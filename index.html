@@ -30,7 +30,7 @@
     line-height:1.5;
     -webkit-font-smoothing:antialiased;
   }
-  .wrap{max-width:1100px;margin:0 auto;padding:0 20px 80px;}
+  .wrap{max-width:1280px;margin:0 auto;padding:0 20px 80px;}
 
   /* HERO */
   header{
@@ -54,14 +54,35 @@
   }
   .sub{max-width:640px;margin:.4em auto 0;color:var(--shade);font-size:1.05rem;}
 
+  .howto-row{
+    display:flex;gap:18px;justify-content:center;align-items:stretch;
+    flex-wrap:wrap;max-width:1000px;margin:26px auto 0;
+  }
   .howto{
     background:var(--card);border:2px dashed var(--line);border-radius:16px;
-    max-width:760px;margin:26px auto 0;padding:18px 22px;text-align:left;
+    flex:1 1 380px;padding:18px 22px;text-align:left;
     font-size:.95rem;color:#4a3b32;
   }
   .howto b{color:var(--ink);}
   .howto ol{margin:.4em 0 0;padding-left:1.2em;}
   .howto li{margin:.25em 0;}
+
+  .legend{
+    background:var(--card);border:2px dashed var(--line);border-radius:16px;
+    flex:1 1 320px;padding:18px 22px;text-align:left;
+    font-size:.9rem;color:#4a3b32;
+  }
+  .legend-title{font-weight:700;color:var(--ink);display:block;margin-bottom:.5em;}
+  .legend ul{margin:0;padding:0;list-style:none;}
+  .legend li{margin:.32em 0;display:flex;align-items:flex-start;gap:8px;line-height:1.3;}
+  .legend b{color:var(--ink);}
+  .legend .sw,.legend .ic{flex:0 0 14px;margin-top:2px;}
+  .legend .sw{display:inline-block;width:14px;height:14px;border-radius:4px;
+    -webkit-print-color-adjust:exact;print-color-adjust:exact;}
+  .legend .sw-green{background:#1DB954;}
+  .legend .sw-grey{background:#64748b;}
+  .legend .ic{text-align:center;font-size:.95em;line-height:1.2;}
+  .legend .note{margin-top:.7em;font-style:italic;color:var(--shade);font-size:.85rem;}
 
   .toolbar{
     display:flex;gap:10px;justify-content:center;flex-wrap:wrap;
@@ -77,6 +98,15 @@
   .btn-sky{background:var(--sky);}
   .btn-ghost{background:transparent;color:var(--sun-deep);border:2px solid var(--sun-deep);}
   .btn:hover{filter:brightness(1.05);}
+  /* Expand/Collapse act as a toggle pair: the active view state is filled,
+     ringed, and checkmarked; the other sits quiet as an outline. Clear on
+     mobile, where the two buttons may wrap onto separate rows. */
+  .btn-toggle{background:var(--card);color:var(--sun-deep);border:2px solid var(--sun-deep);}
+  .btn-toggle[aria-pressed="true"]{
+    background:var(--sun-deep);color:#fff;
+    box-shadow:0 0 0 3px rgba(251,133,0,.28);
+  }
+  .btn-toggle[aria-pressed="true"]::before{content:"✓ ";font-weight:800;}
 
   /* ERA FILTER */
   .eras{display:flex;gap:8px;justify-content:center;flex-wrap:wrap;margin:30px auto 4px;}
@@ -90,7 +120,10 @@
   /* GRID */
   .grid{
     display:grid;gap:16px;margin-top:26px;
-    grid-template-columns:repeat(auto-fill,minmax(250px,1fr));
+    /* Fills as many ~260px columns as fit: 4+ on wide screens, then 3, 2,
+       and a single full-width column on phones. The min() stops the last
+       column from overflowing on very narrow viewports. */
+    grid-template-columns:repeat(auto-fill,minmax(min(100%,260px),1fr));
   }
   .card{
     background:var(--card);border:1px solid var(--line);border-radius:18px;
@@ -141,6 +174,7 @@
   .watch:hover{filter:brightness(1.06);}
   .watch.tiny{background:var(--ink);font-weight:500;}
   .watch.spotify{background:#1DB954;}
+  .watch.spotify-find{background:#64748b;}
   .watch-row{display:flex;gap:8px;flex-wrap:wrap;}
   .wiki-link{display:inline-block;margin-top:12px;font-size:.85rem;color:var(--sky);text-decoration:none;border-bottom:1px solid rgba(58,134,255,.35);padding-bottom:1px;}
   .wiki-link:hover{border-bottom-color:var(--sky);}
@@ -185,19 +219,33 @@
     <h1>Summer Jam<br>School</h1>
     <p class="sub">One act a day, a few fun facts, and one short clip to watch together — a tour through music history from the 1950s to now. Each day can link to a Spotify playlist, so you can listen along while you learn.</p>
 
-    <div class="howto">
-      <b>How to run a day (about 5 minutes):</b>
-      <ol>
-        <li>Read the act's name and the one-line intro.</li>
-        <li>Share the 3 fun facts — the weird ones stick best.</li>
-        <li>Give the kids the <b>Listen For</b> job, then watch the clip.</li>
-        <li>Watch for a <b style="color:#ef476f">⚑ Parent note</b> — pre-screen those before pressing play.</li>
-      </ol>
+    <div class="howto-row">
+      <div class="howto">
+        <b>How to run a day (about 5 minutes):</b>
+        <ol>
+          <li>Read the act's name and the one-line intro.</li>
+          <li>Share the 3 fun facts — the weird ones stick best.</li>
+          <li>Give the kids the <b>Listen For</b> job, then watch the clip.</li>
+          <li>Watch for a <b style="color:#ef476f">⚑ Parent note</b> — pre-screen those before pressing play.</li>
+        </ol>
+      </div>
+
+      <div class="legend">
+        <b class="legend-title">What the buttons &amp; marks mean</b>
+        <ul>
+          <li><span class="sw sw-green"></span><span><b>♫ Listen on Spotify</b> (green) — a curated, kid-vetted playlist</span></li>
+          <li><span class="sw sw-grey"></span><span><b>♫ Find on Spotify</b> (grey) — search and pick your own songs</span></li>
+          <li><span class="ic">▶️</span><span><b>Watch a clip</b> — a short video to watch together</span></li>
+          <li><span class="ic" style="color:#ef476f">⚑</span><span><b>Parent note</b> — this day's music skews mature; preview first</span></li>
+          <li><span class="ic" style="color:#fb8500">★</span><span><b>Music-history essential</b> — if you only do a few, start here</span></li>
+        </ul>
+        <div class="note">Either way, use your own judgment — preview anything before playing for little ones.</div>
+      </div>
     </div>
 
     <div class="toolbar">
-      <button class="btn btn-sun" onclick="toggleAll(true)">Expand all</button>
-      <button class="btn btn-ghost" onclick="toggleAll(false)">Collapse all</button>
+      <button class="btn btn-toggle" id="btnExpand" aria-pressed="false" onclick="toggleAll(true)">Expand all</button>
+      <button class="btn btn-toggle" id="btnCollapse" aria-pressed="true" onclick="toggleAll(false)">Collapse all</button>
       <button class="btn btn-sky" onclick="window.print()">🖨 Print / Save PDF</button>
     </div>
 
@@ -205,730 +253,10 @@
       <button class="ess-toggle" id="essToggle" aria-pressed="false">★ Show only Music History Essentials</button>
     </div>
 
-    <div class="eras" id="eras"><button class="chip" aria-pressed="true">All</button><button class="chip" aria-pressed="false">1950s</button><button class="chip" aria-pressed="false">1960s</button><button class="chip" aria-pressed="false">1970s</button><button class="chip" aria-pressed="false">1980s</button><button class="chip" aria-pressed="false">1990s</button><button class="chip" aria-pressed="false">2000s</button><button class="chip" aria-pressed="false">2010s+</button><button class="chip" aria-pressed="false">Bonus</button></div>
+    <div class="eras" id="eras"></div>
   </header>
 
-  <div class="grid" id="grid"><div class="card e50" data-era="1950s" data-essential="true">
-    <button class="card-head" onclick="this.parentElement.classList.toggle(&#39;open&#39;)">
-      <span class="day-num">1</span>
-      <span class="card-meta">
-        <span class="era-tag">1950s</span>
-        <p class="artist">Chuck Berry <span class="essential-badge" title="Music History Essential"></span></p>
-        <span class="genre">Rock &amp; roll guitar — Often called the father of rock and roll.</span>
-      </span>
-      <span class="chev">›</span>
-    </button><div class="card-body">
-      <div class="body-label">Fun facts</div>
-      <ul class="facts"><li>He invented the famous one-legged hop across the stage called the "duck walk."</li><li>His song "Johnny B. Goode" was launched into space on the Voyager Golden Record — actual music sent to the stars.</li><li>Tons of bands you'll meet this summer (the Beatles, the Beach Boys) learned by copying his guitar riffs.</li></ul>
-      <div class="listen"><b>Listen for:</b> Listen for the bright, twangy guitar that kicks off the whole song.</div><div class="watch-row"><a class="watch" href="https://www.youtube.com/results?search_query=Chuck%20Berry%20Johnny%20B%20Goode%20live" target="_blank" rel="noopener">▶️ Watch a clip</a></div><a class="wiki-link" href="https://en.wikipedia.org/wiki/Chuck_Berry" target="_blank" rel="noopener">📖 Learn more (Wikipedia)</a></div></div><div class="card e50" data-era="1950s" data-essential="true">
-    <button class="card-head" onclick="this.parentElement.classList.toggle(&#39;open&#39;)">
-      <span class="day-num">2</span>
-      <span class="card-meta">
-        <span class="era-tag">1950s</span>
-        <p class="artist">Little Richard <span class="essential-badge" title="Music History Essential"></span></p>
-        <span class="genre">Piano rock &amp; roll — A wild, joyful piano-pounder with sky-high energy.</span>
-      </span>
-      <span class="chev">›</span>
-    </button><div class="card-body">
-      <div class="body-label">Fun facts</div>
-      <ul class="facts"><li>He played piano standing up, sometimes with his foot on the keys.</li><li>His big yell "A-wop-bop-a-loo-bop-a-lop-bam-boom!" is one of the most famous noises in music.</li><li>He called himself "the architect of rock and roll" — and lots of people agree.</li></ul>
-      <div class="listen"><b>Listen for:</b> Count how many times he shouts "woo!"</div><div class="watch-row"><a class="watch" href="https://www.youtube.com/results?search_query=Little%20Richard%20Tutti%20Frutti%20live%20performance" target="_blank" rel="noopener">▶️ Watch a clip</a></div><a class="wiki-link" href="https://en.wikipedia.org/wiki/Little_Richard" target="_blank" rel="noopener">📖 Learn more (Wikipedia)</a></div></div><div class="card e50" data-era="1950s">
-    <button class="card-head" onclick="this.parentElement.classList.toggle(&#39;open&#39;)">
-      <span class="day-num">3</span>
-      <span class="card-meta">
-        <span class="era-tag">1950s</span>
-        <p class="artist">Ella Fitzgerald</p>
-        <span class="genre">Jazz vocals — "The First Lady of Song" and the queen of scat singing.</span>
-      </span>
-      <span class="chev">›</span>
-    </button><div class="card-body">
-      <div class="body-label">Fun facts</div>
-      <ul class="facts"><li>Scat singing is making up nonsense syllables like an instrument — "shoo-bee-doo-bop" — and Ella was the best ever.</li><li>She won 13 Grammy Awards.</li><li>She could copy the sound of a trumpet or sax with just her voice.</li></ul>
-      <div class="listen"><b>Listen for:</b> When she stops singing real words and just sings sounds — that's scat!</div><div class="watch-row"><a class="watch" href="https://www.youtube.com/results?search_query=Ella%20Fitzgerald%20scat%20singing%20live" target="_blank" rel="noopener">▶️ Watch a clip</a></div><a class="wiki-link" href="https://en.wikipedia.org/wiki/Ella_Fitzgerald" target="_blank" rel="noopener">📖 Learn more (Wikipedia)</a></div></div><div class="card e50" data-era="1950s">
-    <button class="card-head" onclick="this.parentElement.classList.toggle(&#39;open&#39;)">
-      <span class="day-num">4</span>
-      <span class="card-meta">
-        <span class="era-tag">1950s</span>
-        <p class="artist">Louis Armstrong</p>
-        <span class="genre">Jazz trumpet — A trumpet master with the most recognizable gravelly voice in jazz.</span>
-      </span>
-      <span class="chev">›</span>
-    </button><div class="card-body">
-      <div class="body-label">Fun facts</div>
-      <ul class="facts"><li>His nickname was "Satchmo," short for "Satchel Mouth."</li><li>He helped make the trumpet solo a star of jazz music.</li><li>His song "What a Wonderful World" is still played at weddings and movies today.</li></ul>
-      <div class="listen"><b>Listen for:</b> Notice how his singing voice sounds raspy, like a friendly growl.</div><div class="watch-row"><a class="watch" href="https://www.youtube.com/results?search_query=Louis%20Armstrong%20What%20a%20Wonderful%20World" target="_blank" rel="noopener">▶️ Watch a clip</a></div><a class="wiki-link" href="https://en.wikipedia.org/wiki/Louis_Armstrong" target="_blank" rel="noopener">📖 Learn more (Wikipedia)</a></div></div><div class="card e50" data-era="1950s" data-essential="true">
-    <button class="card-head" onclick="this.parentElement.classList.toggle(&#39;open&#39;)">
-      <span class="day-num">5</span>
-      <span class="card-meta">
-        <span class="era-tag">1950s</span>
-        <p class="artist">Doo-Wop Day <span class="essential-badge" title="Music History Essential"></span></p>
-        <span class="genre">Vocal harmony / doo-wop — The 1950s sound of groups singing close harmony together, often with no instruments at first — featuring the Platters, the Drifters, and Frankie Lymon and the Teenagers.</span>
-      </span>
-      <span class="chev">›</span>
-    </button><div class="card-body">
-      <div class="body-label">Fun facts</div>
-      <ul class="facts"><li>"Doo-wop" gets its name from the nonsense sounds the background singers made, like "doo-wop" and "sh-boom."</li><li>Groups would practice singing on street corners and in stairwells because the echo made their harmonies sound great.</li><li>Frankie Lymon was only 13 when he sang lead on "Why Do Fools Fall in Love" — making them rock's first all-teenage group.</li><li>The Platters' "The Great Pretender" and The Drifters' songs turned this street-corner style into polished hits.</li></ul>
-      <div class="listen"><b>Listen for:</b> Listen for the background singers making sounds instead of words.</div><div class="watch-row"><a class="watch" href="https://www.youtube.com/results?search_query=The%20Platters%20The%20Great%20Pretender%20live" target="_blank" rel="noopener">▶️ Watch a clip</a><a class="watch tiny" href="https://www.youtube.com/results?search_query=Frankie%20Lymon%20Why%20Do%20Fools%20Fall%20in%20Love" target="_blank" rel="noopener">▶️ Also: Frankie Lymon "Why Do Fools Fall in Love"</a></div><a class="wiki-link" href="https://en.wikipedia.org/wiki/Doo-wop" target="_blank" rel="noopener">📖 Learn more (Wikipedia)</a></div></div><div class="card e60" data-era="1960s" data-essential="true">
-    <button class="card-head" onclick="this.parentElement.classList.toggle(&#39;open&#39;)">
-      <span class="day-num">6</span>
-      <span class="card-meta">
-        <span class="era-tag">1960s</span>
-        <p class="artist">The Beatles <span class="essential-badge" title="Music History Essential"></span></p>
-        <span class="genre">British Invasion rock — Four guys from Liverpool, England who became the most famous band in the world.</span>
-      </span>
-      <span class="chev">›</span>
-    </button><div class="card-body">
-      <div class="body-label">Fun facts</div>
-      <ul class="facts"><li>When they first came to America, so many fans screamed at concerts the band couldn't hear themselves play.</li><li>They wrote songs perfect for kids like "Yellow Submarine" and "Octopus's Garden."</li><li>Their last public concert was a surprise show on a rooftop.</li></ul>
-      <div class="listen"><b>Listen for:</b> In "Yellow Submarine," listen for the bubbly underwater sound effects.</div><div class="watch-row"><a class="watch" href="https://www.youtube.com/results?search_query=Beatles%20Yellow%20Submarine%20official%20video" target="_blank" rel="noopener">▶️ Watch a clip</a></div><a class="wiki-link" href="https://en.wikipedia.org/wiki/The_Beatles" target="_blank" rel="noopener">📖 Learn more (Wikipedia)</a></div></div><div class="card e60" data-era="1960s">
-    <button class="card-head" onclick="this.parentElement.classList.toggle(&#39;open&#39;)">
-      <span class="day-num">7</span>
-      <span class="card-meta">
-        <span class="era-tag">1960s</span>
-        <p class="artist">The Beach Boys</p>
-        <span class="genre">Surf harmony pop — California's kings of sunshine, surfing, and stacked harmonies.</span>
-      </span>
-      <span class="chev">›</span>
-    </button><div class="card-body">
-      <div class="body-label">Fun facts</div>
-      <ul class="facts"><li>Most of the band members were actual brothers and cousins.</li><li>Only one of them really surfed — the rest just sang about it!</li><li>They layered many voices together to make those big, glowing harmonies.</li></ul>
-      <div class="listen"><b>Listen for:</b> Hear how many different voices are singing at the same time.</div><div class="watch-row"><a class="watch" href="https://www.youtube.com/results?search_query=Beach%20Boys%20I%20Get%20Around" target="_blank" rel="noopener">▶️ Watch a clip</a></div><a class="wiki-link" href="https://en.wikipedia.org/wiki/The_Beach_Boys" target="_blank" rel="noopener">📖 Learn more (Wikipedia)</a></div></div><div class="card e60" data-era="1960s" data-essential="true">
-    <button class="card-head" onclick="this.parentElement.classList.toggle(&#39;open&#39;)">
-      <span class="day-num">8</span>
-      <span class="card-meta">
-        <span class="era-tag">1960s</span>
-        <p class="artist">Stevie Wonder <span class="essential-badge" title="Music History Essential"></span></p>
-        <span class="genre">Motown soul — A musical genius who was signed to Motown Records as a kid.</span>
-      </span>
-      <span class="chev">›</span>
-    </button><div class="card-body">
-      <div class="body-label">Fun facts</div>
-      <ul class="facts"><li>He has been blind since shortly after birth and plays piano, drums, and harmonica.</li><li>He had his first number-one song at just 13 years old.</li><li>He's won 25 Grammy Awards — one of the most in history.</li></ul>
-      <div class="listen"><b>Listen for:</b> Listen for the harmonica — that's Stevie playing it.</div><div class="watch-row"><a class="watch" href="https://www.youtube.com/results?search_query=Stevie%20Wonder%20Isn%27t%20She%20Lovely%20live" target="_blank" rel="noopener">▶️ Watch a clip</a></div><a class="wiki-link" href="https://en.wikipedia.org/wiki/Stevie_Wonder" target="_blank" rel="noopener">📖 Learn more (Wikipedia)</a></div></div><div class="card e60" data-era="1960s">
-    <button class="card-head" onclick="this.parentElement.classList.toggle(&#39;open&#39;)">
-      <span class="day-num">9</span>
-      <span class="card-meta">
-        <span class="era-tag">1960s</span>
-        <p class="artist">The Jackson 5</p>
-        <span class="genre">Motown pop-soul — Five brothers led by a very young Michael Jackson.</span>
-      </span>
-      <span class="chev">›</span>
-    </button><div class="card-body">
-      <div class="body-label">Fun facts</div>
-      <ul class="facts"><li>Michael was only about 11 when the band became famous.</li><li>All five members were brothers from Gary, Indiana.</li><li>Their bouncy hit "ABC" turns the alphabet into a love song.</li></ul>
-      <div class="listen"><b>Listen for:</b> That's little Michael singing lead — try to spot his voice.</div><div class="watch-row"><a class="watch" href="https://www.youtube.com/results?search_query=Jackson%205%20ABC%20official" target="_blank" rel="noopener">▶️ Watch a clip</a></div><a class="wiki-link" href="https://en.wikipedia.org/wiki/The_Jackson_5" target="_blank" rel="noopener">📖 Learn more (Wikipedia)</a></div></div><div class="card e60" data-era="1960s" data-essential="true">
-    <button class="card-head" onclick="this.parentElement.classList.toggle(&#39;open&#39;)">
-      <span class="day-num">10</span>
-      <span class="card-meta">
-        <span class="era-tag">1960s</span>
-        <p class="artist">Aretha Franklin <span class="essential-badge" title="Music History Essential"></span></p>
-        <span class="genre">Soul / gospel — "The Queen of Soul" with one of the most powerful voices ever recorded.</span>
-      </span>
-      <span class="chev">›</span>
-    </button><div class="card-body">
-      <div class="body-label">Fun facts</div>
-      <ul class="facts"><li>Her most famous song spells out a word: R-E-S-P-E-C-T.</li><li>She learned to sing in her father's church.</li><li>She was the first woman inducted into the Rock and Roll Hall of Fame.</li></ul>
-      <div class="listen"><b>Listen for:</b> In "Respect," sing along when she spells the word out loud.</div><div class="watch-row"><a class="watch" href="https://www.youtube.com/results?search_query=Aretha%20Franklin%20Respect" target="_blank" rel="noopener">▶️ Watch a clip</a></div><a class="wiki-link" href="https://en.wikipedia.org/wiki/Aretha_Franklin" target="_blank" rel="noopener">📖 Learn more (Wikipedia)</a></div></div><div class="card e70" data-era="1970s">
-    <button class="card-head" onclick="this.parentElement.classList.toggle(&#39;open&#39;)">
-      <span class="day-num">11</span>
-      <span class="card-meta">
-        <span class="era-tag">1970s</span>
-        <p class="artist">Queen</p>
-        <span class="genre">Arena rock — A theatrical rock band led by the dazzling showman Freddie Mercury.</span>
-      </span>
-      <span class="chev">›</span>
-    </button><div class="card-body">
-      <div class="body-label">Fun facts</div>
-      <ul class="facts"><li>"We Will Rock You" was written so crowds could stomp-stomp-clap along — try it!</li><li>Their song "Bohemian Rhapsody" has an opera section in the middle.</li><li>Guitarist Brian May built his famous guitar with his dad out of an old fireplace.</li></ul>
-      <div class="listen"><b>Listen for:</b> Do the stomp-stomp-CLAP beat with "We Will Rock You."</div><div class="watch-row"><a class="watch" href="https://www.youtube.com/results?search_query=Queen%20We%20Will%20Rock%20You%20official" target="_blank" rel="noopener">▶️ Watch a clip</a></div><a class="wiki-link" href="https://en.wikipedia.org/wiki/Queen_(band)" target="_blank" rel="noopener">📖 Learn more (Wikipedia)</a></div></div><div class="card e70" data-era="1970s">
-    <button class="card-head" onclick="this.parentElement.classList.toggle(&#39;open&#39;)">
-      <span class="day-num">12</span>
-      <span class="card-meta">
-        <span class="era-tag">1970s</span>
-        <p class="artist">Earth, Wind &amp; Fire</p>
-        <span class="genre">Funk / soul — A huge, horn-powered funk band with sparkly costumes and big grooves.</span>
-      </span>
-      <span class="chev">›</span>
-    </button><div class="card-body">
-      <div class="body-label">Fun facts</div>
-      <ul class="facts"><li>Their song "September" asks "do you remember" the 21st night — a date fans celebrate every year.</li><li>They had a whole section of horn players blasting trumpets and trombones.</li><li>Their costumes were covered in glitter and bright colors.</li></ul>
-      <div class="listen"><b>Listen for:</b> Listen for the punchy horns answering the singers back and forth.</div><div class="watch-row"><a class="watch" href="https://www.youtube.com/results?search_query=Earth%20Wind%20Fire%20September%20official" target="_blank" rel="noopener">▶️ Watch a clip</a></div><a class="wiki-link" href="https://en.wikipedia.org/wiki/Earth,_Wind_%26_Fire" target="_blank" rel="noopener">📖 Learn more (Wikipedia)</a></div></div><div class="card e70" data-era="1970s">
-    <button class="card-head" onclick="this.parentElement.classList.toggle(&#39;open&#39;)">
-      <span class="day-num">13</span>
-      <span class="card-meta">
-        <span class="era-tag">1970s</span>
-        <p class="artist">ABBA</p>
-        <span class="genre">Disco pop — A super-catchy pop group from Sweden — two couples who sang together.</span>
-      </span>
-      <span class="chev">›</span>
-    </button><div class="card-body">
-      <div class="body-label">Fun facts</div>
-      <ul class="facts"><li>The name ABBA comes from the first letters of the four members' names.</li><li>They sang in English even though they're from Sweden.</li><li>Their songs became the musical and movie "Mamma Mia!"</li></ul>
-      <div class="listen"><b>Listen for:</b> Try to clap along with "Dancing Queen" — it's built for dancing.</div><div class="watch-row"><a class="watch" href="https://www.youtube.com/results?search_query=ABBA%20Dancing%20Queen%20official" target="_blank" rel="noopener">▶️ Watch a clip</a></div><a class="wiki-link" href="https://en.wikipedia.org/wiki/ABBA" target="_blank" rel="noopener">📖 Learn more (Wikipedia)</a></div></div><div class="card e70" data-era="1970s">
-    <button class="card-head" onclick="this.parentElement.classList.toggle(&#39;open&#39;)">
-      <span class="day-num">14</span>
-      <span class="card-meta">
-        <span class="era-tag">1970s</span>
-        <p class="artist">Bob Marley</p>
-        <span class="genre">Reggae — Jamaica's reggae legend who spread messages of peace through music.</span>
-      </span>
-      <span class="chev">›</span>
-    </button><div class="card-body">
-      <div class="body-label">Fun facts</div>
-      <ul class="facts"><li>Reggae music has a relaxed, bouncy off-beat rhythm you can sway to.</li><li>His song "Three Little Birds" tells you "don't worry about a thing."</li><li>He's the most famous musician ever to come from Jamaica.</li></ul>
-      <div class="listen"><b>Listen for:</b> Feel the off-beat "chucka-chucka" guitar that makes reggae bounce.</div><div class="watch-row"><a class="watch" href="https://www.youtube.com/results?search_query=Bob%20Marley%20Three%20Little%20Birds" target="_blank" rel="noopener">▶️ Watch a clip</a></div><a class="wiki-link" href="https://en.wikipedia.org/wiki/Bob_Marley" target="_blank" rel="noopener">📖 Learn more (Wikipedia)</a></div></div><div class="card e70" data-era="1970s">
-    <button class="card-head" onclick="this.parentElement.classList.toggle(&#39;open&#39;)">
-      <span class="day-num">15</span>
-      <span class="card-meta">
-        <span class="era-tag">1970s</span>
-        <p class="artist">Dolly Parton</p>
-        <span class="genre">Country — A beloved country songwriter and storyteller with a giant heart.</span>
-      </span>
-      <span class="chev">›</span>
-    </button><div class="card-body">
-      <div class="body-label">Fun facts</div>
-      <ul class="facts"><li>She has written over 3,000 songs.</li><li>She runs a program that has mailed free books to millions of kids.</li><li>She wrote two hit songs — "Jolene" and "I Will Always Love You" — on the very same day.</li></ul>
-      <div class="listen"><b>Listen for:</b> Country songs tell a story — listen for what happens in it.</div><div class="watch-row"><a class="watch" href="https://www.youtube.com/results?search_query=Dolly%20Parton%20Jolene%20live" target="_blank" rel="noopener">▶️ Watch a clip</a></div><a class="wiki-link" href="https://en.wikipedia.org/wiki/Dolly_Parton" target="_blank" rel="noopener">📖 Learn more (Wikipedia)</a></div></div><div class="card e60" data-era="1960s">
-    <button class="card-head" onclick="this.parentElement.classList.toggle(&#39;open&#39;)">
-      <span class="day-num">16</span>
-      <span class="card-meta">
-        <span class="era-tag">1960s</span>
-        <p class="artist">The Rolling Stones</p>
-        <span class="genre">Blues rock — The "bad boys" of British rock — and one of the longest-lasting bands ever.</span>
-      </span>
-      <span class="chev">›</span>
-    </button><div class="card-body">
-      <div class="body-label">Fun facts</div>
-      <ul class="facts"><li>They've been performing together for over 60 years.</li><li>Their logo is a big cartoon mouth with a sticking-out tongue.</li><li>"(I Can't Get No) Satisfaction" has one of the most famous guitar riffs in rock.</li></ul>
-      <div class="listen"><b>Listen for:</b> Listen for the fuzzy, buzzing guitar riff at the start of "Satisfaction."</div><div class="watch-row"><a class="watch" href="https://www.youtube.com/results?search_query=Rolling%20Stones%20Satisfaction%20live" target="_blank" rel="noopener">▶️ Watch a clip</a></div><a class="wiki-link" href="https://en.wikipedia.org/wiki/The_Rolling_Stones" target="_blank" rel="noopener">📖 Learn more (Wikipedia)</a></div></div><div class="card e60" data-era="1960s" data-essential="true">
-    <button class="card-head" onclick="this.parentElement.classList.toggle(&#39;open&#39;)">
-      <span class="day-num">17</span>
-      <span class="card-meta">
-        <span class="era-tag">1960s</span>
-        <p class="artist">Motown Day <span class="essential-badge" title="Music History Essential"></span></p>
-        <span class="genre">Motown soul — A whole day for Motown, the Detroit record label that made hit after hit after hit — featuring the Supremes, the Temptations, the Four Tops, Smokey Robinson, and Marvin Gaye.</span>
-      </span>
-      <span class="chev">›</span>
-    </button><div class="card-body">
-      <div class="body-label">Fun facts</div>
-      <ul class="facts"><li>Motown was started in Detroit, a city famous for building cars, and people called its smooth hit-making style "the Motown sound."</li><li>The Temptations and the Four Tops did sharp, matching dance steps while they sang.</li><li>The Supremes, led by Diana Ross, were one of the most successful groups of the 1960s.</li><li>Smokey Robinson wrote hit songs for himself AND for many other Motown stars.</li></ul>
-      <div class="listen"><b>Listen for:</b> Watch the groups' synchronized dance moves — everyone steps together.</div><div class="watch-row"><a class="watch" href="https://www.youtube.com/results?search_query=The%20Temptations%20My%20Girl%20live" target="_blank" rel="noopener">▶️ Watch a clip</a><a class="watch tiny" href="https://www.youtube.com/results?search_query=The%20Supremes%20You%20Can%27t%20Hurry%20Love" target="_blank" rel="noopener">▶️ Also: The Supremes "You Can't Hurry Love"</a></div><a class="wiki-link" href="https://en.wikipedia.org/wiki/Motown" target="_blank" rel="noopener">📖 Learn more (Wikipedia)</a></div></div><div class="card e60" data-era="1960s" data-essential="true">
-    <button class="card-head" onclick="this.parentElement.classList.toggle(&#39;open&#39;)">
-      <span class="day-num">18</span>
-      <span class="card-meta">
-        <span class="era-tag">1960s</span>
-        <p class="artist">Rock Titans <span class="essential-badge" title="Music History Essential"></span></p>
-        <span class="genre">Psychedelic &amp; hard rock — The bold, electric rock giants who pushed the late-60s to new places — featuring Jimi Hendrix, The Who, and The Doors.</span>
-      </span>
-      <span class="chev">›</span>
-    </button><div class="card-body">
-      <div class="body-label">Fun facts</div>
-      <ul class="facts"><li>Jimi Hendrix was left-handed and flipped a regular guitar upside down — and famously played it with his teeth and behind his back as showmanship.</li><li>The Who were known for smashing their instruments at the end of shows.</li><li>The Doors were named after a line in a book, and their singer Jim Morrison was famous for his deep, dramatic voice.</li></ul>
-      <div class="listen"><b>Listen for:</b> In Hendrix's solos, hear how he bends the notes so the guitar almost "talks."</div><div class="flag"><b>⚑ Parent note:</b> Some songs from these bands are long or have grown-up themes. Hendrix's "Star-Spangled Banner" and The Who's "Baba O'Riley" are good kid-friendly entry points — pre-screen first.</div><div class="watch-row"><a class="watch" href="https://www.youtube.com/results?search_query=Jimi%20Hendrix%20Star%20Spangled%20Banner%20Woodstock" target="_blank" rel="noopener">▶️ Watch a clip</a><a class="watch tiny" href="https://www.youtube.com/results?search_query=The%20Who%20Baba%20O%27Riley" target="_blank" rel="noopener">▶️ Also: The Who "Baba O'Riley"</a></div><a class="wiki-link" href="https://en.wikipedia.org/wiki/Jimi_Hendrix" target="_blank" rel="noopener">📖 Learn more (Wikipedia)</a></div></div><div class="card e70" data-era="1970s">
-    <button class="card-head" onclick="this.parentElement.classList.toggle(&#39;open&#39;)">
-      <span class="day-num">19</span>
-      <span class="card-meta">
-        <span class="era-tag">1970s</span>
-        <p class="artist">Pink Floyd</p>
-        <span class="genre">Psychedelic / progressive rock — A band that made spacey, dreamy music and turned concerts into giant art shows.</span>
-      </span>
-      <span class="chev">›</span>
-    </button><div class="card-body">
-      <div class="body-label">Fun facts</div>
-      <ul class="facts"><li>Their album cover for "The Dark Side of the Moon" — a prism splitting light into a rainbow — is one of the most famous covers ever.</li><li>Their concerts had lasers, films, and even a giant inflatable pig floating over the crowd.</li><li>They liked to use real-world sounds in songs, like ringing clocks, cash registers, and heartbeats.</li></ul>
-      <div class="listen"><b>Listen for:</b> Listen for sounds that aren't instruments at all — clocks, coins, or a heartbeat.</div><div class="watch-row"><a class="watch" href="https://www.youtube.com/results?search_query=Pink%20Floyd%20Time%20official" target="_blank" rel="noopener">▶️ Watch a clip</a></div><a class="wiki-link" href="https://en.wikipedia.org/wiki/Pink_Floyd" target="_blank" rel="noopener">📖 Learn more (Wikipedia)</a></div></div><div class="card e70" data-era="1970s">
-    <button class="card-head" onclick="this.parentElement.classList.toggle(&#39;open&#39;)">
-      <span class="day-num">20</span>
-      <span class="card-meta">
-        <span class="era-tag">1970s</span>
-        <p class="artist">Yacht Rock Day</p>
-        <span class="genre">Smooth summer grooves — Mellow, sunny "yacht rock" plus Carolina beach music made for swaying on a warm day — featuring Chairmen of the Board and Christopher Cross.</span>
-      </span>
-      <span class="chev">›</span>
-    </button><div class="card-body">
-      <div class="body-label">Fun facts</div>
-      <ul class="facts"><li>Chairmen of the Board's "Carolina Girls" is THE Carolina beach anthem — and it was written by a college student right in Raleigh, North Carolina.</li><li>"Yacht rock" is a nickname for super-smooth, breezy 1970s–80s songs that sound like a sunny day on a boat.</li><li>Carolina beach music has its own slow partner dance called "the shag."</li></ul>
-      <div class="listen"><b>Listen for:</b> Pick the song that sounds the most like a lazy summer afternoon.</div><div class="watch-row"><a class="watch" href="https://www.youtube.com/results?search_query=Chairmen%20of%20the%20Board%20Carolina%20Girls" target="_blank" rel="noopener">▶️ Watch a clip</a><a class="watch tiny" href="https://www.youtube.com/results?search_query=Christopher%20Cross%20Sailing%20official" target="_blank" rel="noopener">▶️ Also: Christopher Cross "Sailing"</a></div><a class="wiki-link" href="https://en.wikipedia.org/wiki/Yacht_rock" target="_blank" rel="noopener">📖 Learn more (Wikipedia)</a></div></div><div class="card e60" data-era="1960s">
-    <button class="card-head" onclick="this.parentElement.classList.toggle(&#39;open&#39;)">
-      <span class="day-num">21</span>
-      <span class="card-meta">
-        <span class="era-tag">1960s</span>
-        <p class="artist">Sounds of Summer (Soul)</p>
-        <span class="genre">Motown &amp; soul summer anthems — A day of feel-good summer songs made by Black artists that became the soundtrack of warm-weather America.</span>
-      </span>
-      <span class="chev">›</span>
-    </button><div class="card-body">
-      <div class="body-label">Fun facts</div>
-      <ul class="facts"><li>Martha &amp; the Vandellas' "Dancing in the Street" became a joyful anthem during the 1960s civil rights era — a song about everyone coming together outside.</li><li>The Drifters' "Under the Boardwalk" paints a picture of hiding from the hot sun by the beach.</li><li>Sly &amp; the Family Stone's "Hot Fun in the Summertime" is basically a postcard of summer in a song.</li></ul>
-      <div class="listen"><b>Listen for:</b> Each song names something about summer — see who can catch it.</div><div class="watch-row"><a class="watch" href="https://www.youtube.com/results?search_query=Martha%20and%20the%20Vandellas%20Dancing%20in%20the%20Street" target="_blank" rel="noopener">▶️ Watch a clip</a><a class="watch tiny" href="https://www.youtube.com/results?search_query=The%20Drifters%20Under%20the%20Boardwalk" target="_blank" rel="noopener">▶️ Also: The Drifters "Under the Boardwalk"</a></div><a class="wiki-link" href="https://en.wikipedia.org/wiki/Soul_music" target="_blank" rel="noopener">📖 Learn more (Wikipedia)</a></div></div><div class="card e80" data-era="1980s" data-essential="true">
-    <button class="card-head" onclick="this.parentElement.classList.toggle(&#39;open&#39;)">
-      <span class="day-num">22</span>
-      <span class="card-meta">
-        <span class="era-tag">1980s</span>
-        <p class="artist">Michael Jackson <span class="essential-badge" title="Music History Essential"></span></p>
-        <span class="genre">Pop / R&amp;B — "The King of Pop" — the biggest solo pop star of the 1980s.</span>
-      </span>
-      <span class="chev">›</span>
-    </button><div class="card-body">
-      <div class="body-label">Fun facts</div>
-      <ul class="facts"><li>His dance move the "moonwalk" makes it look like he's gliding backward.</li><li>His album "Thriller" is one of the best-selling albums of all time.</li><li>He started out as the kid singer of the Jackson 5 (Day 8!).</li></ul>
-      <div class="listen"><b>Listen for:</b> Watch his feet during the moonwalk — how does he do that?</div><div class="watch-row"><a class="watch" href="https://www.youtube.com/results?search_query=Michael%20Jackson%20Billie%20Jean%20moonwalk%20Motown%2025" target="_blank" rel="noopener">▶️ Watch a clip</a></div><a class="wiki-link" href="https://en.wikipedia.org/wiki/Michael_Jackson" target="_blank" rel="noopener">📖 Learn more (Wikipedia)</a></div></div><div class="card e80" data-era="1980s" data-essential="true">
-    <button class="card-head" onclick="this.parentElement.classList.toggle(&#39;open&#39;)">
-      <span class="day-num">23</span>
-      <span class="card-meta">
-        <span class="era-tag">1980s</span>
-        <p class="artist">Prince <span class="essential-badge" title="Music History Essential"></span></p>
-        <span class="genre">Funk / pop / rock — A one-of-a-kind musician who could play almost every instrument himself.</span>
-      </span>
-      <span class="chev">›</span>
-    </button><div class="card-body">
-      <div class="body-label">Fun facts</div>
-      <ul class="facts"><li>On his first album he played all 27 instruments himself.</li><li>His favorite color was purple — his big movie was even called "Purple Rain."</li><li>He once changed his name to a symbol that couldn't be spoken.</li></ul>
-      <div class="listen"><b>Listen for:</b> He's the one playing that wailing guitar solo.</div><div class="watch-row"><a class="watch" href="https://www.youtube.com/results?search_query=Prince%20guitar%20solo%20While%20My%20Guitar%20Gently%20Weeps" target="_blank" rel="noopener">▶️ Watch a clip</a></div><a class="wiki-link" href="https://en.wikipedia.org/wiki/Prince_(musician)" target="_blank" rel="noopener">📖 Learn more (Wikipedia)</a></div></div><div class="card e80" data-era="1980s">
-    <button class="card-head" onclick="this.parentElement.classList.toggle(&#39;open&#39;)">
-      <span class="day-num">24</span>
-      <span class="card-meta">
-        <span class="era-tag">1980s</span>
-        <p class="artist">Whitney Houston</p>
-        <span class="genre">Pop / R&amp;B — A singer with an absolutely enormous, crystal-clear voice.</span>
-      </span>
-      <span class="chev">›</span>
-    </button><div class="card-body">
-      <div class="body-label">Fun facts</div>
-      <ul class="facts"><li>She could hold a single note longer and louder than almost anyone.</li><li>Her version of "I Will Always Love You" was written by Dolly Parton (Day 14!).</li><li>She started out singing in church as a girl.</li></ul>
-      <div class="listen"><b>Listen for:</b> Wait for the big long note — see how long she holds it.</div><div class="watch-row"><a class="watch" href="https://www.youtube.com/results?search_query=Whitney%20Houston%20I%20Wanna%20Dance%20With%20Somebody" target="_blank" rel="noopener">▶️ Watch a clip</a></div><a class="wiki-link" href="https://en.wikipedia.org/wiki/Whitney_Houston" target="_blank" rel="noopener">📖 Learn more (Wikipedia)</a></div></div><div class="card e80" data-era="1980s">
-    <button class="card-head" onclick="this.parentElement.classList.toggle(&#39;open&#39;)">
-      <span class="day-num">25</span>
-      <span class="card-meta">
-        <span class="era-tag">1980s</span>
-        <p class="artist">Tina Turner</p>
-        <span class="genre">Rock / soul — "The Queen of Rock and Roll" — pure energy on stage.</span>
-      </span>
-      <span class="chev">›</span>
-    </button><div class="card-body">
-      <div class="body-label">Fun facts</div>
-      <ul class="facts"><li>She was famous for dancing nonstop through entire concerts.</li><li>She became an even bigger solo star in her 40s — a huge comeback.</li><li>Her powerful, raspy voice is instantly recognizable.</li></ul>
-      <div class="listen"><b>Listen for:</b> Notice she's basically dancing the whole song without stopping.</div><div class="watch-row"><a class="watch" href="https://www.youtube.com/results?search_query=Tina%20Turner%20Proud%20Mary%20live" target="_blank" rel="noopener">▶️ Watch a clip</a></div><a class="wiki-link" href="https://en.wikipedia.org/wiki/Tina_Turner" target="_blank" rel="noopener">📖 Learn more (Wikipedia)</a></div></div><div class="card e80" data-era="1980s" data-essential="true">
-    <button class="card-head" onclick="this.parentElement.classList.toggle(&#39;open&#39;)">
-      <span class="day-num">26</span>
-      <span class="card-meta">
-        <span class="era-tag">1980s</span>
-        <p class="artist">Run-DMC <span class="essential-badge" title="Music History Essential"></span></p>
-        <span class="genre">Hip-hop — The trio that helped bring hip-hop to the whole world.</span>
-      </span>
-      <span class="chev">›</span>
-    </button><div class="card-body">
-      <div class="body-label">Fun facts</div>
-      <ul class="facts"><li>They teamed up with rock band Aerosmith on "Walk This Way," mixing rap and rock.</li><li>Their look — black hats, tracksuits, and shell-toe sneakers — became super famous.</li><li>They were one of the first rap groups to be played on MTV.</li></ul>
-      <div class="listen"><b>Listen for:</b> Hear how the rock guitar and the rapping trade off in "Walk This Way."</div><div class="watch-row"><a class="watch" href="https://www.youtube.com/results?search_query=Run%20DMC%20Walk%20This%20Way%20Aerosmith" target="_blank" rel="noopener">▶️ Watch a clip</a></div><a class="wiki-link" href="https://en.wikipedia.org/wiki/Run-DMC" target="_blank" rel="noopener">📖 Learn more (Wikipedia)</a></div></div><div class="card e70" data-era="1970s">
-    <button class="card-head" onclick="this.parentElement.classList.toggle(&#39;open&#39;)">
-      <span class="day-num">27</span>
-      <span class="card-meta">
-        <span class="era-tag">1970s</span>
-        <p class="artist">Stadium Singalong</p>
-        <span class="genre">Melodic arena rock — The soaring, sing-along rock of the late 70s — big choruses made for waving your arms in a stadium. Featuring Journey, Boston, Foreigner, Kansas, REO Speedwagon, and the Steve Miller Band.</span>
-      </span>
-      <span class="chev">›</span>
-    </button><div class="card-body">
-      <div class="body-label">Fun facts</div>
-      <ul class="facts"><li>Journey's "Don't Stop Believin'" is one of the most sung-along songs ever — perfect for a backyard chorus.</li><li>Boston's leader was a trained engineer who recorded much of the first album in his own basement studio.</li><li>Kansas's "Carry On Wayward Son" opens with voices singing in harmony before any instruments come in.</li><li>The Steve Miller Band's "The Joker" and "Fly Like an Eagle" are breezy, easygoing radio classics.</li></ul>
-      <div class="listen"><b>Listen for:</b> Belt out the "Don't stop believin'!" part together.</div><div class="watch-row"><a class="watch" href="https://www.youtube.com/results?search_query=Journey%20Don%27t%20Stop%20Believin%20official" target="_blank" rel="noopener">▶️ Watch a clip</a><a class="watch tiny" href="https://www.youtube.com/results?search_query=Boston%20More%20Than%20a%20Feeling%20official" target="_blank" rel="noopener">▶️ Also: Boston "More Than a Feeling"</a></div><a class="wiki-link" href="https://en.wikipedia.org/wiki/Arena_rock" target="_blank" rel="noopener">📖 Learn more (Wikipedia)</a></div></div><div class="card e70" data-era="1970s">
-    <button class="card-head" onclick="this.parentElement.classList.toggle(&#39;open&#39;)">
-      <span class="day-num">28</span>
-      <span class="card-meta">
-        <span class="era-tag">1970s</span>
-        <p class="artist">Heartland &amp; Southern Rock</p>
-        <span class="genre">Country-rock / Southern rock — Easygoing American rock with storytelling, harmonies, and a road-trip feel — featuring the Eagles, Tom Petty, and Lynyrd Skynyrd.</span>
-      </span>
-      <span class="chev">›</span>
-    </button><div class="card-body">
-      <div class="body-label">Fun facts</div>
-      <ul class="facts"><li>The Eagles' "Hotel California" has one of the most famous twin-guitar endings in rock.</li><li>Tom Petty's songs like "Free Fallin'" and "Learning to Fly" are big, friendly sing-alongs.</li><li>Lynyrd Skynyrd's "Sweet Home Alabama" is a Southern-rock anthem with a riff you'll recognize instantly.</li></ul>
-      <div class="listen"><b>Listen for:</b> These songs tell a story or paint a place — listen for where each one takes you.</div><div class="watch-row"><a class="watch" href="https://www.youtube.com/results?search_query=Tom%20Petty%20Learning%20to%20Fly%20official" target="_blank" rel="noopener">▶️ Watch a clip</a><a class="watch tiny" href="https://www.youtube.com/results?search_query=Eagles%20Take%20It%20Easy" target="_blank" rel="noopener">▶️ Also: Eagles "Take It Easy"</a></div><a class="wiki-link" href="https://en.wikipedia.org/wiki/Southern_rock" target="_blank" rel="noopener">📖 Learn more (Wikipedia)</a></div></div><div class="card e80" data-era="1980s">
-    <button class="card-head" onclick="this.parentElement.classList.toggle(&#39;open&#39;)">
-      <span class="day-num">29</span>
-      <span class="card-meta">
-        <span class="era-tag">1980s</span>
-        <p class="artist">Big Hair, Bigger Guitars</p>
-        <span class="genre">Hard / flashy arena rock — The louder, flashier rock of the early 80s — huge guitars and even huger hair. Featuring Van Halen and Def Leppard.</span>
-      </span>
-      <span class="chev">›</span>
-    </button><div class="card-body">
-      <div class="body-label">Fun facts</div>
-      <ul class="facts"><li>Van Halen's guitarist Eddie Van Halen was famous for "tapping" the strings with both hands at once to play super-fast.</li><li>Def Leppard's drummer kept drumming and touring after losing an arm — he built a special drum kit he plays partly with his feet.</li><li>Both bands were famous for enormous, high-energy stadium concerts.</li></ul>
-      <div class="listen"><b>Listen for:</b> In "Jump," the main riff is played on a keyboard, not a guitar — try to spot it.</div><div class="watch-row"><a class="watch" href="https://www.youtube.com/results?search_query=Van%20Halen%20Jump%20official" target="_blank" rel="noopener">▶️ Watch a clip</a><a class="watch tiny" href="https://www.youtube.com/results?search_query=Def%20Leppard%20Pour%20Some%20Sugar%20on%20Me%20official" target="_blank" rel="noopener">▶️ Also: Def Leppard "Pour Some Sugar on Me" (pre-screen)</a></div><a class="wiki-link" href="https://en.wikipedia.org/wiki/Glam_metal" target="_blank" rel="noopener">📖 Learn more (Wikipedia)</a></div></div><div class="card e80" data-era="1980s">
-    <button class="card-head" onclick="this.parentElement.classList.toggle(&#39;open&#39;)">
-      <span class="day-num">30</span>
-      <span class="card-meta">
-        <span class="era-tag">1980s</span>
-        <p class="artist">Heavier Stuff</p>
-        <span class="genre">Heavy metal &amp; hard rock — The loudest, heaviest end of rock — thunderous drums, growling guitars, and a little spooky fun. Featuring Metallica, Ozzy Osbourne / Black Sabbath, and ZZ Top.</span>
-      </span>
-      <span class="chev">›</span>
-    </button><div class="card-body">
-      <div class="body-label">Fun facts</div>
-      <ul class="facts"><li>Black Sabbath, with singer Ozzy Osbourne, is often called the band that invented heavy metal.</li><li>Metallica plays super-fast and is one of the best-selling bands in the world — they even recorded songs with a full orchestra.</li><li>ZZ Top is a Texas trio famous for two members with very long, chest-length beards — and for their hot-rod cars in music videos.</li></ul>
-      <div class="listen"><b>Listen for:</b> Feel how the drums and guitars hit harder and faster than other rock.</div><div class="flag"><b>⚑ Parent note:</b> Metal lyrics and imagery often skew dark/grown-up. ZZ Top's "Sharp Dressed Man," Metallica's instrumental moments, or their orchestra performance are safer entry points — pre-screen first.</div><div class="watch-row"><a class="watch" href="https://www.youtube.com/results?search_query=ZZ%20Top%20Sharp%20Dressed%20Man%20official" target="_blank" rel="noopener">▶️ Watch a clip</a><a class="watch tiny" href="https://www.youtube.com/results?search_query=Metallica%20S%26M%20orchestra%20Nothing%20Else%20Matters" target="_blank" rel="noopener">▶️ Also: Metallica with orchestra (S&amp;M)</a></div><a class="wiki-link" href="https://en.wikipedia.org/wiki/Heavy_metal_music" target="_blank" rel="noopener">📖 Learn more (Wikipedia)</a></div></div><div class="card e90" data-era="1990s" data-essential="true">
-    <button class="card-head" onclick="this.parentElement.classList.toggle(&#39;open&#39;)">
-      <span class="day-num">31</span>
-      <span class="card-meta">
-        <span class="era-tag">1990s</span>
-        <p class="artist">Grunge Day <span class="essential-badge" title="Music History Essential"></span></p>
-        <span class="genre">Grunge / alternative rock — Loud, raw rock from rainy Seattle and beyond that took over the 1990s — featuring Nirvana, Pearl Jam, Soundgarden, Alice in Chains, and Stone Temple Pilots.</span>
-      </span>
-      <span class="chev">›</span>
-    </button><div class="card-body">
-      <div class="body-label">Fun facts</div>
-      <ul class="facts"><li>Grunge bands came from the Seattle, Washington area and often wore flannel shirts and ripped jeans.</li><li>Nirvana, Pearl Jam, Soundgarden, Alice in Chains, and Stone Temple Pilots were the biggest grunge bands.</li><li>Alice in Chains was known for two voices singing together in an eerie, layered way.</li><li>Soundgarden's "Black Hole Sun" has a strange, dreamy sound that still gets played today.</li></ul>
-      <div class="listen"><b>Listen for:</b> Notice how the guitars sound fuzzy and "dirty" on purpose.</div><div class="flag"><b>⚑ Parent note:</b> This music can be loud and the lyrics are written for grown-ups. Stick to instrumental-heavy or well-known clips like Soundgarden's "Black Hole Sun," and pre-screen before playing for the kids.</div><div class="watch-row"><a class="watch" href="https://www.youtube.com/results?search_query=Soundgarden%20Black%20Hole%20Sun%20official" target="_blank" rel="noopener">▶️ Watch a clip</a><a class="watch tiny" href="https://www.youtube.com/results?search_query=Alice%20in%20Chains%20Would%20official" target="_blank" rel="noopener">▶️ Also: Alice in Chains "Would?" (pre-screen)</a></div><a class="wiki-link" href="https://en.wikipedia.org/wiki/Grunge" target="_blank" rel="noopener">📖 Learn more (Wikipedia)</a></div></div><div class="card e90" data-era="1990s">
-    <button class="card-head" onclick="this.parentElement.classList.toggle(&#39;open&#39;)">
-      <span class="day-num">32</span>
-      <span class="card-meta">
-        <span class="era-tag">1990s</span>
-        <p class="artist">90s Alt-Rock &amp; Cult Classics</p>
-        <span class="genre">Alternative rock — The guitar bands that ruled 90s radio after grunge — some anthemic, some goofy, all beloved. Featuring Foo Fighters, Goo Goo Dolls, Blink-182, Dave Matthews Band, and R.E.M.</span>
-      </span>
-      <span class="chev">›</span>
-    </button><div class="card-body">
-      <div class="body-label">Fun facts</div>
-      <ul class="facts"><li>Foo Fighters were started by Dave Grohl, who had been the drummer in Nirvana — and he played every single instrument himself on the first album.</li><li>Blink-182 were known for being silly and fun, with fast, bouncy pop-punk songs.</li><li>Dave Matthews Band built a huge, loyal following by jamming and stretching songs out live, often with a violin and saxophone in the mix.</li><li>R.E.M. helped invent "alternative" rock and had a giant hit with the bright, jangly "Shiny Happy People."</li></ul>
-      <div class="listen"><b>Listen for:</b> Notice how different these bands sound from each other — alt-rock was a big tent.</div><div class="flag"><b>⚑ Parent note:</b> A few songs (especially Blink-182) have grown-up lyrics. "Shiny Happy People" (R.E.M.) and "Learn to Fly" (Foo Fighters) are great kid-friendly starting points — pre-screen first.</div><div class="watch-row"><a class="watch" href="https://www.youtube.com/results?search_query=Foo%20Fighters%20Learn%20to%20Fly%20official" target="_blank" rel="noopener">▶️ Watch a clip</a><a class="watch tiny" href="https://www.youtube.com/results?search_query=R.E.M.%20Shiny%20Happy%20People%20official" target="_blank" rel="noopener">▶️ Also: R.E.M. "Shiny Happy People"</a></div><a class="wiki-link" href="https://en.wikipedia.org/wiki/Alternative_rock" target="_blank" rel="noopener">📖 Learn more (Wikipedia)</a></div></div><div class="card e90" data-era="1990s">
-    <button class="card-head" onclick="this.parentElement.classList.toggle(&#39;open&#39;)">
-      <span class="day-num">33</span>
-      <span class="card-meta">
-        <span class="era-tag">1990s</span>
-        <p class="artist">Mariah Carey</p>
-        <span class="genre">Pop / R&amp;B — A pop superstar famous for hitting impossibly high notes.</span>
-      </span>
-      <span class="chev">›</span>
-    </button><div class="card-body">
-      <div class="body-label">Fun facts</div>
-      <ul class="facts"><li>She can sing a super-high "whistle note" most singers can't reach.</li><li>She co-wrote most of her own hit songs.</li><li>Her holiday song "All I Want for Christmas Is You" comes back every single December.</li></ul>
-      <div class="listen"><b>Listen for:</b> Wait for the very, very high "whistle" note near the end.</div><div class="watch-row"><a class="watch" href="https://www.youtube.com/results?search_query=Mariah%20Carey%20whistle%20notes%20live" target="_blank" rel="noopener">▶️ Watch a clip</a></div><a class="wiki-link" href="https://en.wikipedia.org/wiki/Mariah_Carey" target="_blank" rel="noopener">📖 Learn more (Wikipedia)</a></div></div><div class="card e90" data-era="1990s">
-    <button class="card-head" onclick="this.parentElement.classList.toggle(&#39;open&#39;)">
-      <span class="day-num">34</span>
-      <span class="card-meta">
-        <span class="era-tag">1990s</span>
-        <p class="artist">Spice Girls</p>
-        <span class="genre">Pop — A fun British pop group whose whole message was "girl power."</span>
-      </span>
-      <span class="chev">›</span>
-    </button><div class="card-body">
-      <div class="body-label">Fun facts</div>
-      <ul class="facts"><li>Each member had a nickname: Scary, Sporty, Baby, Posh, and Ginger.</li><li>Their catchphrase was "girl power!"</li><li>"Wannabe" is one of the best-selling songs ever by a girl group.</li></ul>
-      <div class="listen"><b>Listen for:</b> Try to learn the "zig-a-zig-ah" part of "Wannabe."</div><div class="watch-row"><a class="watch" href="https://www.youtube.com/results?search_query=Spice%20Girls%20Wannabe%20official" target="_blank" rel="noopener">▶️ Watch a clip</a></div><a class="wiki-link" href="https://en.wikipedia.org/wiki/Spice_Girls" target="_blank" rel="noopener">📖 Learn more (Wikipedia)</a></div></div><div class="card e90" data-era="1990s">
-    <button class="card-head" onclick="this.parentElement.classList.toggle(&#39;open&#39;)">
-      <span class="day-num">35</span>
-      <span class="card-meta">
-        <span class="era-tag">1990s</span>
-        <p class="artist">Selena</p>
-        <span class="genre">Tejano / Latin pop — "The Queen of Tejano music" and a beloved Mexican-American star.</span>
-      </span>
-      <span class="chev">›</span>
-    </button><div class="card-body">
-      <div class="body-label">Fun facts</div>
-      <ul class="facts"><li>She sang in Spanish and learned the words even before she spoke Spanish fluently.</li><li>She's called the Queen of Tejano, a lively Texas-Mexican style of music.</li><li>Her bright, danceable song "Bidi Bidi Bom Bom" is still a favorite.</li></ul>
-      <div class="listen"><b>Listen for:</b> The chorus is just fun sounds — "bidi bidi bom bom" — sing along!</div><div class="watch-row"><a class="watch" href="https://www.youtube.com/results?search_query=Selena%20Bidi%20Bidi%20Bom%20Bom%20official" target="_blank" rel="noopener">▶️ Watch a clip</a></div><a class="wiki-link" href="https://en.wikipedia.org/wiki/Selena" target="_blank" rel="noopener">📖 Learn more (Wikipedia)</a></div></div><div class="card e90" data-era="1990s">
-    <button class="card-head" onclick="this.parentElement.classList.toggle(&#39;open&#39;)">
-      <span class="day-num">36</span>
-      <span class="card-meta">
-        <span class="era-tag">1990s</span>
-        <p class="artist">Vocal Groups of the 90s</p>
-        <span class="genre">R&amp;B / pop harmony — Smooth-singing groups like Boyz II Men and TLC who ruled 90s radio with harmony.</span>
-      </span>
-      <span class="chev">›</span>
-    </button><div class="card-body">
-      <div class="body-label">Fun facts</div>
-      <ul class="facts"><li>Boyz II Men were famous for blending four voices into one smooth sound.</li><li>TLC mixed singing and rapping and were one of the best-selling girl groups ever.</li><li>These groups often sang every note live with no instruments — just voices.</li><li>Backstreet Boys and NSYNC carried this harmony style into huge pop hits.</li></ul>
-      <div class="listen"><b>Listen for:</b> Count the voices — can you hear all four singing different parts?</div><div class="watch-row"><a class="watch" href="https://www.youtube.com/results?search_query=Boyz%20II%20Men%20live%20a%20cappella%20harmony" target="_blank" rel="noopener">▶️ Watch a clip</a><a class="watch tiny" href="https://www.youtube.com/results?search_query=TLC%20Waterfalls%20official" target="_blank" rel="noopener">▶️ Also: TLC "Waterfalls"</a></div><a class="wiki-link" href="https://en.wikipedia.org/wiki/Boyz_II_Men" target="_blank" rel="noopener">📖 Learn more (Wikipedia)</a></div></div><div class="card e00" data-era="2000s" data-essential="true">
-    <button class="card-head" onclick="this.parentElement.classList.toggle(&#39;open&#39;)">
-      <span class="day-num">37</span>
-      <span class="card-meta">
-        <span class="era-tag">2000s</span>
-        <p class="artist">Women of Hip-Hop &amp; R&amp;B <span class="essential-badge" title="Music History Essential"></span></p>
-        <span class="genre">Hip-hop / R&amp;B — Trailblazing women — Missy Elliott, Eve, and more — who changed what hip-hop sounded and looked like.</span>
-      </span>
-      <span class="chev">›</span>
-    </button><div class="card-body">
-      <div class="body-label">Fun facts</div>
-      <ul class="facts"><li>Missy Elliott made wild, imaginative music videos unlike anything else on TV.</li><li>Eve was the first woman rapper to have an album debut at number one — a huge milestone.</li><li>Missy is also a producer, meaning she builds the beats and sounds, not just the words.</li></ul>
-      <div class="listen"><b>Listen for:</b> Notice the bouncy, creative beats — Missy loved unusual sounds.</div><div class="flag"><b>⚑ Parent note:</b> Pick songs carefully — use clean/radio edits. Missy's "Work It" and Eve &amp; Gwen Stefani's "Let Me Blow Ya Mind" have edited versions; pre-screen the specific clip first.</div><div class="watch-row"><a class="watch" href="https://www.youtube.com/results?search_query=Missy%20Elliott%20NPR%20Tiny%20Desk" target="_blank" rel="noopener">▶️ Watch a clip</a><a class="watch tiny" href="https://www.youtube.com/results?search_query=Missy%20Elliott%20Work%20It%20clean%20version" target="_blank" rel="noopener">▶️ Also: Missy Elliott "Work It" (clean)</a></div><a class="wiki-link" href="https://en.wikipedia.org/wiki/Missy_Elliott" target="_blank" rel="noopener">📖 Learn more (Wikipedia)</a></div></div><div class="card e00" data-era="2000s" data-essential="true">
-    <button class="card-head" onclick="this.parentElement.classList.toggle(&#39;open&#39;)">
-      <span class="day-num">38</span>
-      <span class="card-meta">
-        <span class="era-tag">2000s</span>
-        <p class="artist">Beyoncé <span class="essential-badge" title="Music History Essential"></span></p>
-        <span class="genre">Pop / R&amp;B — One of the biggest stars in the world — first as a kid in Destiny's Child, then solo.</span>
-      </span>
-      <span class="chev">›</span>
-    </button><div class="card-body">
-      <div class="body-label">Fun facts</div>
-      <ul class="facts"><li>She started in the girl group Destiny's Child before going solo.</li><li>She has won more Grammy Awards than any other artist in history.</li><li>She rehearses her shows for months to get every dance move exact.</li></ul>
-      <div class="listen"><b>Listen for:</b> Watch how every dancer moves at the exact same time as her.</div><div class="watch-row"><a class="watch" href="https://www.youtube.com/results?search_query=Beyonce%20Single%20Ladies%20official" target="_blank" rel="noopener">▶️ Watch a clip</a></div><a class="wiki-link" href="https://en.wikipedia.org/wiki/Beyonc%C3%A9" target="_blank" rel="noopener">📖 Learn more (Wikipedia)</a></div></div><div class="card e00" data-era="2000s">
-    <button class="card-head" onclick="this.parentElement.classList.toggle(&#39;open&#39;)">
-      <span class="day-num">39</span>
-      <span class="card-meta">
-        <span class="era-tag">2000s</span>
-        <p class="artist">Alicia Keys</p>
-        <span class="genre">R&amp;B / soul / piano — A singer-songwriter who plays gorgeous piano while she sings.</span>
-      </span>
-      <span class="chev">›</span>
-    </button><div class="card-body">
-      <div class="body-label">Fun facts</div>
-      <ul class="facts"><li>She started playing classical piano when she was just 7 years old.</li><li>She writes her own songs at the piano.</li><li>Her song "Empire State of Mind" is a love letter to New York City.</li></ul>
-      <div class="listen"><b>Listen for:</b> It's all built on her piano — listen for it under her voice.</div><div class="watch-row"><a class="watch" href="https://www.youtube.com/results?search_query=Alicia%20Keys%20NPR%20Tiny%20Desk" target="_blank" rel="noopener">▶️ Watch a clip</a></div><a class="wiki-link" href="https://en.wikipedia.org/wiki/Alicia_Keys" target="_blank" rel="noopener">📖 Learn more (Wikipedia)</a></div></div><div class="card e00" data-era="2000s">
-    <button class="card-head" onclick="this.parentElement.classList.toggle(&#39;open&#39;)">
-      <span class="day-num">40</span>
-      <span class="card-meta">
-        <span class="era-tag">2000s</span>
-        <p class="artist">OutKast</p>
-        <span class="genre">Hip-hop — A creative, genre-bending hip-hop duo from Atlanta.</span>
-      </span>
-      <span class="chev">›</span>
-    </button><div class="card-body">
-      <div class="body-label">Fun facts</div>
-      <ul class="facts"><li>Their song "Hey Ya!" tells you to shake it "like a Polaroid picture."</li><li>They mixed rap with funk, rock, and soul in surprising ways.</li><li>They were known for bold, colorful style and big imagination.</li></ul>
-      <div class="listen"><b>Listen for:</b> Everyone shake your hands during "shake it like a Polaroid picture!"</div><div class="watch-row"><a class="watch" href="https://www.youtube.com/results?search_query=OutKast%20Hey%20Ya%20official" target="_blank" rel="noopener">▶️ Watch a clip</a></div><a class="wiki-link" href="https://en.wikipedia.org/wiki/OutKast" target="_blank" rel="noopener">📖 Learn more (Wikipedia)</a></div></div><div class="card e00" data-era="2000s">
-    <button class="card-head" onclick="this.parentElement.classList.toggle(&#39;open&#39;)">
-      <span class="day-num">41</span>
-      <span class="card-meta">
-        <span class="era-tag">2000s</span>
-        <p class="artist">Pop Princesses</p>
-        <span class="genre">Teen pop — The super catchy teen-pop stars who ruled the radio and TV around the year 2000 — featuring Britney Spears, Christina Aguilera, and more.</span>
-      </span>
-      <span class="chev">›</span>
-    </button><div class="card-body">
-      <div class="body-label">Fun facts</div>
-      <ul class="facts"><li>Britney Spears and Christina Aguilera both started out as kids on the same TV show — Disney's "Mickey Mouse Club" — alongside Justin Timberlake.</li><li>Britney's "...Baby One More Time" made her one of the biggest pop stars in the world almost overnight.</li><li>Christina Aguilera was famous for her huge, powerful voice and lots of fancy vocal runs.</li><li>Other big pop stars of this moment included Mandy Moore, Jessica Simpson, and Pink.</li></ul>
-      <div class="listen"><b>Listen for:</b> Listen to how many extra notes Christina adds — that's called a vocal "run."</div><div class="flag"><b>⚑ Parent note:</b> Some songs and videos from this era are aimed at teens/adults. Stick to the big radio hits and pre-screen the specific clip first.</div><div class="watch-row"><a class="watch" href="https://www.youtube.com/results?search_query=Britney%20Spears%20Baby%20One%20More%20Time%20official" target="_blank" rel="noopener">▶️ Watch a clip</a><a class="watch tiny" href="https://www.youtube.com/results?search_query=Christina%20Aguilera%20Genie%20in%20a%20Bottle%20official" target="_blank" rel="noopener">▶️ Also: Christina Aguilera "Genie in a Bottle"</a></div><a class="wiki-link" href="https://en.wikipedia.org/wiki/Teen_pop" target="_blank" rel="noopener">📖 Learn more (Wikipedia)</a></div></div><div class="card e10" data-era="2010s+">
-    <button class="card-head" onclick="this.parentElement.classList.toggle(&#39;open&#39;)">
-      <span class="day-num">42</span>
-      <span class="card-meta">
-        <span class="era-tag">2010s+</span>
-        <p class="artist">Emo &amp; Anthems</p>
-        <span class="genre">Emo / pop-punk / alt-rock — The big, emotional rock of the 2000s and 2010s — dramatic, catchy, and made for shouting along. Featuring Fall Out Boy, Panic! at the Disco, Paramore, and Linkin Park.</span>
-      </span>
-      <span class="chev">›</span>
-    </button><div class="card-body">
-      <div class="body-label">Fun facts</div>
-      <ul class="facts"><li>These bands often have long, funny, dramatic song titles — Fall Out Boy and Panic! at the Disco are famous for it.</li><li>Paramore is led by Hayley Williams, one of the most popular women fronting a rock band in this era.</li><li>Linkin Park mixed rock guitars with rapping and electronic sounds — a blend lots of bands copied.</li><li>The style is full of loud-then-soft-then-loud moments that make the songs feel dramatic.</li></ul>
-      <div class="listen"><b>Listen for:</b> Listen for the loud-then-soft-then-loud pattern that makes these songs feel dramatic.</div><div class="flag"><b>⚑ Parent note:</b> Some of these songs touch on grown-up emotions. Paramore's "Still Into You" and Fall Out Boy's "Centuries" are upbeat, kid-friendly entry points — pre-screen first.</div><div class="watch-row"><a class="watch" href="https://www.youtube.com/results?search_query=Paramore%20Still%20Into%20You%20official" target="_blank" rel="noopener">▶️ Watch a clip</a><a class="watch tiny" href="https://www.youtube.com/results?search_query=Fall%20Out%20Boy%20Centuries%20official" target="_blank" rel="noopener">▶️ Also: Fall Out Boy "Centuries"</a></div><a class="wiki-link" href="https://en.wikipedia.org/wiki/Emo" target="_blank" rel="noopener">📖 Learn more (Wikipedia)</a></div></div><div class="card e10" data-era="2010s+">
-    <button class="card-head" onclick="this.parentElement.classList.toggle(&#39;open&#39;)">
-      <span class="day-num">43</span>
-      <span class="card-meta">
-        <span class="era-tag">2010s+</span>
-        <p class="artist">Taylor Swift</p>
-        <span class="genre">Pop / country-pop — One of the biggest stars of the 2010s, who started in country music and became a pop superstar.</span>
-      </span>
-      <span class="chev">›</span>
-    </button><div class="card-body">
-      <div class="body-label">Fun facts</div>
-      <ul class="facts"><li>She writes or co-writes all her own songs, often telling stories from her real life.</li><li>When a company bought the recordings of her early albums, she re-recorded them herself so she'd own her own music — fans call these the "Taylor's Version" albums.</li><li>Her Eras Tour became one of the biggest and highest-earning concert tours ever.</li><li>She started out as a teenager playing country music in Nashville before going full pop.</li></ul>
-      <div class="listen"><b>Listen for:</b> Listen for the storytelling — her songs usually tell a beginning, middle, and end.</div><div class="watch-row"><a class="watch" href="https://www.youtube.com/results?search_query=Taylor%20Swift%20Shake%20It%20Off%20official" target="_blank" rel="noopener">▶️ Watch a clip</a><a class="watch tiny" href="https://www.youtube.com/results?search_query=Taylor%20Swift%20ME%20official" target="_blank" rel="noopener">▶️ Also: Taylor Swift "ME!"</a></div><a class="wiki-link" href="https://en.wikipedia.org/wiki/Taylor_Swift" target="_blank" rel="noopener">📖 Learn more (Wikipedia)</a></div></div><div class="card e10" data-era="2010s+">
-    <button class="card-head" onclick="this.parentElement.classList.toggle(&#39;open&#39;)">
-      <span class="day-num">44</span>
-      <span class="card-meta">
-        <span class="era-tag">2010s+</span>
-        <p class="artist">Adele</p>
-        <span class="genre">Pop / soul — A British singer with a huge, emotional voice, famous for powerful ballads.</span>
-      </span>
-      <span class="chev">›</span>
-    </button><div class="card-body">
-      <div class="body-label">Fun facts</div>
-      <ul class="facts"><li>She names her albums after how old she was when she made them — like "19," "21," "25," and "30."</li><li>Her song "Hello" was so popular its video got over a billion views.</li><li>She's won many Grammy Awards and an Oscar for a James Bond movie song, "Skyfall."</li><li>She sings mostly without fancy effects — it's really just her big voice.</li></ul>
-      <div class="listen"><b>Listen for:</b> Close your eyes and notice how much feeling she puts into each note.</div><div class="watch-row"><a class="watch" href="https://www.youtube.com/results?search_query=Adele%20Hello%20official" target="_blank" rel="noopener">▶️ Watch a clip</a><a class="watch tiny" href="https://www.youtube.com/results?search_query=Adele%20NPR%20Tiny%20Desk" target="_blank" rel="noopener">▶️ Also: Adele NPR Tiny Desk</a></div><a class="wiki-link" href="https://en.wikipedia.org/wiki/Adele" target="_blank" rel="noopener">📖 Learn more (Wikipedia)</a></div></div><div class="card e10" data-era="2010s+">
-    <button class="card-head" onclick="this.parentElement.classList.toggle(&#39;open&#39;)">
-      <span class="day-num">45</span>
-      <span class="card-meta">
-        <span class="era-tag">2010s+</span>
-        <p class="artist">Lady Gaga</p>
-        <span class="genre">Pop / dance-pop — A bold, theatrical pop star known for wild costumes and powerful singing.</span>
-      </span>
-      <span class="chev">›</span>
-    </button><div class="card-body">
-      <div class="body-label">Fun facts</div>
-      <ul class="facts"><li>She's famous for over-the-top outfits and dramatic, artistic music videos.</li><li>She's also a trained pianist and can sing big jazz and showtune numbers.</li><li>She won an Academy Award for the song "Shallow" from the movie A Star Is Born.</li><li>She made a whole album of old jazz songs with the legendary singer Tony Bennett.</li></ul>
-      <div class="listen"><b>Listen for:</b> Notice she's not just singing — the costumes and staging are part of the show.</div><div class="watch-row"><a class="watch" href="https://www.youtube.com/results?search_query=Lady%20Gaga%20Shallow%20live" target="_blank" rel="noopener">▶️ Watch a clip</a><a class="watch tiny" href="https://www.youtube.com/results?search_query=Lady%20Gaga%20Million%20Reasons%20official" target="_blank" rel="noopener">▶️ Also: Lady Gaga "Million Reasons"</a></div><a class="wiki-link" href="https://en.wikipedia.org/wiki/Lady_Gaga" target="_blank" rel="noopener">📖 Learn more (Wikipedia)</a></div></div><div class="card e10" data-era="2010s+" data-essential="true">
-    <button class="card-head" onclick="this.parentElement.classList.toggle(&#39;open&#39;)">
-      <span class="day-num">46</span>
-      <span class="card-meta">
-        <span class="era-tag">2010s+</span>
-        <p class="artist">Boy Bands &amp; Global Pop <span class="essential-badge" title="Music History Essential"></span></p>
-        <span class="genre">Pop — The huge, feel-good pop groups and stars of the 2010s — featuring One Direction, BTS, Justin Bieber, and Ed Sheeran.</span>
-      </span>
-      <span class="chev">›</span>
-    </button><div class="card-body">
-      <div class="body-label">Fun facts</div>
-      <ul class="facts"><li>BTS is a seven-member group from South Korea who sing in a style called K-pop — they became one of the biggest bands in the world.</li><li>BTS's videos often show off Korean culture, like the traditional outfits called hanbok.</li><li>One Direction were five singers put together on a TV talent show, and became a global sensation.</li><li>Justin Bieber was discovered as a kid singing on YouTube, and Ed Sheeran writes warm, gentle songs just with his guitar.</li></ul>
-      <div class="listen"><b>Listen for:</b> BTS sing in both Korean and English — see if you can catch the switch.</div><div class="watch-row"><a class="watch" href="https://www.youtube.com/results?search_query=BTS%20Dynamite%20official" target="_blank" rel="noopener">▶️ Watch a clip</a><a class="watch tiny" href="https://www.youtube.com/results?search_query=Ed%20Sheeran%20Perfect%20official" target="_blank" rel="noopener">▶️ Also: Ed Sheeran "Perfect"</a></div><a class="wiki-link" href="https://en.wikipedia.org/wiki/K-pop" target="_blank" rel="noopener">📖 Learn more (Wikipedia)</a></div></div><div class="card e10" data-era="2010s+">
-    <button class="card-head" onclick="this.parentElement.classList.toggle(&#39;open&#39;)">
-      <span class="day-num">47</span>
-      <span class="card-meta">
-        <span class="era-tag">2010s+</span>
-        <p class="artist">Pop Queens</p>
-        <span class="genre">Pop / dance-pop — The chart-topping women who defined 2010s radio — featuring Katy Perry, Ariana Grande, and Rihanna.</span>
-      </span>
-      <span class="chev">›</span>
-    </button><div class="card-body">
-      <div class="body-label">Fun facts</div>
-      <ul class="facts"><li>Katy Perry's "Firework" and "Roar" are big, confident sing-along anthems.</li><li>Ariana Grande is known for hitting very high notes, a bit like Mariah Carey (Day 33!), who inspired her.</li><li>Rihanna is from the Caribbean island of Barbados and became a global superstar — she's also a hugely successful businessperson.</li><li>All three are famous for enormous, colorful concerts and music videos.</li></ul>
-      <div class="listen"><b>Listen for:</b> Listen for how high Ariana can sing — she reaches notes most singers can't.</div><div class="flag"><b>⚑ Parent note:</b> Some songs and videos from these artists are aimed at teens/adults (especially Rihanna). Stick to the big radio hits — "Firework," "Roar," "Brave" — and pre-screen the specific clip first.</div><div class="watch-row"><a class="watch" href="https://www.youtube.com/results?search_query=Katy%20Perry%20Firework%20official" target="_blank" rel="noopener">▶️ Watch a clip</a><a class="watch tiny" href="https://www.youtube.com/results?search_query=Ariana%20Grande%20NPR%20Tiny%20Desk" target="_blank" rel="noopener">▶️ Also: Ariana Grande NPR Tiny Desk</a></div><a class="wiki-link" href="https://en.wikipedia.org/wiki/Ariana_Grande" target="_blank" rel="noopener">📖 Learn more (Wikipedia)</a></div></div><div class="card e10" data-era="2010s+" data-essential="true">
-    <button class="card-head" onclick="this.parentElement.classList.toggle(&#39;open&#39;)">
-      <span class="day-num">48</span>
-      <span class="card-meta">
-        <span class="era-tag">2010s+</span>
-        <p class="artist">Hip-Hop Storytellers <span class="essential-badge" title="Music History Essential"></span></p>
-        <span class="genre">Hip-hop / pop-rap — A look at modern hip-hop through its most positive, kid-friendly songs — about giving back, family, and big dreams.</span>
-      </span>
-      <span class="chev">›</span>
-    </button><div class="card-body">
-      <div class="body-label">Fun facts</div>
-      <ul class="facts"><li>Drake's song "God's Plan" came with a video where he gave away the whole video budget — about $1 million — to everyday people who needed it.</li><li>Hip-hop is built on rhyming and rhythm — rappers fit words together like puzzle pieces over a beat.</li><li>Lots of rappers got their start telling stories about where they grew up and the people who raised them.</li><li>"Old Town Road" by Lil Nas X mixed hip-hop with country and became one of the most popular songs ever.</li></ul>
-      <div class="listen"><b>Listen for:</b> Listen to how the words rhyme and lock into the beat.</div><div class="flag"><b>⚑ Parent note:</b> Most hip-hop is written for grown-ups and needs clean/edited versions. Safe bets: Drake's "God's Plan" (clean), "Old Town Road," and "Sunflower." Always pre-screen the specific clip first.</div><div class="watch-row"><a class="watch" href="https://www.youtube.com/results?search_query=Lil%20Nas%20X%20Old%20Town%20Road%20official" target="_blank" rel="noopener">▶️ Watch a clip</a><a class="watch tiny" href="https://www.youtube.com/results?search_query=Drake%20God%27s%20Plan%20clean%20version" target="_blank" rel="noopener">▶️ Also: Drake "God's Plan" (clean)</a></div><a class="wiki-link" href="https://en.wikipedia.org/wiki/Hip-hop_music" target="_blank" rel="noopener">📖 Learn more (Wikipedia)</a></div></div><div class="card e10" data-era="2010s+">
-    <button class="card-head" onclick="this.parentElement.classList.toggle(&#39;open&#39;)">
-      <span class="day-num">49</span>
-      <span class="card-meta">
-        <span class="era-tag">2010s+</span>
-        <p class="artist">Bruno Mars</p>
-        <span class="genre">Pop / funk / soul — A throwback showman who brings old-school funk and soul to today's pop.</span>
-      </span>
-      <span class="chev">›</span>
-    </button><div class="card-body">
-      <div class="body-label">Fun facts</div>
-      <ul class="facts"><li>As a little kid he performed as an Elvis impersonator.</li><li>He plays multiple instruments and sings, dances, and writes his songs.</li><li>"Uptown Funk" makes almost everybody want to dance.</li></ul>
-      <div class="listen"><b>Listen for:</b> Try not to dance during "Uptown Funk" — it's nearly impossible.</div><div class="watch-row"><a class="watch" href="https://www.youtube.com/results?search_query=Mark%20Ronson%20Bruno%20Mars%20Uptown%20Funk%20official" target="_blank" rel="noopener">▶️ Watch a clip</a></div><a class="wiki-link" href="https://en.wikipedia.org/wiki/Bruno_Mars" target="_blank" rel="noopener">📖 Learn more (Wikipedia)</a></div></div><div class="card e10" data-era="2010s+">
-    <button class="card-head" onclick="this.parentElement.classList.toggle(&#39;open&#39;)">
-      <span class="day-num">50</span>
-      <span class="card-meta">
-        <span class="era-tag">2010s+</span>
-        <p class="artist">Lizzo</p>
-        <span class="genre">Pop / hip-hop — A joyful pop star who is also a trained classical flute player.</span>
-      </span>
-      <span class="chev">›</span>
-    </button><div class="card-body">
-      <div class="body-label">Fun facts</div>
-      <ul class="facts"><li>She plays the flute — and sometimes plays it while dancing!</li><li>She studied classical flute seriously before becoming a pop star.</li><li>Her songs are all about confidence and feeling good about yourself.</li></ul>
-      <div class="listen"><b>Listen for:</b> Spot the moment she plays the flute mid-song.</div><div class="watch-row"><a class="watch" href="https://www.youtube.com/results?search_query=Lizzo%20NPR%20Tiny%20Desk%20flute" target="_blank" rel="noopener">▶️ Watch a clip</a></div><a class="wiki-link" href="https://en.wikipedia.org/wiki/Lizzo" target="_blank" rel="noopener">📖 Learn more (Wikipedia)</a></div></div><div class="card e10" data-era="2010s+">
-    <button class="card-head" onclick="this.parentElement.classList.toggle(&#39;open&#39;)">
-      <span class="day-num">51</span>
-      <span class="card-meta">
-        <span class="era-tag">2010s+</span>
-        <p class="artist">OK Go</p>
-        <span class="genre">Alt-rock / video art — A band famous for jaw-dropping music videos done in one single take.</span>
-      </span>
-      <span class="chev">›</span>
-    </button><div class="card-body">
-      <div class="body-label">Fun facts</div>
-      <ul class="facts"><li>One video has the whole band dancing on moving treadmills.</li><li>Another is a giant Rube Goldberg machine that takes the whole song to finish.</li><li>They plan these videos for months and film them all in one continuous shot.</li></ul>
-      <div class="listen"><b>Listen for:</b> Watch the video closely — it's all one take with no cuts!</div><div class="watch-row"><a class="watch" href="https://www.youtube.com/results?search_query=OK%20Go%20This%20Too%20Shall%20Pass%20Rube%20Goldberg%20official" target="_blank" rel="noopener">▶️ Watch a clip</a></div><a class="wiki-link" href="https://en.wikipedia.org/wiki/OK_Go" target="_blank" rel="noopener">📖 Learn more (Wikipedia)</a></div></div><div class="card e10" data-era="2010s+">
-    <button class="card-head" onclick="this.parentElement.classList.toggle(&#39;open&#39;)">
-      <span class="day-num">52</span>
-      <span class="card-meta">
-        <span class="era-tag">2010s+</span>
-        <p class="artist">They Might Be Giants</p>
-        <span class="genre">Alt-rock / kids' music — A clever, quirky band that makes music for grown-ups AND whole albums for kids.</span>
-      </span>
-      <span class="chev">›</span>
-    </button><div class="card-body">
-      <div class="body-label">Fun facts</div>
-      <ul class="facts"><li>They've made several albums just for children, about science and the alphabet.</li><li>Their song "Why Does the Sun Shine?" teaches real facts about the sun.</li><li>They love weird instruments and silly, smart lyrics.</li></ul>
-      <div class="listen"><b>Listen for:</b> Listen for actual facts hidden inside the silly songs.</div><div class="watch-row"><a class="watch" href="https://www.youtube.com/results?search_query=They%20Might%20Be%20Giants%20Why%20Does%20the%20Sun%20Shine" target="_blank" rel="noopener">▶️ Watch a clip</a></div><a class="wiki-link" href="https://en.wikipedia.org/wiki/They_Might_Be_Giants" target="_blank" rel="noopener">📖 Learn more (Wikipedia)</a></div></div><div class="card e10" data-era="2010s+">
-    <button class="card-head" onclick="this.parentElement.classList.toggle(&#39;open&#39;)">
-      <span class="day-num">53</span>
-      <span class="card-meta">
-        <span class="era-tag">2010s+</span>
-        <p class="artist">Pentatonix</p>
-        <span class="genre">A cappella — A group that makes a full band's worth of sound using only their voices.</span>
-      </span>
-      <span class="chev">›</span>
-    </button><div class="card-body">
-      <div class="body-label">Fun facts</div>
-      <ul class="facts"><li>They use zero instruments — every sound is a human voice.</li><li>One member is a "beatboxer" who makes drum sounds with his mouth.</li><li>They won a TV singing competition as a group.</li></ul>
-      <div class="listen"><b>Listen for:</b> There are no instruments — every single sound is somebody's mouth.</div><div class="watch-row"><a class="watch" href="https://www.youtube.com/results?search_query=Pentatonix%20official%20a%20cappella%20performance" target="_blank" rel="noopener">▶️ Watch a clip</a></div><a class="wiki-link" href="https://en.wikipedia.org/wiki/Pentatonix" target="_blank" rel="noopener">📖 Learn more (Wikipedia)</a></div></div><div class="card ebonus" data-era="Bonus">
-    <button class="card-head" onclick="this.parentElement.classList.toggle(&#39;open&#39;)">
-      <span class="day-num">54</span>
-      <span class="card-meta">
-        <span class="era-tag">Bonus</span>
-        <p class="artist">One-Hit Wonders</p>
-        <span class="genre">Songs everyone knows, by bands you might not — A whole day of catchy songs where the band became famous for basically just one giant hit.</span>
-      </span>
-      <span class="chev">›</span>
-    </button><div class="card-body">
-      <div class="body-label">Fun facts</div>
-      <ul class="facts"><li>A "one-hit wonder" is a musician who has one super-famous song but never has another big hit.</li><li>a-ha's "Take On Me" has a famous music video that mixes real people with pencil-sketch cartoon drawings.</li><li>Some are impossible to sit still for — like "Tainted Love," "Come On Eileen," "Mambo No. 5," and "Macarena" (which comes with its own dance).</li><li>The Baha Men's "Who Let the Dogs Out?" is a goofy favorite that kids almost always know.</li></ul>
-      <div class="listen"><b>Listen for:</b> Pick the catchiest one and see if you still remember it tomorrow — that's why they're famous!</div><div class="watch-row"><a class="watch" href="https://www.youtube.com/results?search_query=a-ha%20Take%20On%20Me%20official%20video" target="_blank" rel="noopener">▶️ Watch a clip</a><a class="watch tiny" href="https://www.youtube.com/results?search_query=Macarena%20official%20dance%20version" target="_blank" rel="noopener">▶️ Also: Los del Río "Macarena" (try the dance!)</a></div><a class="wiki-link" href="https://en.wikipedia.org/wiki/One-hit_wonder" target="_blank" rel="noopener">📖 Learn more (Wikipedia)</a></div></div><div class="card ebonus" data-era="Bonus">
-    <button class="card-head" onclick="this.parentElement.classList.toggle(&#39;open&#39;)">
-      <span class="day-num">55</span>
-      <span class="card-meta">
-        <span class="era-tag">Bonus</span>
-        <p class="artist">Princess &amp; Disney Songs</p>
-        <span class="genre">Movie musical / soundtrack — A whole day of the big sing-along songs from animated movies — many written like Broadway showstoppers.</span>
-      </span>
-      <span class="chev">›</span>
-    </button><div class="card-body">
-      <div class="body-label">Fun facts</div>
-      <ul class="facts"><li>"Let It Go" from Frozen was so catchy it won an Academy Award and got sung by kids everywhere.</li><li>The songs for Moana and Encanto were written by Lin-Manuel Miranda, the same person who made the musical Hamilton.</li><li>Encanto's "We Don't Talk About Bruno" became the first Disney movie song ever to hit number one in America — and it was translated into 46 languages.</li><li>Brave is set in Scotland, and Tangled, Cinderella, and Snow White each turned classic fairy tales into musicals.</li></ul>
-      <div class="listen"><b>Listen for:</b> Notice how these songs tell the story — the character is usually singing about what they want.</div><div class="watch-row"><a class="watch" href="https://www.youtube.com/results?search_query=Encanto%20We%20Don%27t%20Talk%20About%20Bruno%20official%20clip" target="_blank" rel="noopener">▶️ Watch a clip</a><a class="watch tiny" href="https://www.youtube.com/results?search_query=Moana%20How%20Far%20I%27ll%20Go%20official" target="_blank" rel="noopener">▶️ Also: Moana "How Far I'll Go"</a></div><a class="wiki-link" href="https://en.wikipedia.org/wiki/Walt_Disney_Animation_Studios" target="_blank" rel="noopener">📖 Learn more (Wikipedia)</a></div></div><div class="card ebonus" data-era="Bonus">
-    <button class="card-head" onclick="this.parentElement.classList.toggle(&#39;open&#39;)">
-      <span class="day-num">56</span>
-      <span class="card-meta">
-        <span class="era-tag">Bonus</span>
-        <p class="artist">Bobby McFerrin</p>
-        <span class="genre">Voice as instrument — A singer who builds entire songs using only his voice and his body.</span>
-      </span>
-      <span class="chev">›</span>
-    </button><div class="card-body">
-      <div class="body-label">Fun facts</div>
-      <ul class="facts"><li>His hit "Don't Worry, Be Happy" has NO instruments — every sound is him.</li><li>He thumps his own chest to make the drum beat.</li><li>He can sing two things at once and gets whole audiences singing with him.</li></ul>
-      <div class="listen"><b>Listen for:</b> There's no band — see how many sounds come from just one person.</div><div class="watch-row"><a class="watch" href="https://www.youtube.com/results?search_query=Bobby%20McFerrin%20Don%27t%20Worry%20Be%20Happy%20official" target="_blank" rel="noopener">▶️ Watch a clip</a></div><a class="wiki-link" href="https://en.wikipedia.org/wiki/Bobby_McFerrin" target="_blank" rel="noopener">📖 Learn more (Wikipedia)</a></div></div><div class="card ebonus" data-era="Bonus">
-    <button class="card-head" onclick="this.parentElement.classList.toggle(&#39;open&#39;)">
-      <span class="day-num">57</span>
-      <span class="card-meta">
-        <span class="era-tag">Bonus</span>
-        <p class="artist">Yo-Yo Ma</p>
-        <span class="genre">Classical cello — The world's most famous cello player.</span>
-      </span>
-      <span class="chev">›</span>
-    </button><div class="card-body">
-      <div class="body-label">Fun facts</div>
-      <ul class="facts"><li>The cello is a big string instrument you play sitting down, hugged between your knees.</li><li>He played for the public at age 7 and has won many Grammys.</li><li>He has played everything from classical music to bluegrass to movie scores.</li></ul>
-      <div class="listen"><b>Listen for:</b> The cello sounds deep and warm — close your eyes and just listen.</div><div class="watch-row"><a class="watch" href="https://www.youtube.com/results?search_query=Yo-Yo%20Ma%20NPR%20Tiny%20Desk%20cello" target="_blank" rel="noopener">▶️ Watch a clip</a></div><a class="wiki-link" href="https://en.wikipedia.org/wiki/Yo-Yo_Ma" target="_blank" rel="noopener">📖 Learn more (Wikipedia)</a></div></div><div class="card ebonus" data-era="Bonus">
-    <button class="card-head" onclick="this.parentElement.classList.toggle(&#39;open&#39;)">
-      <span class="day-num">58</span>
-      <span class="card-meta">
-        <span class="era-tag">Bonus</span>
-        <p class="artist">STOMP</p>
-        <span class="genre">Rhythm &amp; percussion — A performance group that makes music out of everyday objects.</span>
-      </span>
-      <span class="chev">›</span>
-    </button><div class="card-body">
-      <div class="body-label">Fun facts</div>
-      <ul class="facts"><li>They make beats using brooms, trash can lids, and even kitchen sinks.</li><li>There are no words and no normal instruments — just rhythm.</li><li>It started as a street show and became a famous stage performance.</li></ul>
-      <div class="listen"><b>Listen for:</b> Try tapping the beat along with them on your knees.</div><div class="watch-row"><a class="watch" href="https://www.youtube.com/results?search_query=STOMP%20performance%20brooms%20rhythm" target="_blank" rel="noopener">▶️ Watch a clip</a></div><a class="wiki-link" href="https://en.wikipedia.org/wiki/Stomp_(theatrical_show)" target="_blank" rel="noopener">📖 Learn more (Wikipedia)</a></div></div><div class="card ebonus" data-era="Bonus">
-    <button class="card-head" onclick="this.parentElement.classList.toggle(&#39;open&#39;)">
-      <span class="day-num">59</span>
-      <span class="card-meta">
-        <span class="era-tag">Bonus</span>
-        <p class="artist">"Weird Al" Yankovic</p>
-        <span class="genre">Comedy / parody — The king of funny songs that make fun of famous hits.</span>
-      </span>
-      <span class="chev">›</span>
-    </button><div class="card-body">
-      <div class="body-label">Fun facts</div>
-      <ul class="facts"><li>He takes hit songs and rewrites the words to be silly — like turning a love song into a song about food.</li><li>He plays the accordion.</li><li>He's been making people laugh with parody songs for over 40 years.</li></ul>
-      <div class="listen"><b>Listen for:</b> See if you can guess the real song he's making fun of.</div><div class="watch-row"><a class="watch" href="https://www.youtube.com/results?search_query=Weird%20Al%20Yankovic%20Eat%20It%20official" target="_blank" rel="noopener">▶️ Watch a clip</a></div><a class="wiki-link" href="https://en.wikipedia.org/wiki/%22Weird_Al%22_Yankovic" target="_blank" rel="noopener">📖 Learn more (Wikipedia)</a></div></div><div class="card ebonus" data-era="Bonus">
-    <button class="card-head" onclick="this.parentElement.classList.toggle(&#39;open&#39;)">
-      <span class="day-num">60</span>
-      <span class="card-meta">
-        <span class="era-tag">Bonus</span>
-        <p class="artist">Lin-Manuel Miranda / Hamilton</p>
-        <span class="genre">Musical theater — A songwriter who told the story of American history using rap and hip-hop.</span>
-      </span>
-      <span class="chev">›</span>
-    </button><div class="card-body">
-      <div class="body-label">Fun facts</div>
-      <ul class="facts"><li>He wrote the musical "Hamilton," where the Founding Fathers rap.</li><li>It mixes hip-hop, R&amp;B, and traditional show tunes.</li><li>He also wrote songs for Disney's "Moana" and "Encanto."</li></ul>
-      <div class="listen"><b>Listen for:</b> Notice how the characters rap the story instead of just talking.</div><div class="flag"><b>⚑ Parent note:</b> The full musical has some mature themes and language — the "Moana" and "Encanto" songs are the most kid-friendly entry point.</div><div class="watch-row"><a class="watch" href="https://www.youtube.com/results?search_query=Lin-Manuel%20Miranda%20Hamilton%20White%20House%20performance" target="_blank" rel="noopener">▶️ Watch a clip</a></div><a class="wiki-link" href="https://en.wikipedia.org/wiki/Lin-Manuel_Miranda" target="_blank" rel="noopener">📖 Learn more (Wikipedia)</a></div></div></div>
+  <div class="grid" id="grid"></div>
 
   <footer>
     Built for backyard listening. Video links open YouTube searches or official channels so they stay working over time.<br>
@@ -940,54 +268,113 @@
 // ---- DATA ----
 // yt() builds a reliable YouTube search link; ch() is a direct/known link.
 const yt = q => "https://www.youtube.com/results?search_query=" + encodeURIComponent(q);
+const sp = q => "https://open.spotify.com/search/" + encodeURIComponent(q);
 
 /* ============================================================
    SPOTIFY PLAYLISTS  —  EDIT THIS LIST
    ------------------------------------------------------------
-   Paste one playlist link per day, using the DAY NUMBER as the key.
+   Paste one playlist link per day, using the day's ID as the key.
+   The ID is the "id" field on each entry in the DAYS array below
+   (e.g. "chuck-berry", "the-beatles"). It never changes, so you can
+   reorder or insert days without touching these links.
    In Spotify: open your playlist → Share → Copy link, then paste below.
    Leave a day out (or blank) and its Spotify button simply won't show.
    Example:
-       3: "https://open.spotify.com/playlist/37i9dQZF1DX...",
-   Day numbers match the cards in order (Day 1 = first card, etc.).
+       "the-beatles": "https://open.spotify.com/playlist/37i9dQZF1DX...",
    ============================================================ */
 const SPOTIFY = {
-  // 1: "https://open.spotify.com/playlist/PASTE_HERE",
-  // 2: "https://open.spotify.com/playlist/PASTE_HERE",
+  // Keyed by each day's id (the "id" field in the DAYS array below).
+  // Add, remove, or edit freely; a day with no entry just hides its button.
+  "louis-armstrong":                "https://open.spotify.com/playlist/37i9dQZF1DZ06evO0Co11u",  // Louis Armstrong
+  "ella-fitzgerald":                "https://open.spotify.com/artist/5V0MlUE1Bft0mbLlND7FJz",  // Ella Fitzgerald
+  "chuck-berry":                    "https://open.spotify.com/playlist/37i9dQZF1DZ06evO1dAid2",  // Chuck Berry
+  "little-richard":                 "https://open.spotify.com/playlist/37i9dQZF1DZ06evO2EOpcI",  // Little Richard
+  "doo-wop-day":                    "https://open.spotify.com/playlist/49YFcrnPQC9i1KhUS5VfUu",  // Doo-Wop Day
+  "motown-day":                     "https://open.spotify.com/playlist/6TYrF3UIlP0edoN4nLAntW",  // Motown Day
+  "the-beach-boys":                 "https://open.spotify.com/playlist/37i9dQZF1DZ06evO1YgcUw",  // The Beach Boys
+  "stevie-wonder":                  "https://open.spotify.com/artist/7guDJrEfX3qb6FEbdPA5qi",  // Stevie Wonder
+  "aretha-franklin":                "https://open.spotify.com/artist/7nwUJBm0HE4ZxD3f5cy5ok",  // Aretha Franklin
+  "the-beatles":                    "https://open.spotify.com/playlist/3qzSs6QfGALvi7ItObGwDl",  // The Beatles
+  "the-rolling-stones":             "https://open.spotify.com/playlist/37i9dQZF1DZ06evO19s0CZ",  // The Rolling Stones
+  "the-jackson-5":                  "https://open.spotify.com/playlist/37i9dQZF1DZ06evO1jm2Q0",  // The Jackson 5
+  "pink-floyd":                     "https://open.spotify.com/playlist/37i9dQZF1DZ06evO07zaak",  // Pink Floyd
+  "bob-marley":                     "https://open.spotify.com/playlist/37i9dQZF1DZ06evO1DHoaY",  // Bob Marley
+  "earth-wind-and-fire":            "https://open.spotify.com/playlist/37i9dQZF1DZ06evO2QxIuk",  // Earth, Wind & Fire
+  "dolly-parton":                   "https://open.spotify.com/playlist/37i9dQZF1DZ06evO1KXgbK",  // Dolly Parton
+  "queen":                          "https://open.spotify.com/playlist/37i9dQZF1DZ06evO0ENBD2",  // Queen
+  "abba":                           "https://open.spotify.com/playlist/37i9dQZF1DX3D78h6FPBPC",  // ABBA
+  "michael-jackson":                "https://open.spotify.com/playlist/37i9dQZF1DZ06evO1SVXaM",  // Michael Jackson
+  "prince":                         "https://open.spotify.com/playlist/37i9dQZF1DZ06evO3262Tm",  // Prince
+  "tina-turner":                    "https://open.spotify.com/artist/1zuJe6b1roixEKMOtyrEak",  // Tina Turner
+  "whitney-houston":                "https://open.spotify.com/playlist/37i9dQZF1DZ06evO476tMI",  // Whitney Houston
+  "90s-alt-rock-and-cult-classics": "https://open.spotify.com/playlist/6noaN1KgNaeMru0bSaYcZy",  // 90s Alt-Rock & Cult Classics
+  "selena":                         "https://open.spotify.com/playlist/37i9dQZF1DZ06evO3YdXS8",  // Selena
+  "spice-girls":                    "https://open.spotify.com/playlist/37i9dQZF1DZ06evO0dPrdS",  // Spice Girls
+  "alicia-keys":                    "https://open.spotify.com/playlist/37i9dQZF1DZ06evO275qeI",  // Alicia Keys
+  "lady-gaga":                      "https://open.spotify.com/playlist/37i9dQZF1DXc7FZ2VBjaeT",  // Lady Gaga
+  "taylor-swift":                   "https://open.spotify.com/playlist/37i9dQZF1DX5KpP2LN299J",  // Taylor Swift
+  "adele":                          "https://open.spotify.com/playlist/37i9dQZF1DWZUozJiHy44Y",  // Adele
+  "bruno-mars":                     "https://open.spotify.com/playlist/37i9dQZF1DZ06evO03DwPK",  // Bruno Mars
+  "lizzo":                          "https://open.spotify.com/playlist/37i9dQZF1DZ06evO2ZTWSp",  // Lizzo
+  "ok-go":                          "https://open.spotify.com/playlist/37i9dQZF1DZ06evO1TUrVS",  // OK Go
+  "pentatonix":                     "https://open.spotify.com/playlist/37i9dQZF1DZ06evO1c6rSg",  // Pentatonix
+  "they-might-be-giants":           "https://open.spotify.com/playlist/37i9dQZF1DZ06evO3SMicb",  // They Might Be Giants
+  "princess-and-disney-songs":      "https://open.spotify.com/playlist/2dZawzZF9f2tBpYtLKqhNl",  // Princess & Disney Songs
+  "lin-manuel-miranda-hamilton":    "https://open.spotify.com/album/1kCHru7uhxBUdzkm4gzRQc",  // Lin-Manuel Miranda / Hamilton
+  "weird-al-yankovic":              "https://open.spotify.com/playlist/37i9dQZF1DZ06evO0DPW12",  // "Weird Al" Yankovic
+  "bobby-mcferrin":                 "https://open.spotify.com/playlist/37i9dQZF1DZ06evO1wZCuz",  // Bobby McFerrin
+  "stomp":                          "https://open.spotify.com/playlist/37i9dQZF1E4vv3SNe8RRbP",  // STOMP
+  "yo-yo-ma":                       "https://open.spotify.com/playlist/37i9dQZF1DZ06evO3jIPfy",  // Yo-Yo Ma
 };
 
 
 const DAYS = [
   // ===== 1950s =====
-  {era:"1950s",cls:"e50",artist:"Chuck Berry",essential:true,genre:"Rock & roll guitar",
-   intro:"Often called the father of rock and roll.",
-   facts:["He invented the famous one-legged hop across the stage called the \"duck walk.\"","His song \"Johnny B. Goode\" was launched into space on the Voyager Golden Record — actual music sent to the stars.","Tons of bands you'll meet this summer (the Beatles, the Beach Boys) learned by copying his guitar riffs."],
-   listen:"Listen for the bright, twangy guitar that kicks off the whole song.",
-   wiki:"https://en.wikipedia.org/wiki/Chuck_Berry",
-   watch:yt("Chuck Berry Johnny B Goode live")},
-
-  {era:"1950s",cls:"e50",artist:"Little Richard",essential:true,genre:"Piano rock & roll",
-   intro:"A wild, joyful piano-pounder with sky-high energy.",
-   facts:["He played piano standing up, sometimes with his foot on the keys.","His big yell \"A-wop-bop-a-loo-bop-a-lop-bam-boom!\" is one of the most famous noises in music.","He called himself \"the architect of rock and roll\" — and lots of people agree."],
-   listen:"Count how many times he shouts \"woo!\"",
-   wiki:"https://en.wikipedia.org/wiki/Little_Richard",
-   watch:yt("Little Richard Tutti Frutti live performance")},
-
-  {era:"1950s",cls:"e50",artist:"Ella Fitzgerald",genre:"Jazz vocals",
-   intro:"\"The First Lady of Song\" and the queen of scat singing.",
-   facts:["Scat singing is making up nonsense syllables like an instrument — \"shoo-bee-doo-bop\" — and Ella was the best ever.","She won 13 Grammy Awards.","She could copy the sound of a trumpet or sax with just her voice."],
-   listen:"When she stops singing real words and just sings sounds — that's scat!",
-   wiki:"https://en.wikipedia.org/wiki/Ella_Fitzgerald",
-   watch:yt("Ella Fitzgerald scat singing live")},
-
-  {era:"1950s",cls:"e50",artist:"Louis Armstrong",genre:"Jazz trumpet",
+  {id:"louis-armstrong", era:"1950s",cls:"e50",artist:"Louis Armstrong",genre:"Jazz trumpet",
    intro:"A trumpet master with the most recognizable gravelly voice in jazz.",
    facts:["His nickname was \"Satchmo,\" short for \"Satchel Mouth.\"","He helped make the trumpet solo a star of jazz music.","His song \"What a Wonderful World\" is still played at weddings and movies today."],
    listen:"Notice how his singing voice sounds raspy, like a friendly growl.",
    wiki:"https://en.wikipedia.org/wiki/Louis_Armstrong",
    watch:yt("Louis Armstrong What a Wonderful World")},
 
-  {era:"1950s",cls:"e50",artist:"Doo-Wop Day",essential:true,genre:"Vocal harmony / doo-wop",
+  {id:"ella-fitzgerald", era:"1950s",cls:"e50",artist:"Ella Fitzgerald",genre:"Jazz vocals",
+   intro:"\"The First Lady of Song\" and the queen of scat singing.",
+   facts:["Scat singing is making up nonsense syllables like an instrument — \"shoo-bee-doo-bop\" — and Ella was the best ever.","She won 13 Grammy Awards.","She could copy the sound of a trumpet or sax with just her voice."],
+   listen:"When she stops singing real words and just sings sounds — that's scat!",
+   wiki:"https://en.wikipedia.org/wiki/Ella_Fitzgerald",
+   watch:yt("Ella Fitzgerald scat singing live")},
+
+  {id:"classic-country", era:"1950s",cls:"e50",artist:"Classic Country",genre:"Classic country",
+   intro:"Country music is all about telling a story in a song — from early stars like Hank Williams to the legends Johnny Cash, Patsy Cline, and Willie Nelson.",
+   facts:["A country song is like a little story you can follow from start to finish — listen and find out what happens.","Johnny Cash almost always wore black clothes from head to toe, so everyone called him \"the Man in Black.\"","Willie Nelson is easy to spot with his long braids, and he's played the same trusty old guitar — which he named \"Trigger\" — for many, many years.","Patsy Cline and Hank Williams were famous country stars long ago, and people still love singing their songs today."],
+   listen:"Listen for the story — what happens in the song?",
+   wiki:"https://en.wikipedia.org/wiki/Country_music",
+   watch:yt("Johnny Cash I Walk the Line"),
+   watch2:{label:"▶️ Also: Patsy Cline \"Walkin' After Midnight\"",url:yt("Patsy Cline Walkin' After Midnight")}},
+
+  {id:"chuck-berry", era:"1950s",cls:"e50",artist:"Chuck Berry",essential:true,genre:"Rock & roll guitar",
+   intro:"Often called the father of rock and roll.",
+   facts:["He invented the famous one-legged hop across the stage called the \"duck walk.\"","His song \"Johnny B. Goode\" was launched into space on the Voyager Golden Record — actual music sent to the stars.","Tons of bands you'll meet this summer (the Beatles, the Beach Boys) learned by copying his guitar riffs."],
+   listen:"Listen for the bright, twangy guitar that kicks off the whole song.",
+   wiki:"https://en.wikipedia.org/wiki/Chuck_Berry",
+   watch:yt("Chuck Berry Johnny B Goode live")},
+
+  {id:"little-richard", era:"1950s",cls:"e50",artist:"Little Richard",essential:true,genre:"Piano rock & roll",
+   intro:"A wild, joyful piano-pounder with sky-high energy.",
+   facts:["He played piano standing up, sometimes with his foot on the keys.","His big yell \"A-wop-bop-a-loo-bop-a-lop-bam-boom!\" is one of the most famous noises in music.","He called himself \"the architect of rock and roll\" — and lots of people agree."],
+   listen:"Count how many times he shouts \"woo!\"",
+   wiki:"https://en.wikipedia.org/wiki/Little_Richard",
+   watch:yt("Little Richard Tutti Frutti live performance")},
+
+  {id:"elvis-presley", era:"1950s",cls:"e50",artist:"Elvis Presley",essential:true,genre:"Rock & roll",
+   intro:"\"The King of Rock and Roll\" — one of the most famous singers who ever lived.",
+   facts:["Everyone called him the King of Rock and Roll.","When he sang, he wiggled and shook his hips so much that it became his very own famous dance.","He loved flashy outfits — big collars and sparkly white jumpsuits — that made him easy to spot on stage."],
+   listen:"Wiggle and dance the way Elvis did — shake those hips!",
+   wiki:"https://en.wikipedia.org/wiki/Elvis_Presley",
+   watch:yt("Elvis Presley Hound Dog"),
+   watch2:{label:"▶️ Also: Elvis Presley \"Jailhouse Rock\"",url:yt("Elvis Presley Jailhouse Rock")}},
+
+  {id:"doo-wop-day", era:"1950s",cls:"e50",artist:"Doo-Wop Day",essential:true,genre:"Vocal harmony / doo-wop",
    intro:"The 1950s sound of groups singing close harmony together, often with no instruments at first — featuring the Platters, the Drifters, and Frankie Lymon and the Teenagers.",
    facts:["\"Doo-wop\" gets its name from the nonsense sounds the background singers made, like \"doo-wop\" and \"sh-boom.\"","Groups would practice singing on street corners and in stairwells because the echo made their harmonies sound great.","Frankie Lymon was only 13 when he sang lead on \"Why Do Fools Fall in Love\" — making them rock's first all-teenage group.","The Platters' \"The Great Pretender\" and The Drifters' songs turned this street-corner style into polished hits."],
    listen:"Listen for the background singers making sounds instead of words.",
@@ -995,86 +382,9 @@ const DAYS = [
    watch:yt("The Platters The Great Pretender live"),
    watch2:{label:"▶️ Also: Frankie Lymon \"Why Do Fools Fall in Love\"",url:yt("Frankie Lymon Why Do Fools Fall in Love")}},
 
+
   // ===== 1960s =====
-  {era:"1960s",cls:"e60",artist:"The Beatles",essential:true,genre:"British Invasion rock",
-   intro:"Four guys from Liverpool, England who became the most famous band in the world.",
-   facts:["When they first came to America, so many fans screamed at concerts the band couldn't hear themselves play.","They wrote songs perfect for kids like \"Yellow Submarine\" and \"Octopus's Garden.\"","Their last public concert was a surprise show on a rooftop."],
-   listen:"In \"Yellow Submarine,\" listen for the bubbly underwater sound effects.",
-   wiki:"https://en.wikipedia.org/wiki/The_Beatles",
-   watch:yt("Beatles Yellow Submarine official video")},
-
-  {era:"1960s",cls:"e60",artist:"The Beach Boys",genre:"Surf harmony pop",
-   intro:"California's kings of sunshine, surfing, and stacked harmonies.",
-   facts:["Most of the band members were actual brothers and cousins.","Only one of them really surfed — the rest just sang about it!","They layered many voices together to make those big, glowing harmonies."],
-   listen:"Hear how many different voices are singing at the same time.",
-   wiki:"https://en.wikipedia.org/wiki/The_Beach_Boys",
-   watch:yt("Beach Boys I Get Around")},
-
-  {era:"1960s",cls:"e60",artist:"Stevie Wonder",essential:true,genre:"Motown soul",
-   intro:"A musical genius who was signed to Motown Records as a kid.",
-   facts:["He has been blind since shortly after birth and plays piano, drums, and harmonica.","He had his first number-one song at just 13 years old.","He's won 25 Grammy Awards — one of the most in history."],
-   listen:"Listen for the harmonica — that's Stevie playing it.",
-   wiki:"https://en.wikipedia.org/wiki/Stevie_Wonder",
-   watch:yt("Stevie Wonder Isn't She Lovely live")},
-
-  {era:"1960s",cls:"e60",artist:"The Jackson 5",genre:"Motown pop-soul",
-   intro:"Five brothers led by a very young Michael Jackson.",
-   facts:["Michael was only about 11 when the band became famous.","All five members were brothers from Gary, Indiana.","Their bouncy hit \"ABC\" turns the alphabet into a love song."],
-   listen:"That's little Michael singing lead — try to spot his voice.",
-   wiki:"https://en.wikipedia.org/wiki/The_Jackson_5",
-   watch:yt("Jackson 5 ABC official")},
-
-  {era:"1960s",cls:"e60",artist:"Aretha Franklin",essential:true,genre:"Soul / gospel",
-   intro:"\"The Queen of Soul\" with one of the most powerful voices ever recorded.",
-   facts:["Her most famous song spells out a word: R-E-S-P-E-C-T.","She learned to sing in her father's church.","She was the first woman inducted into the Rock and Roll Hall of Fame."],
-   listen:"In \"Respect,\" sing along when she spells the word out loud.",
-   wiki:"https://en.wikipedia.org/wiki/Aretha_Franklin",
-   watch:yt("Aretha Franklin Respect")},
-
-  // ===== 1970s =====
-  {era:"1970s",cls:"e70",artist:"Queen",genre:"Arena rock",
-   intro:"A theatrical rock band led by the dazzling showman Freddie Mercury.",
-   facts:["\"We Will Rock You\" was written so crowds could stomp-stomp-clap along — try it!","Their song \"Bohemian Rhapsody\" has an opera section in the middle.","Guitarist Brian May built his famous guitar with his dad out of an old fireplace."],
-   listen:"Do the stomp-stomp-CLAP beat with \"We Will Rock You.\"",
-   wiki:"https://en.wikipedia.org/wiki/Queen_(band)",
-   watch:yt("Queen We Will Rock You official")},
-
-  {era:"1970s",cls:"e70",artist:"Earth, Wind & Fire",genre:"Funk / soul",
-   intro:"A huge, horn-powered funk band with sparkly costumes and big grooves.",
-   facts:["Their song \"September\" asks \"do you remember\" the 21st night — a date fans celebrate every year.","They had a whole section of horn players blasting trumpets and trombones.","Their costumes were covered in glitter and bright colors."],
-   listen:"Listen for the punchy horns answering the singers back and forth.",
-   wiki:"https://en.wikipedia.org/wiki/Earth,_Wind_%26_Fire",
-   watch:yt("Earth Wind Fire September official")},
-
-  {era:"1970s",cls:"e70",artist:"ABBA",genre:"Disco pop",
-   intro:"A super-catchy pop group from Sweden — two couples who sang together.",
-   facts:["The name ABBA comes from the first letters of the four members' names.","They sang in English even though they're from Sweden.","Their songs became the musical and movie \"Mamma Mia!\""],
-   listen:"Try to clap along with \"Dancing Queen\" — it's built for dancing.",
-   wiki:"https://en.wikipedia.org/wiki/ABBA",
-   watch:yt("ABBA Dancing Queen official")},
-
-  {era:"1970s",cls:"e70",artist:"Bob Marley",genre:"Reggae",
-   intro:"Jamaica's reggae legend who spread messages of peace through music.",
-   facts:["Reggae music has a relaxed, bouncy off-beat rhythm you can sway to.","His song \"Three Little Birds\" tells you \"don't worry about a thing.\"","He's the most famous musician ever to come from Jamaica."],
-   listen:"Feel the off-beat \"chucka-chucka\" guitar that makes reggae bounce.",
-   wiki:"https://en.wikipedia.org/wiki/Bob_Marley",
-   watch:yt("Bob Marley Three Little Birds")},
-
-  {era:"1970s",cls:"e70",artist:"Dolly Parton",genre:"Country",
-   intro:"A beloved country songwriter and storyteller with a giant heart.",
-   facts:["She has written over 3,000 songs.","She runs a program that has mailed free books to millions of kids.","She wrote two hit songs — \"Jolene\" and \"I Will Always Love You\" — on the very same day."],
-   listen:"Country songs tell a story — listen for what happens in it.",
-   wiki:"https://en.wikipedia.org/wiki/Dolly_Parton",
-   watch:yt("Dolly Parton Jolene live")},
-
-  {era:"1960s",cls:"e60",artist:"The Rolling Stones",genre:"Blues rock",
-   intro:"The \"bad boys\" of British rock — and one of the longest-lasting bands ever.",
-   facts:["They've been performing together for over 60 years.","Their logo is a big cartoon mouth with a sticking-out tongue.","\"(I Can't Get No) Satisfaction\" has one of the most famous guitar riffs in rock."],
-   listen:"Listen for the fuzzy, buzzing guitar riff at the start of \"Satisfaction.\"",
-   wiki:"https://en.wikipedia.org/wiki/The_Rolling_Stones",
-   watch:yt("Rolling Stones Satisfaction live")},
-
-  {era:"1960s",cls:"e60",artist:"Motown Day",essential:true,genre:"Motown soul",
+  {id:"motown-day", era:"1960s",cls:"e60",artist:"Motown Day",essential:true,genre:"Motown soul",
    intro:"A whole day for Motown, the Detroit record label that made hit after hit after hit — featuring the Supremes, the Temptations, the Four Tops, Smokey Robinson, and Marvin Gaye.",
    facts:["Motown was started in Detroit, a city famous for building cars, and people called its smooth hit-making style \"the Motown sound.\"","The Temptations and the Four Tops did sharp, matching dance steps while they sang.","The Supremes, led by Diana Ross, were one of the most successful groups of the 1960s.","Smokey Robinson wrote hit songs for himself AND for many other Motown stars."],
    listen:"Watch the groups' synchronized dance moves — everyone steps together.",
@@ -1082,77 +392,134 @@ const DAYS = [
    watch:yt("The Temptations My Girl live"),
    watch2:{label:"▶️ Also: The Supremes \"You Can't Hurry Love\"",url:yt("The Supremes You Can't Hurry Love")}},
 
-  {era:"1960s",cls:"e60",artist:"Rock Titans",essential:true,genre:"Psychedelic & hard rock",
+  {id:"the-beach-boys", era:"1960s",cls:"e60",artist:"The Beach Boys",genre:"Surf harmony pop",
+   intro:"California's kings of sunshine, surfing, and stacked harmonies.",
+   facts:["Most of the band members were actual brothers and cousins.","Only one of them really surfed — the rest just sang about it!","They layered many voices together to make those big, glowing harmonies."],
+   listen:"Hear how many different voices are singing at the same time.",
+   wiki:"https://en.wikipedia.org/wiki/The_Beach_Boys",
+   watch:yt("Beach Boys I Get Around")},
+
+  {id:"stevie-wonder", era:"1960s",cls:"e60",artist:"Stevie Wonder",essential:true,genre:"Motown soul",
+   intro:"A musical genius who was signed to Motown Records as a kid.",
+   facts:["He has been blind since shortly after birth and plays piano, drums, and harmonica.","He had his first number-one song at just 13 years old.","He's won 25 Grammy Awards — one of the most in history."],
+   listen:"Listen for the harmonica — that's Stevie playing it.",
+   wiki:"https://en.wikipedia.org/wiki/Stevie_Wonder",
+   watch:yt("Stevie Wonder Isn't She Lovely live")},
+
+  {id:"aretha-franklin", era:"1960s",cls:"e60",artist:"Aretha Franklin",essential:true,genre:"Soul / gospel",
+   intro:"\"The Queen of Soul\" with one of the most powerful voices ever recorded.",
+   facts:["Her most famous song spells out a word: R-E-S-P-E-C-T.","She learned to sing in her father's church.","She was the first woman inducted into the Rock and Roll Hall of Fame."],
+   listen:"In \"Respect,\" sing along when she spells the word out loud.",
+   wiki:"https://en.wikipedia.org/wiki/Aretha_Franklin",
+   watch:yt("Aretha Franklin Respect")},
+
+  {id:"sounds-of-summer-soul", era:"1960s",cls:"e60",artist:"Sounds of Summer (Soul)",genre:"Motown & soul summer anthems",
+   intro:"A day of feel-good summer songs made by Black artists that became the soundtrack of warm-weather America.",
+   facts:["Martha & the Vandellas' \"Dancing in the Street\" is a happy song about everyone coming outside to dance together.","The Drifters' \"Under the Boardwalk\" paints a picture of hiding from the hot sun by the beach.","Sly & the Family Stone's \"Hot Fun in the Summertime\" is basically a postcard of summer in a song."],
+   listen:"Each song names something about summer — see who can catch it.",
+   wiki:"https://en.wikipedia.org/wiki/Soul_music",
+   watch:yt("Martha and the Vandellas Dancing in the Street"),
+   watch2:{label:"▶️ Also: The Drifters \"Under the Boardwalk\"",url:yt("The Drifters Under the Boardwalk")}},
+
+  {id:"the-beatles", era:"1960s",cls:"e60",artist:"The Beatles",essential:true,genre:"British Invasion rock",
+   intro:"Four guys from Liverpool, England who became the most famous band in the world.",
+   facts:["When they first came to America, so many fans screamed at concerts the band couldn't hear themselves play.","They wrote songs perfect for kids like \"Yellow Submarine\" and \"Octopus's Garden.\"","Their last public concert was a surprise show on a rooftop."],
+   listen:"In \"Yellow Submarine,\" listen for the bubbly underwater sound effects.",
+   wiki:"https://en.wikipedia.org/wiki/The_Beatles",
+   watch:yt("Beatles Yellow Submarine official video")},
+
+  {id:"the-rolling-stones", era:"1960s",cls:"e60",artist:"The Rolling Stones",genre:"Blues rock",
+   intro:"A high-energy British rock band — and one of the longest-lasting groups ever.",
+   facts:["They've been performing together for over 60 years.","Their logo is a big cartoon mouth with a sticking-out tongue.","\"(I Can't Get No) Satisfaction\" has one of the most famous guitar riffs in rock."],
+   listen:"Listen for the fuzzy, buzzing guitar riff at the start of \"Satisfaction.\"",
+   wiki:"https://en.wikipedia.org/wiki/The_Rolling_Stones",
+   watch:yt("Rolling Stones Satisfaction live")},
+
+  {id:"paul-simon", era:"1960s",cls:"e60",artist:"Paul Simon & Simon & Garfunkel",genre:"Folk rock / singer-songwriter",
+   intro:"A singer-songwriter who first found fame in the duo Simon & Garfunkel, then helped bring music from around the world to everyone's ears.",
+   facts:["As one half of Simon & Garfunkel, he and Art Garfunkel sang gentle, harmony-filled songs like \"The Sound of Silence\" and \"Mrs. Robinson.\"","For his 1986 album \"Graceland,\" Paul Simon traveled to South Africa and made music with South African musicians, sharing their joyful rhythms with the whole world.","On \"Graceland,\" he sang with a South African group called Ladysmith Black Mambazo, who make beautiful music using only their voices — no instruments at all. The album won the Grammy for Album of the Year."],
+   listen:"In \"The Sound of Silence,\" hear how the two voices weave together in close harmony.",
+   wiki:"https://en.wikipedia.org/wiki/Paul_Simon",
+   watch:yt("Simon and Garfunkel The Sound of Silence"),
+   watch2:{label:"▶️ Also: Paul Simon \"You Can Call Me Al\" (Graceland)",url:yt("Paul Simon You Can Call Me Al official")}},
+
+  {id:"rock-titans", era:"1960s",cls:"e60",artist:"Rock Titans",essential:true,genre:"Psychedelic & hard rock",
    intro:"The bold, electric rock giants who pushed the late-60s to new places — featuring Jimi Hendrix, The Who, and The Doors.",
-   facts:["Jimi Hendrix was left-handed and flipped a regular guitar upside down — and famously played it with his teeth and behind his back as showmanship.","The Who were known for smashing their instruments at the end of shows.","The Doors were named after a line in a book, and their singer Jim Morrison was famous for his deep, dramatic voice."],
+   facts:["Jimi Hendrix was left-handed and flipped a regular guitar upside down — and famously played it with his teeth and behind his back as showmanship.","The Who were so wild on stage that they'd sometimes smash a guitar at the very end of a show!","The Doors were named after a line in a book, and their singer Jim Morrison was famous for his deep, dramatic voice."],
    listen:"In Hendrix's solos, hear how he bends the notes so the guitar almost \"talks.\"",
    flag:"Some songs from these bands are long or have grown-up themes. Hendrix's \"Star-Spangled Banner\" and The Who's \"Baba O'Riley\" are good kid-friendly entry points — pre-screen first.",
    wiki:"https://en.wikipedia.org/wiki/Jimi_Hendrix",
    watch:yt("Jimi Hendrix Star Spangled Banner Woodstock"),
    watch2:{label:"▶️ Also: The Who \"Baba O'Riley\"",url:yt("The Who Baba O'Riley")}},
 
-  {era:"1970s",cls:"e70",artist:"Pink Floyd",genre:"Psychedelic / progressive rock",
+  {id:"the-jackson-5", era:"1960s",cls:"e60",artist:"The Jackson 5",genre:"Motown pop-soul",
+   intro:"Five brothers led by a very young Michael Jackson.",
+   facts:["Michael was only about 11 when the band became famous.","All five members were brothers from Gary, Indiana.","Their bouncy hit \"ABC\" turns the alphabet into a love song."],
+   listen:"That's little Michael singing lead — try to spot his voice.",
+   wiki:"https://en.wikipedia.org/wiki/The_Jackson_5",
+   watch:yt("Jackson 5 ABC official")},
+
+
+  // ===== 1970s =====
+  {id:"pink-floyd", era:"1970s",cls:"e70",artist:"Pink Floyd",genre:"Psychedelic / progressive rock",
    intro:"A band that made spacey, dreamy music and turned concerts into giant art shows.",
    facts:["Their album cover for \"The Dark Side of the Moon\" — a prism splitting light into a rainbow — is one of the most famous covers ever.","Their concerts had lasers, films, and even a giant inflatable pig floating over the crowd.","They liked to use real-world sounds in songs, like ringing clocks, cash registers, and heartbeats."],
    listen:"Listen for sounds that aren't instruments at all — clocks, coins, or a heartbeat.",
    wiki:"https://en.wikipedia.org/wiki/Pink_Floyd",
    watch:yt("Pink Floyd Time official")},
 
-  // ===== YACHT ROCK / BEACH MUSIC =====
-  {era:"1970s",cls:"e70",artist:"Yacht Rock Day",genre:"Smooth summer grooves",
-   intro:"Mellow, sunny \"yacht rock\" plus Carolina beach music made for swaying on a warm day — featuring Chairmen of the Board and Christopher Cross.",
-   facts:["Chairmen of the Board's \"Carolina Girls\" is THE Carolina beach anthem — and it was written by a college student right in Raleigh, North Carolina.","\"Yacht rock\" is a nickname for super-smooth, breezy 1970s–80s songs that sound like a sunny day on a boat.","Carolina beach music has its own slow partner dance called \"the shag.\""],
-   listen:"Pick the song that sounds the most like a lazy summer afternoon.",
-   wiki:"https://en.wikipedia.org/wiki/Yacht_rock",
-   watch:yt("Chairmen of the Board Carolina Girls"),
-   watch2:{label:"▶️ Also: Christopher Cross \"Sailing\"",url:yt("Christopher Cross Sailing official")}},
+  {id:"bob-marley", era:"1970s",cls:"e70",artist:"Bob Marley",genre:"Reggae",
+   intro:"Jamaica's reggae legend who spread messages of peace through music.",
+   facts:["Reggae music has a relaxed, bouncy off-beat rhythm you can sway to.","His song \"Three Little Birds\" tells you \"don't worry about a thing.\"","He's the most famous musician ever to come from Jamaica."],
+   listen:"Feel the off-beat \"chucka-chucka\" guitar that makes reggae bounce.",
+   wiki:"https://en.wikipedia.org/wiki/Bob_Marley",
+   watch:yt("Bob Marley Three Little Birds")},
 
-  // ===== SUMMER SOUL =====
-  {era:"1960s",cls:"e60",artist:"Sounds of Summer (Soul)",genre:"Motown & soul summer anthems",
-   intro:"A day of feel-good summer songs made by Black artists that became the soundtrack of warm-weather America.",
-   facts:["Martha & the Vandellas' \"Dancing in the Street\" became a joyful anthem during the 1960s civil rights era — a song about everyone coming together outside.","The Drifters' \"Under the Boardwalk\" paints a picture of hiding from the hot sun by the beach.","Sly & the Family Stone's \"Hot Fun in the Summertime\" is basically a postcard of summer in a song."],
-   listen:"Each song names something about summer — see who can catch it.",
-   wiki:"https://en.wikipedia.org/wiki/Soul_music",
-   watch:yt("Martha and the Vandellas Dancing in the Street"),
-   watch2:{label:"▶️ Also: The Drifters \"Under the Boardwalk\"",url:yt("The Drifters Under the Boardwalk")}},
+  {id:"earth-wind-and-fire", era:"1970s",cls:"e70",artist:"Earth, Wind & Fire",genre:"Funk / soul",
+   intro:"A huge, horn-powered funk band with sparkly costumes and big grooves.",
+   facts:["Their song \"September\" asks \"do you remember\" the 21st night — a date fans celebrate every year.","They had a whole section of horn players blasting trumpets and trombones.","Their costumes were covered in glitter and bright colors."],
+   listen:"Listen for the punchy horns answering the singers back and forth.",
+   wiki:"https://en.wikipedia.org/wiki/Earth,_Wind_%26_Fire",
+   watch:yt("Earth Wind Fire September official")},
 
-  // ===== 1980s =====
-  {era:"1980s",cls:"e80",artist:"Michael Jackson",essential:true,genre:"Pop / R&B",
-   intro:"\"The King of Pop\" — the biggest solo pop star of the 1980s.",
-   facts:["His dance move the \"moonwalk\" makes it look like he's gliding backward.","His album \"Thriller\" is one of the best-selling albums of all time.","He started out as the kid singer of the Jackson 5 (Day 8!)."],
-   listen:"Watch his feet during the moonwalk — how does he do that?",
-   wiki:"https://en.wikipedia.org/wiki/Michael_Jackson",
-   watch:yt("Michael Jackson Billie Jean moonwalk Motown 25")},
+  {id:"dolly-parton", era:"1970s",cls:"e70",artist:"Dolly Parton",genre:"Country",
+   intro:"A beloved country songwriter and storyteller with a giant heart.",
+   facts:["She has written over 3,000 songs.","She runs a program that has mailed free books to millions of kids.","She wrote two hit songs — \"Jolene\" and \"I Will Always Love You\" — on the very same day."],
+   listen:"Country songs tell a story — listen for what happens in it.",
+   wiki:"https://en.wikipedia.org/wiki/Dolly_Parton",
+   watch:yt("Dolly Parton Jolene live")},
 
-  {era:"1980s",cls:"e80",artist:"Prince",essential:true,genre:"Funk / pop / rock",
-   intro:"A one-of-a-kind musician who could play almost every instrument himself.",
-   facts:["On his first album he played all 27 instruments himself.","His favorite color was purple — his big movie was even called \"Purple Rain.\"","He once changed his name to a symbol that couldn't be spoken."],
-   listen:"He's the one playing that wailing guitar solo.",
-   wiki:"https://en.wikipedia.org/wiki/Prince_(musician)",
-   watch:yt("Prince guitar solo While My Guitar Gently Weeps")},
+  {id:"billy-joel", era:"1970s",cls:"e70",artist:"Billy Joel",genre:"Piano rock / singer-songwriter",
+   intro:"The \"Piano Man\" — a singer-songwriter who tells whole stories from behind his piano.",
+   facts:["His nickname is the \"Piano Man,\" after his 1973 song where he plays both piano and harmonica.","Almost every line of his song \"We Didn't Start the Fire\" names a real historical event, listed in order from 1949 to 1989 — teachers have used it to help kids learn history.","He's one of the best-selling solo musicians in U.S. history, with tens of millions of albums sold."],
+   listen:"In \"Piano Man,\" listen for the harmonica he plays between the verses.",
+   wiki:"https://en.wikipedia.org/wiki/Billy_Joel",
+   watch:yt("Billy Joel Piano Man official"),
+   watch2:{label:"▶️ Also: Billy Joel \"We Didn't Start the Fire\"",url:yt("Billy Joel We Didn't Start the Fire official")}},
 
-  {era:"1980s",cls:"e80",artist:"Whitney Houston",genre:"Pop / R&B",
-   intro:"A singer with an absolutely enormous, crystal-clear voice.",
-   facts:["She could hold a single note longer and louder than almost anyone.","Her version of \"I Will Always Love You\" was written by Dolly Parton (Day 14!).","She started out singing in church as a girl."],
-   listen:"Wait for the big long note — see how long she holds it.",
-   wiki:"https://en.wikipedia.org/wiki/Whitney_Houston",
-   watch:yt("Whitney Houston I Wanna Dance With Somebody")},
+  {id:"queen", era:"1970s",cls:"e70",artist:"Queen",genre:"Arena rock",
+   intro:"A theatrical rock band led by the dazzling showman Freddie Mercury.",
+   facts:["\"We Will Rock You\" was written so crowds could stomp-stomp-clap along — try it!","Their song \"Bohemian Rhapsody\" has an opera section in the middle.","Guitarist Brian May built his famous guitar with his dad out of an old fireplace."],
+   listen:"Do the stomp-stomp-CLAP beat with \"We Will Rock You.\"",
+   wiki:"https://en.wikipedia.org/wiki/Queen_(band)",
+   watch:yt("Queen We Will Rock You official")},
 
-  {era:"1980s",cls:"e80",artist:"Tina Turner",genre:"Rock / soul",
-   intro:"\"The Queen of Rock and Roll\" — pure energy on stage.",
-   facts:["She was famous for dancing nonstop through entire concerts.","She became an even bigger solo star in her 40s — a huge comeback.","Her powerful, raspy voice is instantly recognizable."],
-   listen:"Notice she's basically dancing the whole song without stopping.",
-   wiki:"https://en.wikipedia.org/wiki/Tina_Turner",
-   watch:yt("Tina Turner Proud Mary live")},
+  {id:"abba", era:"1970s",cls:"e70",artist:"ABBA",genre:"Disco pop",
+   intro:"A super-catchy pop group from Sweden — two couples who sang together.",
+   facts:["The name ABBA comes from the first letters of the four members' names.","They sang in English even though they're from Sweden.","Their songs became the musical and movie \"Mamma Mia!\""],
+   listen:"Try to clap along with \"Dancing Queen\" — it's built for dancing.",
+   wiki:"https://en.wikipedia.org/wiki/ABBA",
+   watch:yt("ABBA Dancing Queen official")},
 
-  {era:"1980s",cls:"e80",artist:"Run-DMC",essential:true,genre:"Hip-hop",
-   intro:"The trio that helped bring hip-hop to the whole world.",
-   facts:["They teamed up with rock band Aerosmith on \"Walk This Way,\" mixing rap and rock.","Their look — black hats, tracksuits, and shell-toe sneakers — became super famous.","They were one of the first rap groups to be played on MTV."],
-   listen:"Hear how the rock guitar and the rapping trade off in \"Walk This Way.\"",
-   wiki:"https://en.wikipedia.org/wiki/Run-DMC",
-   watch:yt("Run DMC Walk This Way Aerosmith")},
+  {id:"heartland-and-southern-rock", era:"1970s",cls:"e70",artist:"American Roots Rock",genre:"Roots rock / Americana",
+   intro:"Down-to-earth American rock built on storytelling and the wide-open landscape — bands that blended country, blues, folk, and gospel into rock. Featuring Creedence Clearwater Revival, The Band, the Eagles, Tom Petty, and Lynyrd Skynyrd.",
+   facts:["Creedence Clearwater Revival sang about Southern swamps and rivers in songs like \"Bad Moon Rising\" and \"Down on the Corner\" — even though the band was actually from California.","The Band got their start as the backing group for the famous singer Bob Dylan, then made their own roots-rock classic \"The Weight\" (the \"take a load off\" singalong).","The Eagles' \"Hotel California\" has one of the most famous twin-guitar endings in rock.","Tom Petty's songs like \"Free Fallin'\" and \"Learning to Fly\" are big, friendly sing-alongs.","Lynyrd Skynyrd's \"Sweet Home Alabama\" is a Southern-rock anthem with a riff you'll recognize instantly."],
+   listen:"These songs tell a story or paint a picture of America — listen for the place each one takes you.",
+   wiki:"https://en.wikipedia.org/wiki/Roots_rock",
+   watch:yt("Creedence Clearwater Revival Down on the Corner official"),
+   watch2:{label:"▶️ Also: The Band \"The Weight\"",url:yt("The Band The Weight official")}},
 
-  {era:"1970s",cls:"e70",artist:"Stadium Singalong",genre:"Melodic arena rock",
+  {id:"stadium-singalong", era:"1970s",cls:"e70",artist:"Classic Rock Anthems",genre:"Melodic arena rock",
    intro:"The soaring, sing-along rock of the late 70s — big choruses made for waving your arms in a stadium. Featuring Journey, Boston, Foreigner, Kansas, REO Speedwagon, and the Steve Miller Band.",
    facts:["Journey's \"Don't Stop Believin'\" is one of the most sung-along songs ever — perfect for a backyard chorus.","Boston's leader was a trained engineer who recorded much of the first album in his own basement studio.","Kansas's \"Carry On Wayward Son\" opens with voices singing in harmony before any instruments come in.","The Steve Miller Band's \"The Joker\" and \"Fly Like an Eagle\" are breezy, easygoing radio classics."],
    listen:"Belt out the \"Don't stop believin'!\" part together.",
@@ -1160,15 +527,25 @@ const DAYS = [
    watch:yt("Journey Don't Stop Believin official"),
    watch2:{label:"▶️ Also: Boston \"More Than a Feeling\"",url:yt("Boston More Than a Feeling official")}},
 
-  {era:"1970s",cls:"e70",artist:"Heartland & Southern Rock",genre:"Country-rock / Southern rock",
-   intro:"Easygoing American rock with storytelling, harmonies, and a road-trip feel — featuring the Eagles, Tom Petty, and Lynyrd Skynyrd.",
-   facts:["The Eagles' \"Hotel California\" has one of the most famous twin-guitar endings in rock.","Tom Petty's songs like \"Free Fallin'\" and \"Learning to Fly\" are big, friendly sing-alongs.","Lynyrd Skynyrd's \"Sweet Home Alabama\" is a Southern-rock anthem with a riff you'll recognize instantly."],
-   listen:"These songs tell a story or paint a place — listen for where each one takes you.",
-   wiki:"https://en.wikipedia.org/wiki/Southern_rock",
-   watch:yt("Tom Petty Learning to Fly official"),
-   watch2:{label:"▶️ Also: Eagles \"Take It Easy\"",url:yt("Eagles Take It Easy")}},
+  {id:"soft-rock-sunshine-pop", era:"1970s",cls:"e70",artist:"Soft Rock & Sunshine Pop",genre:"Soft rock / sunshine pop",
+   intro:"Gentle, harmony-driven pop from the late 60s and 70s — lush vocal blends and mellow, sunny songs. Featuring The Carpenters, The Mamas & the Papas, Seals & Crofts, America, and Crosby, Stills, Nash & Young (CSNY).",
+   facts:["The Mamas & the Papas' \"California Dreamin'\" stacks four voices into one warm, layered harmony.","The Carpenters were built around Karen Carpenter's rich, gentle voice — and she sang lead while playing the drums, which was rare back then.","America's \"A Horse with No Name\" is a mellow, easygoing song that sounds like a long drive through the desert.","Seals & Crofts' \"Summer Breeze\" is a soft, sunny tune that feels like a lazy warm afternoon.","Crosby, Stills, Nash & Young wove several voices together into intricate, interlocking harmony."],
+   listen:"Listen for how many voices blend together — these groups stacked their harmonies in layers.",
+   wiki:"https://en.wikipedia.org/wiki/Soft_rock",
+   watch:yt("The Mamas and the Papas California Dreamin'"),
+   watch2:{label:"▶️ Also: Carpenters \"Close to You\"",url:yt("Carpenters Close to You")}},
 
-  {era:"1980s",cls:"e80",artist:"Big Hair, Bigger Guitars",genre:"Hard / flashy arena rock",
+  {id:"yacht-rock-day", era:"1970s",cls:"e70",artist:"Yacht Rock Day",genre:"Smooth summer grooves",
+   intro:"Mellow, sunny \"yacht rock\" plus Carolina beach music made for swaying on a warm day — featuring Chairmen of the Board and Christopher Cross.",
+   facts:["Chairmen of the Board's \"Carolina Girls\" is THE Carolina beach anthem — and it was written by a college student right in Raleigh, North Carolina.","\"Yacht rock\" is a nickname for super-smooth, breezy 1970s–80s songs that sound like a sunny day on a boat.","Carolina beach music has its own slow partner dance called \"the shag.\""],
+   listen:"Pick the song that sounds the most like a lazy summer afternoon.",
+   wiki:"https://en.wikipedia.org/wiki/Yacht_rock",
+   watch:yt("Chairmen of the Board Carolina Girls"),
+   watch2:{label:"▶️ Also: Christopher Cross \"Sailing\"",url:yt("Christopher Cross Sailing official")}},
+
+
+  // ===== 1980s =====
+  {id:"big-hair-bigger-guitars", era:"1980s",cls:"e80",artist:"Big Hair, Bigger Guitars",genre:"Hard / flashy arena rock",
    intro:"The louder, flashier rock of the early 80s — huge guitars and even huger hair. Featuring Van Halen and Def Leppard.",
    facts:["Van Halen's guitarist Eddie Van Halen was famous for \"tapping\" the strings with both hands at once to play super-fast.","Def Leppard's drummer kept drumming and touring after losing an arm — he built a special drum kit he plays partly with his feet.","Both bands were famous for enormous, high-energy stadium concerts."],
    listen:"In \"Jump,\" the main riff is played on a keyboard, not a guitar — try to spot it.",
@@ -1176,7 +553,7 @@ const DAYS = [
    watch:yt("Van Halen Jump official"),
    watch2:{label:"▶️ Also: Def Leppard \"Pour Some Sugar on Me\" (pre-screen)",url:yt("Def Leppard Pour Some Sugar on Me official")}},
 
-  {era:"1980s",cls:"e80",artist:"Heavier Stuff",genre:"Heavy metal & hard rock",
+  {id:"heavier-stuff", era:"1980s",cls:"e80",artist:"Hard Rock & Metal",genre:"Heavy metal & hard rock",
    intro:"The loudest, heaviest end of rock — thunderous drums, growling guitars, and a little spooky fun. Featuring Metallica, Ozzy Osbourne / Black Sabbath, and ZZ Top.",
    facts:["Black Sabbath, with singer Ozzy Osbourne, is often called the band that invented heavy metal.","Metallica plays super-fast and is one of the best-selling bands in the world — they even recorded songs with a full orchestra.","ZZ Top is a Texas trio famous for two members with very long, chest-length beards — and for their hot-rod cars in music videos."],
    listen:"Feel how the drums and guitars hit harder and faster than other rock.",
@@ -1185,8 +562,54 @@ const DAYS = [
    watch:yt("ZZ Top Sharp Dressed Man official"),
    watch2:{label:"▶️ Also: Metallica with orchestra (S&M)",url:yt("Metallica S&M orchestra Nothing Else Matters")}},
 
+  {id:"bruce-springsteen", era:"1980s",cls:"e80",artist:"Bruce Springsteen",essential:true,genre:"Heartland rock",
+   intro:"\"The Boss\" — a rock star famous for huge, high-energy, sing-along concerts.",
+   facts:["Everybody calls him \"The Boss.\"","He plays with a big group called the E Street Band.","His concerts are famous for lasting a really, really long time — he just loves to play so much.","His song \"Born in the U.S.A.\" is a big, fist-pumping singalong you can shout right along with."],
+   listen:"Pump your fist and sing along with the big \"Born in the U.S.A.!\" part.",
+   wiki:"https://en.wikipedia.org/wiki/Bruce_Springsteen",
+   watch:yt("Bruce Springsteen Born in the USA"),
+   watch2:{label:"▶️ Also: Bruce Springsteen \"Dancing in the Dark\"",url:yt("Bruce Springsteen Dancing in the Dark")}},
+
+  {id:"michael-jackson", era:"1980s",cls:"e80",artist:"Michael Jackson",essential:true,genre:"Pop / R&B",
+   intro:"\"The King of Pop\" — the biggest solo pop star of the 1980s.",
+   facts:["His dance move the \"moonwalk\" makes it look like he's gliding backward.","His album \"Thriller\" is one of the best-selling albums of all time.","He started out as the kid singer of the Jackson 5 (Day {{n:the-jackson-5}}!)."],
+   listen:"Watch his feet during the moonwalk — how does he do that?",
+   wiki:"https://en.wikipedia.org/wiki/Michael_Jackson",
+   watch:yt("Michael Jackson Billie Jean moonwalk Motown 25")},
+
+  {id:"prince", era:"1980s",cls:"e80",artist:"Prince",essential:true,genre:"Funk / pop / rock",
+   intro:"A one-of-a-kind musician who could play almost every instrument himself.",
+   facts:["On his first album he played all 27 instruments himself.","His favorite color was purple — his big movie was even called \"Purple Rain.\"","He once changed his name to a symbol that couldn't be spoken."],
+   listen:"He's the one playing that wailing guitar solo.",
+   wiki:"https://en.wikipedia.org/wiki/Prince_(musician)",
+   watch:yt("Prince guitar solo While My Guitar Gently Weeps")},
+
+  {id:"tina-turner", era:"1980s",cls:"e80",artist:"Tina Turner",genre:"Rock / soul",
+   intro:"\"The Queen of Rock and Roll\" — pure energy on stage.",
+   facts:["She was famous for dancing nonstop through entire concerts.","She became an even bigger solo star in her 40s — a huge comeback.","Her powerful, raspy voice is instantly recognizable."],
+   listen:"Notice she's basically dancing the whole song without stopping.",
+   wiki:"https://en.wikipedia.org/wiki/Tina_Turner",
+   watch:yt("Tina Turner Proud Mary live")},
+
+  {id:"run-dmc", era:"1980s",cls:"e80",artist:"Hip-Hop Is Born",essential:true,genre:"Hip-hop",
+   intro:"The birth of hip-hop — how a brand-new kind of music started at block parties in New York City and grew into one of the biggest kinds of music in the whole world.",
+   facts:["Hip-hop has four fun parts: a DJ spinning and scratching records, an MC rapping rhymes over the beat, breakdancers doing spins and fancy footwork, and artists making colorful graffiti.","It all began at outdoor block parties in New York City: a DJ named Kool Herc threw the very first ones, Grandmaster Flash became famous for his turntable tricks, and the Sugarhill Gang's \"Rapper's Delight\" was one of the first rap songs people everywhere heard.","Run-DMC helped carry hip-hop to the whole world — their song \"Walk This Way\" teamed up with the rock band Aerosmith to mix rap and rock, and their tracksuits-and-sneakers look became super famous.","Snoop Dogg has been a famous rapper since the 1990s and is still making music today — he even made a sing-along show just for kids called \"Doggyland.\" The same rapper your grown-ups grew up with is still going!"],
+   listen:"Try tapping a beat and making up a rhyme over it — that's MCing!",
+   flag:"Most early hip-hop and rap is made for grown-ups, with mature language. This day is built around the story and the kid-safe picks (Run-DMC and Doggyland) — pre-screen anything beyond those before playing for young kids.",
+   wiki:"https://en.wikipedia.org/wiki/Hip_hop_music",
+   watch:yt("Run-DMC It's Tricky"),
+   watch2:{label:"▶️ Also: Snoop Dogg Doggyland for kids",url:yt("Doggyland Snoop Dogg kids songs")}},
+
+  {id:"whitney-houston", era:"1980s",cls:"e80",artist:"Whitney Houston",genre:"Pop / R&B",
+   intro:"A singer with an absolutely enormous, crystal-clear voice.",
+   facts:["She could hold a single note longer and louder than almost anyone.","Her version of \"I Will Always Love You\" was written by Dolly Parton (Day {{n:dolly-parton}}!).","She started out singing in church as a girl."],
+   listen:"Wait for the big long note — see how long she holds it.",
+   wiki:"https://en.wikipedia.org/wiki/Whitney_Houston",
+   watch:yt("Whitney Houston I Wanna Dance With Somebody")},
+
+
   // ===== 1990s =====
-  {era:"1990s",cls:"e90",artist:"Grunge Day",essential:true,genre:"Grunge / alternative rock",
+  {id:"grunge-day", era:"1990s",cls:"e90",artist:"Grunge Day",essential:true,genre:"Grunge / alternative rock",
    intro:"Loud, raw rock from rainy Seattle and beyond that took over the 1990s — featuring Nirvana, Pearl Jam, Soundgarden, Alice in Chains, and Stone Temple Pilots.",
    facts:["Grunge bands came from the Seattle, Washington area and often wore flannel shirts and ripped jeans.","Nirvana, Pearl Jam, Soundgarden, Alice in Chains, and Stone Temple Pilots were the biggest grunge bands.","Alice in Chains was known for two voices singing together in an eerie, layered way.","Soundgarden's \"Black Hole Sun\" has a strange, dreamy sound that still gets played today."],
    listen:"Notice how the guitars sound fuzzy and \"dirty\" on purpose.",
@@ -1195,76 +618,64 @@ const DAYS = [
    watch:yt("Soundgarden Black Hole Sun official"),
    watch2:{label:"▶️ Also: Alice in Chains \"Would?\" (pre-screen)",url:yt("Alice in Chains Would official")}},
 
-  {era:"1990s",cls:"e90",artist:"90s Alt-Rock & Cult Classics",genre:"Alternative rock",
-   intro:"The guitar bands that ruled 90s radio after grunge — some anthemic, some goofy, all beloved. Featuring Foo Fighters, Goo Goo Dolls, Blink-182, Dave Matthews Band, and R.E.M.",
-   facts:["Foo Fighters were started by Dave Grohl, who had been the drummer in Nirvana — and he played every single instrument himself on the first album.","Blink-182 were known for being silly and fun, with fast, bouncy pop-punk songs.","Dave Matthews Band built a huge, loyal following by jamming and stretching songs out live, often with a violin and saxophone in the mix.","R.E.M. helped invent \"alternative\" rock and had a giant hit with the bright, jangly \"Shiny Happy People.\""],
+  {id:"90s-alt-rock-and-cult-classics", era:"1990s",cls:"e90",artist:"90s Alt-Rock & Cult Classics",genre:"Alternative rock",
+   intro:"The guitar bands that ruled 90s radio after grunge — some anthemic, some goofy, all beloved. Featuring Foo Fighters, Weezer, Counting Crows, Hootie & the Blowfish, Goo Goo Dolls, Blink-182, Dave Matthews Band, and R.E.M.",
+   facts:["Foo Fighters were started by Dave Grohl, who had been the drummer in Nirvana — and he played every single instrument himself on the first album.","Weezer played catchy, geeky-fun rock — and their music video for \"Buddy Holly\" magically dropped the band right into a famous old TV show.","Hootie & the Blowfish had warm, easy sing-along hits that whole families loved, and Counting Crows were known for telling vivid stories in their songs.","Blink-182 were known for being silly and fun, with fast, bouncy pop-punk songs.","Dave Matthews Band built a huge, loyal following by jamming and stretching songs out live, often with a violin and saxophone in the mix.","R.E.M. helped invent \"alternative\" rock and had a giant hit with the bright, jangly \"Shiny Happy People.\""],
    listen:"Notice how different these bands sound from each other — alt-rock was a big tent.",
    flag:"A few songs (especially Blink-182) have grown-up lyrics. \"Shiny Happy People\" (R.E.M.) and \"Learn to Fly\" (Foo Fighters) are great kid-friendly starting points — pre-screen first.",
    wiki:"https://en.wikipedia.org/wiki/Alternative_rock",
    watch:yt("Foo Fighters Learn to Fly official"),
    watch2:{label:"▶️ Also: R.E.M. \"Shiny Happy People\"",url:yt("R.E.M. Shiny Happy People official")}},
 
-  {era:"1990s",cls:"e90",artist:"Mariah Carey",genre:"Pop / R&B",
+  {id:"green-day", era:"1990s",cls:"e90",artist:"Green Day",genre:"Pop-punk",
+   intro:"A high-energy band that makes fast, loud, super-fun pop-punk.",
+   facts:["Their songs are fast and loud and really fun to bounce around to.","Their album \"American Idiot\" was such a big hit that it was even turned into a Broadway musical.","Their concerts are famous for being high-energy, with the whole crowd jumping and singing along."],
+   listen:"This music is fast and bouncy — try jumping along to the beat.",
+   flag:"Some Green Day songs have grown-up language or themes — pre-screen first, and for young kids favor \"Good Riddance (Time of Your Life)\" and \"Wake Me Up When September Ends.\"",
+   wiki:"https://en.wikipedia.org/wiki/Green_Day",
+   watch:yt("Green Day Good Riddance Time of Your Life"),
+   watch2:{label:"▶️ Also: Green Day \"American Idiot\"",url:yt("Green Day American Idiot")}},
+
+  {id:"mariah-carey", era:"1990s",cls:"e90",artist:"Mariah Carey",genre:"Pop / R&B",
    intro:"A pop superstar famous for hitting impossibly high notes.",
    facts:["She can sing a super-high \"whistle note\" most singers can't reach.","She co-wrote most of her own hit songs.","Her holiday song \"All I Want for Christmas Is You\" comes back every single December."],
    listen:"Wait for the very, very high \"whistle\" note near the end.",
    wiki:"https://en.wikipedia.org/wiki/Mariah_Carey",
    watch:yt("Mariah Carey whistle notes live")},
 
-  {era:"1990s",cls:"e90",artist:"Spice Girls",genre:"Pop",
-   intro:"A fun British pop group whose whole message was \"girl power.\"",
-   facts:["Each member had a nickname: Scary, Sporty, Baby, Posh, and Ginger.","Their catchphrase was \"girl power!\"","\"Wannabe\" is one of the best-selling songs ever by a girl group."],
-   listen:"Try to learn the \"zig-a-zig-ah\" part of \"Wannabe.\"",
-   wiki:"https://en.wikipedia.org/wiki/Spice_Girls",
-   watch:yt("Spice Girls Wannabe official")},
-
-  {era:"1990s",cls:"e90",artist:"Selena",genre:"Tejano / Latin pop",
+  {id:"selena", era:"1990s",cls:"e90",artist:"Selena",genre:"Tejano / Latin pop",
    intro:"\"The Queen of Tejano music\" and a beloved Mexican-American star.",
    facts:["She sang in Spanish and learned the words even before she spoke Spanish fluently.","She's called the Queen of Tejano, a lively Texas-Mexican style of music.","Her bright, danceable song \"Bidi Bidi Bom Bom\" is still a favorite."],
    listen:"The chorus is just fun sounds — \"bidi bidi bom bom\" — sing along!",
    wiki:"https://en.wikipedia.org/wiki/Selena",
    watch:yt("Selena Bidi Bidi Bom Bom official")},
 
-  {era:"1990s",cls:"e90",artist:"Vocal Groups of the 90s",genre:"R&B / pop harmony",
-   intro:"Smooth-singing groups like Boyz II Men and TLC who ruled 90s radio with harmony.",
-   facts:["Boyz II Men were famous for blending four voices into one smooth sound.","TLC mixed singing and rapping and were one of the best-selling girl groups ever.","These groups often sang every note live with no instruments — just voices.","Backstreet Boys and NSYNC carried this harmony style into huge pop hits."],
-   listen:"Count the voices — can you hear all four singing different parts?",
-   wiki:"https://en.wikipedia.org/wiki/Boyz_II_Men",
+  {id:"90s-rnb-groups", era:"1990s",cls:"e90",artist:"90s R&B Groups",genre:"R&B / soul vocals",
+   intro:"Smooth-singing groups that grew out of soul and R&B and ruled 90s radio with harmony — featuring Boyz II Men, TLC, En Vogue, and New Edition.",
+   facts:["Boyz II Men were famous for blending four voices into one smooth sound.","TLC mixed singing and rapping and were one of the best-selling girl groups ever.","These groups often sang every note live in tight harmony, with no instruments needed — just voices.","Groups like En Vogue and New Edition helped carry the soul and R&B tradition into the 90s."],
+   listen:"Count the voices — can you hear all the different parts singing together?",
+   wiki:"https://en.wikipedia.org/wiki/Contemporary_R%26B",
    watch:yt("Boyz II Men live a cappella harmony"),
    watch2:{label:"▶️ Also: TLC \"Waterfalls\"",url:yt("TLC Waterfalls official")}},
 
+  {id:"boy-band-boom", era:"1990s",cls:"e90",artist:"Boy Band Boom",genre:"Teen pop",
+   intro:"The late-90s pop boy bands — groups put together by producers, with matching outfits and synchronized dancing — featuring NSYNC, Backstreet Boys, and 98 Degrees (plus O-Town, LFO, and Westlife).",
+   facts:["Many of these groups were put together by music producers, rather than friends who started a band on their own.","They were famous for matching outfits and synchronized dance moves — everybody hitting the exact same step at the same time.","So many fans loved them that people called the craze \"boy band fever.\""],
+   listen:"Watch how all the members dance the exact same moves at the same time.",
+   wiki:"https://en.wikipedia.org/wiki/Boy_band",
+   watch:yt("NSYNC Bye Bye Bye official"),
+   watch2:{label:"▶️ Also: Backstreet Boys \"I Want It That Way\"",url:yt("Backstreet Boys I Want It That Way official")}},
+
+  {id:"spice-girls", era:"1990s",cls:"e90",artist:"Spice Girls",genre:"Pop",
+   intro:"A fun British pop group whose whole message was \"girl power.\"",
+   facts:["Each member had a nickname: Scary, Sporty, Baby, Posh, and Ginger.","Their catchphrase was \"girl power!\"","\"Wannabe\" is one of the best-selling songs ever by a girl group."],
+   listen:"Try to learn the \"zig-a-zig-ah\" part of \"Wannabe.\"",
+   wiki:"https://en.wikipedia.org/wiki/Spice_Girls",
+   watch:yt("Spice Girls Wannabe official")},
+
+
   // ===== 2000s =====
-  {era:"2000s",cls:"e00",artist:"Women of Hip-Hop & R&B",essential:true,genre:"Hip-hop / R&B",
-   intro:"Trailblazing women — Missy Elliott, Eve, and more — who changed what hip-hop sounded and looked like.",
-   facts:["Missy Elliott made wild, imaginative music videos unlike anything else on TV.","Eve was the first woman rapper to have an album debut at number one — a huge milestone.","Missy is also a producer, meaning she builds the beats and sounds, not just the words."],
-   listen:"Notice the bouncy, creative beats — Missy loved unusual sounds.",
-   flag:"Pick songs carefully — use clean/radio edits. Missy's \"Work It\" and Eve & Gwen Stefani's \"Let Me Blow Ya Mind\" have edited versions; pre-screen the specific clip first.",
-   wiki:"https://en.wikipedia.org/wiki/Missy_Elliott",
-   watch:yt("Missy Elliott NPR Tiny Desk"),
-   watch2:{label:"▶️ Also: Missy Elliott \"Work It\" (clean)",url:yt("Missy Elliott Work It clean version")}},
-
-  {era:"2000s",cls:"e00",artist:"Beyoncé",essential:true,genre:"Pop / R&B",
-   intro:"One of the biggest stars in the world — first as a kid in Destiny's Child, then solo.",
-   facts:["She started in the girl group Destiny's Child before going solo.","She has won more Grammy Awards than any other artist in history.","She rehearses her shows for months to get every dance move exact."],
-   listen:"Watch how every dancer moves at the exact same time as her.",
-   wiki:"https://en.wikipedia.org/wiki/Beyonc%C3%A9",
-   watch:yt("Beyonce Single Ladies official")},
-
-  {era:"2000s",cls:"e00",artist:"Alicia Keys",genre:"R&B / soul / piano",
-   intro:"A singer-songwriter who plays gorgeous piano while she sings.",
-   facts:["She started playing classical piano when she was just 7 years old.","She writes her own songs at the piano.","Her song \"Empire State of Mind\" is a love letter to New York City."],
-   listen:"It's all built on her piano — listen for it under her voice.",
-   wiki:"https://en.wikipedia.org/wiki/Alicia_Keys",
-   watch:yt("Alicia Keys NPR Tiny Desk")},
-
-  {era:"2000s",cls:"e00",artist:"OutKast",genre:"Hip-hop",
-   intro:"A creative, genre-bending hip-hop duo from Atlanta.",
-   facts:["Their song \"Hey Ya!\" tells you to shake it \"like a Polaroid picture.\"","They mixed rap with funk, rock, and soul in surprising ways.","They were known for bold, colorful style and big imagination."],
-   listen:"Everyone shake your hands during \"shake it like a Polaroid picture!\"",
-   wiki:"https://en.wikipedia.org/wiki/OutKast",
-   watch:yt("OutKast Hey Ya official")},
-
-  {era:"2000s",cls:"e00",artist:"Pop Princesses",genre:"Teen pop",
+  {id:"pop-princesses", era:"2000s",cls:"e00",artist:"Pop Princesses",genre:"Teen pop",
    intro:"The super catchy teen-pop stars who ruled the radio and TV around the year 2000 — featuring Britney Spears, Christina Aguilera, and more.",
    facts:["Britney Spears and Christina Aguilera both started out as kids on the same TV show — Disney's \"Mickey Mouse Club\" — alongside Justin Timberlake.","Britney's \"...Baby One More Time\" made her one of the biggest pop stars in the world almost overnight.","Christina Aguilera was famous for her huge, powerful voice and lots of fancy vocal runs.","Other big pop stars of this moment included Mandy Moore, Jessica Simpson, and Pink."],
    listen:"Listen to how many extra notes Christina adds — that's called a vocal \"run.\"",
@@ -1273,8 +684,47 @@ const DAYS = [
    watch:yt("Britney Spears Baby One More Time official"),
    watch2:{label:"▶️ Also: Christina Aguilera \"Genie in a Bottle\"",url:yt("Christina Aguilera Genie in a Bottle official")}},
 
-  // ===== 2010s–NOW =====
-  {era:"2010s+",cls:"e10",artist:"Emo & Anthems",genre:"Emo / pop-punk / alt-rock",
+  {id:"latin-music", era:"2000s",cls:"e00",artist:"Latin Music",genre:"Latin pop",
+   intro:"A cross-era celebration of music from Latin America and the Spanish-speaking world that makes the whole world want to dance — featuring Gloria Estefan, Shakira, and Ricky Martin, plus the wider world of Latin pop and reggaeton.",
+   facts:["Shakira is from Colombia and is famous all over the world for her amazing dancing.","Gloria Estefan and her band the Miami Sound Machine helped bring bright Latin rhythms onto pop radio.","Lots of these songs mix English and Spanish words together in the very same song.","The bouncy rhythms make it almost impossible to sit still — your feet just want to move!","Selena (Day {{n:selena}}) was another beloved Latin-music star you already met this summer!"],
+   listen:"Get up and dance — see if you can move to the beat.",
+   wiki:"https://en.wikipedia.org/wiki/Latin_pop",
+   watch:yt("Shakira Waka Waka"),
+   watch2:{label:"▶️ Also: Ricky Martin \"Livin' la Vida Loca\"",url:yt("Ricky Martin Livin la Vida Loca")}},
+
+  {id:"women-of-hip-hop-and-rnb", era:"2000s",cls:"e00",artist:"Women of Hip-Hop & R&B",essential:true,genre:"Hip-hop / R&B",
+   intro:"Trailblazing women — Missy Elliott, Eve, and more — who changed what hip-hop sounded and looked like.",
+   facts:["Missy Elliott made wild, imaginative music videos unlike anything else on TV.","Eve was the first woman rapper to have an album debut at number one — a huge milestone.","Missy is also a producer, meaning she builds the beats and sounds, not just the words."],
+   listen:"Notice the bouncy, creative beats — Missy loved unusual sounds.",
+   flag:"Pick songs carefully — use clean/radio edits. Missy's \"Work It\" and Eve & Gwen Stefani's \"Let Me Blow Ya Mind\" have edited versions; pre-screen the specific clip first.",
+   wiki:"https://en.wikipedia.org/wiki/Missy_Elliott",
+   watch:yt("Missy Elliott NPR Tiny Desk"),
+   watch2:{label:"▶️ Also: Missy Elliott \"Work It\" (clean)",url:yt("Missy Elliott Work It clean version")}},
+
+  {id:"outkast", era:"2000s",cls:"e00",artist:"OutKast",genre:"Hip-hop",
+   intro:"A creative, genre-bending hip-hop duo from Atlanta.",
+   facts:["Their song \"Hey Ya!\" tells you to shake it \"like a Polaroid picture.\"","They mixed rap with funk, rock, and soul in surprising ways.","They were known for bold, colorful style and big imagination."],
+   listen:"Everyone shake your hands during \"shake it like a Polaroid picture!\"",
+   wiki:"https://en.wikipedia.org/wiki/OutKast",
+   watch:yt("OutKast Hey Ya official")},
+
+  {id:"alicia-keys", era:"2000s",cls:"e00",artist:"Alicia Keys",genre:"R&B / soul / piano",
+   intro:"A singer-songwriter who plays gorgeous piano while she sings.",
+   facts:["She started playing classical piano when she was just 7 years old.","She writes her own songs at the piano.","Her song \"Empire State of Mind\" is a love letter to New York City."],
+   listen:"It's all built on her piano — listen for it under her voice.",
+   wiki:"https://en.wikipedia.org/wiki/Alicia_Keys",
+   watch:yt("Alicia Keys NPR Tiny Desk")},
+
+  {id:"beyonce", era:"2000s",cls:"e00",artist:"Beyoncé",essential:true,genre:"Pop / R&B",
+   intro:"One of the biggest stars in the world — first as a kid in Destiny's Child, then solo.",
+   facts:["She started in the girl group Destiny's Child before going solo.","She has won more Grammy Awards than any other artist in history.","She rehearses her shows for months to get every dance move exact."],
+   listen:"Watch how every dancer moves at the exact same time as her.",
+   wiki:"https://en.wikipedia.org/wiki/Beyonc%C3%A9",
+   watch:yt("Beyonce Single Ladies official")},
+
+
+  // ===== 2010s+ =====
+  {id:"emo-and-anthems", era:"2010s+",cls:"e10",artist:"Emo & Anthems",genre:"Emo / pop-punk / alt-rock",
    intro:"The big, emotional rock of the 2000s and 2010s — dramatic, catchy, and made for shouting along. Featuring Fall Out Boy, Panic! at the Disco, Paramore, and Linkin Park.",
    facts:["These bands often have long, funny, dramatic song titles — Fall Out Boy and Panic! at the Disco are famous for it.","Paramore is led by Hayley Williams, one of the most popular women fronting a rock band in this era.","Linkin Park mixed rock guitars with rapping and electronic sounds — a blend lots of bands copied.","The style is full of loud-then-soft-then-loud moments that make the songs feel dramatic."],
    listen:"Listen for the loud-then-soft-then-loud pattern that makes these songs feel dramatic.",
@@ -1283,23 +733,7 @@ const DAYS = [
    watch:yt("Paramore Still Into You official"),
    watch2:{label:"▶️ Also: Fall Out Boy \"Centuries\"",url:yt("Fall Out Boy Centuries official")}},
 
-  {era:"2010s+",cls:"e10",artist:"Taylor Swift",genre:"Pop / country-pop",
-   intro:"One of the biggest stars of the 2010s, who started in country music and became a pop superstar.",
-   facts:["She writes or co-writes all her own songs, often telling stories from her real life.","When a company bought the recordings of her early albums, she re-recorded them herself so she'd own her own music — fans call these the \"Taylor's Version\" albums.","Her Eras Tour became one of the biggest and highest-earning concert tours ever.","She started out as a teenager playing country music in Nashville before going full pop."],
-   listen:"Listen for the storytelling — her songs usually tell a beginning, middle, and end.",
-   wiki:"https://en.wikipedia.org/wiki/Taylor_Swift",
-   watch:yt("Taylor Swift Shake It Off official"),
-   watch2:{label:"▶️ Also: Taylor Swift \"ME!\"",url:yt("Taylor Swift ME official")}},
-
-  {era:"2010s+",cls:"e10",artist:"Adele",genre:"Pop / soul",
-   intro:"A British singer with a huge, emotional voice, famous for powerful ballads.",
-   facts:["She names her albums after how old she was when she made them — like \"19,\" \"21,\" \"25,\" and \"30.\"","Her song \"Hello\" was so popular its video got over a billion views.","She's won many Grammy Awards and an Oscar for a James Bond movie song, \"Skyfall.\"","She sings mostly without fancy effects — it's really just her big voice."],
-   listen:"Close your eyes and notice how much feeling she puts into each note.",
-   wiki:"https://en.wikipedia.org/wiki/Adele",
-   watch:yt("Adele Hello official"),
-   watch2:{label:"▶️ Also: Adele NPR Tiny Desk",url:yt("Adele NPR Tiny Desk")}},
-
-  {era:"2010s+",cls:"e10",artist:"Lady Gaga",genre:"Pop / dance-pop",
+  {id:"lady-gaga", era:"2010s+",cls:"e10",artist:"Lady Gaga",genre:"Pop / dance-pop",
    intro:"A bold, theatrical pop star known for wild costumes and powerful singing.",
    facts:["She's famous for over-the-top outfits and dramatic, artistic music videos.","She's also a trained pianist and can sing big jazz and showtune numbers.","She won an Academy Award for the song \"Shallow\" from the movie A Star Is Born.","She made a whole album of old jazz songs with the legendary singer Tony Bennett."],
    listen:"Notice she's not just singing — the costumes and staging are part of the show.",
@@ -1307,24 +741,47 @@ const DAYS = [
    watch:yt("Lady Gaga Shallow live"),
    watch2:{label:"▶️ Also: Lady Gaga \"Million Reasons\"",url:yt("Lady Gaga Million Reasons official")}},
 
-  {era:"2010s+",cls:"e10",artist:"Boy Bands & Global Pop",essential:true,genre:"Pop",
-   intro:"The huge, feel-good pop groups and stars of the 2010s — featuring One Direction, BTS, Justin Bieber, and Ed Sheeran.",
-   facts:["BTS is a seven-member group from South Korea who sing in a style called K-pop — they became one of the biggest bands in the world.","BTS's videos often show off Korean culture, like the traditional outfits called hanbok.","One Direction were five singers put together on a TV talent show, and became a global sensation.","Justin Bieber was discovered as a kid singing on YouTube, and Ed Sheeran writes warm, gentle songs just with his guitar."],
-   listen:"BTS sing in both Korean and English — see if you can catch the switch.",
-   wiki:"https://en.wikipedia.org/wiki/K-pop",
-   watch:yt("BTS Dynamite official"),
-   watch2:{label:"▶️ Also: Ed Sheeran \"Perfect\"",url:yt("Ed Sheeran Perfect official")}},
+  {id:"taylor-swift", era:"2010s+",cls:"e10",artist:"Taylor Swift",genre:"Pop / country-pop",
+   intro:"One of the biggest stars of the 2010s, who started in country music and became a pop superstar.",
+   facts:["She writes or co-writes all her own songs, often telling stories from her real life.","When a company bought the recordings of her early albums, she re-recorded them herself so she'd own her own music — fans call these the \"Taylor's Version\" albums.","Her Eras Tour became one of the biggest and highest-earning concert tours ever.","She started out as a teenager playing country music in Nashville before going full pop."],
+   listen:"Listen for the storytelling — her songs usually tell a beginning, middle, and end.",
+   wiki:"https://en.wikipedia.org/wiki/Taylor_Swift",
+   watch:yt("Taylor Swift Shake It Off official"),
+   watch2:{label:"▶️ Also: Taylor Swift \"ME!\"",url:yt("Taylor Swift ME official")}},
 
-  {era:"2010s+",cls:"e10",artist:"Pop Queens",genre:"Pop / dance-pop",
+  {id:"adele", era:"2010s+",cls:"e10",artist:"Adele",genre:"Pop / soul",
+   intro:"A British singer with a huge, emotional voice, famous for powerful ballads.",
+   facts:["She names her albums after how old she was when she made them — like \"19,\" \"21,\" \"25,\" and \"30.\"","Her song \"Hello\" was so popular its video got over a billion views.","She's won many Grammy Awards and an Oscar for a James Bond movie song, \"Skyfall.\"","She sings mostly without fancy effects — it's really just her big voice."],
+   listen:"Close your eyes and notice how much feeling she puts into each note.",
+   wiki:"https://en.wikipedia.org/wiki/Adele",
+   watch:yt("Adele Hello official"),
+   watch2:{label:"▶️ Also: Adele NPR Tiny Desk",url:yt("Adele NPR Tiny Desk")}},
+
+  {id:"bruno-mars", era:"2010s+",cls:"e10",artist:"Bruno Mars",genre:"Pop / funk / soul",
+   intro:"A throwback showman who brings old-school funk and soul to today's pop.",
+   facts:["As a little kid he performed as an Elvis impersonator.","He plays multiple instruments and sings, dances, and writes his songs.","\"Uptown Funk\" makes almost everybody want to dance."],
+   listen:"Try not to dance during \"Uptown Funk\" — it's nearly impossible.",
+   wiki:"https://en.wikipedia.org/wiki/Bruno_Mars",
+   watch:yt("Mark Ronson Bruno Mars Uptown Funk official")},
+
+  {id:"pop-queens", era:"2010s+",cls:"e10",artist:"Pop Queens",genre:"Pop / dance-pop",
    intro:"The chart-topping women who defined 2010s radio — featuring Katy Perry, Ariana Grande, and Rihanna.",
-   facts:["Katy Perry's \"Firework\" and \"Roar\" are big, confident sing-along anthems.","Ariana Grande is known for hitting very high notes, a bit like Mariah Carey (Day 33!), who inspired her.","Rihanna is from the Caribbean island of Barbados and became a global superstar — she's also a hugely successful businessperson.","All three are famous for enormous, colorful concerts and music videos."],
+   facts:["Katy Perry's \"Firework\" and \"Roar\" are big, confident sing-along anthems.","Ariana Grande is known for hitting very high notes, a bit like Mariah Carey (Day {{n:mariah-carey}}!), who inspired her.","Rihanna is from the Caribbean island of Barbados and became a global superstar — she's also a hugely successful businessperson.","All three are famous for enormous, colorful concerts and music videos."],
    listen:"Listen for how high Ariana can sing — she reaches notes most singers can't.",
    flag:"Some songs and videos from these artists are aimed at teens/adults (especially Rihanna). Stick to the big radio hits — \"Firework,\" \"Roar,\" \"Brave\" — and pre-screen the specific clip first.",
    wiki:"https://en.wikipedia.org/wiki/Ariana_Grande",
    watch:yt("Katy Perry Firework official"),
    watch2:{label:"▶️ Also: Ariana Grande NPR Tiny Desk",url:yt("Ariana Grande NPR Tiny Desk")}},
 
-  {era:"2010s+",cls:"e10",artist:"Hip-Hop Storytellers",essential:true,genre:"Hip-hop / pop-rap",
+  {id:"boy-bands-and-global-pop", era:"2010s+",cls:"e10",artist:"Boy Bands 2.0",essential:true,genre:"Pop",
+   intro:"The modern sequel to the 90s Boy Band Boom (Day {{n:boy-band-boom}}) — those producer-made boy bands grew into the global, social-media-era groups and stars of the 2010s. Featuring One Direction, BTS, Justin Bieber, and Ed Sheeran.",
+   facts:["BTS is a seven-member group from South Korea who sing in a style called K-pop — they became one of the biggest bands in the world.","BTS's videos often show off Korean culture, like the traditional outfits called hanbok.","One Direction were five singers put together on a TV talent show, and became a global sensation.","Justin Bieber was discovered as a kid singing on YouTube, and Ed Sheeran writes warm, gentle songs just with his guitar."],
+   listen:"BTS sing in both Korean and English — see if you can catch the switch.",
+   wiki:"https://en.wikipedia.org/wiki/K-pop",
+   watch:yt("BTS Dynamite official"),
+   watch2:{label:"▶️ Also: Ed Sheeran \"Perfect\"",url:yt("Ed Sheeran Perfect official")}},
+
+  {id:"hip-hop-storytellers", era:"2010s+",cls:"e10",artist:"Hip-Hop Storytellers",essential:true,genre:"Hip-hop / pop-rap",
    intro:"A look at modern hip-hop through its most positive, kid-friendly songs — about giving back, family, and big dreams.",
    facts:["Drake's song \"God's Plan\" came with a video where he gave away the whole video budget — about $1 million — to everyday people who needed it.","Hip-hop is built on rhyming and rhythm — rappers fit words together like puzzle pieces over a beat.","Lots of rappers got their start telling stories about where they grew up and the people who raised them.","\"Old Town Road\" by Lil Nas X mixed hip-hop with country and became one of the most popular songs ever."],
    listen:"Listen to how the words rhyme and lock into the beat.",
@@ -1333,43 +790,37 @@ const DAYS = [
    watch:yt("Lil Nas X Old Town Road official"),
    watch2:{label:"▶️ Also: Drake \"God's Plan\" (clean)",url:yt("Drake God's Plan clean version")}},
 
-  {era:"2010s+",cls:"e10",artist:"Bruno Mars",genre:"Pop / funk / soul",
-   intro:"A throwback showman who brings old-school funk and soul to today's pop.",
-   facts:["As a little kid he performed as an Elvis impersonator.","He plays multiple instruments and sings, dances, and writes his songs.","\"Uptown Funk\" makes almost everybody want to dance."],
-   listen:"Try not to dance during \"Uptown Funk\" — it's nearly impossible.",
-   wiki:"https://en.wikipedia.org/wiki/Bruno_Mars",
-   watch:yt("Mark Ronson Bruno Mars Uptown Funk official")},
-
-  {era:"2010s+",cls:"e10",artist:"Lizzo",genre:"Pop / hip-hop",
+  {id:"lizzo", era:"2010s+",cls:"e10",artist:"Lizzo",genre:"Pop / hip-hop",
    intro:"A joyful pop star who is also a trained classical flute player.",
    facts:["She plays the flute — and sometimes plays it while dancing!","She studied classical flute seriously before becoming a pop star.","Her songs are all about confidence and feeling good about yourself."],
    listen:"Spot the moment she plays the flute mid-song.",
    wiki:"https://en.wikipedia.org/wiki/Lizzo",
    watch:yt("Lizzo NPR Tiny Desk flute")},
 
-  {era:"2010s+",cls:"e10",artist:"OK Go",genre:"Alt-rock / video art",
+  {id:"ok-go", era:"2010s+",cls:"e10",artist:"OK Go",genre:"Alt-rock / video art",
    intro:"A band famous for jaw-dropping music videos done in one single take.",
    facts:["One video has the whole band dancing on moving treadmills.","Another is a giant Rube Goldberg machine that takes the whole song to finish.","They plan these videos for months and film them all in one continuous shot."],
    listen:"Watch the video closely — it's all one take with no cuts!",
    wiki:"https://en.wikipedia.org/wiki/OK_Go",
    watch:yt("OK Go This Too Shall Pass Rube Goldberg official")},
 
-  {era:"2010s+",cls:"e10",artist:"They Might Be Giants",genre:"Alt-rock / kids' music",
-   intro:"A clever, quirky band that makes music for grown-ups AND whole albums for kids.",
-   facts:["They've made several albums just for children, about science and the alphabet.","Their song \"Why Does the Sun Shine?\" teaches real facts about the sun.","They love weird instruments and silly, smart lyrics."],
-   listen:"Listen for actual facts hidden inside the silly songs.",
-   wiki:"https://en.wikipedia.org/wiki/They_Might_Be_Giants",
-   watch:yt("They Might Be Giants Why Does the Sun Shine")},
-
-  {era:"2010s+",cls:"e10",artist:"Pentatonix",genre:"A cappella",
+  {id:"pentatonix", era:"2010s+",cls:"e10",artist:"Pentatonix",genre:"A cappella",
    intro:"A group that makes a full band's worth of sound using only their voices.",
    facts:["They use zero instruments — every sound is a human voice.","One member is a \"beatboxer\" who makes drum sounds with his mouth.","They won a TV singing competition as a group."],
    listen:"There are no instruments — every single sound is somebody's mouth.",
    wiki:"https://en.wikipedia.org/wiki/Pentatonix",
    watch:yt("Pentatonix official a cappella performance")},
 
-  // ===== BONUS / INSTRUMENT WONDER DAYS =====
-  {era:"Bonus",cls:"ebonus",artist:"One-Hit Wonders",genre:"Songs everyone knows, by bands you might not",
+  {id:"they-might-be-giants", era:"2010s+",cls:"e10",artist:"They Might Be Giants",genre:"Alt-rock / kids' music",
+   intro:"A clever, quirky band that makes music for grown-ups AND whole albums for kids.",
+   facts:["They've made several albums just for children, about science and the alphabet.","Their song \"Why Does the Sun Shine?\" teaches real facts about the sun.","They love weird instruments and silly, smart lyrics."],
+   listen:"Listen for actual facts hidden inside the silly songs.",
+   wiki:"https://en.wikipedia.org/wiki/They_Might_Be_Giants",
+   watch:yt("They Might Be Giants Why Does the Sun Shine")},
+
+
+  // ===== Bonus =====
+  {id:"one-hit-wonders", era:"Bonus",cls:"ebonus",artist:"One-Hit Wonders",genre:"Songs everyone knows, by bands you might not",
    intro:"A whole day of catchy songs where the band became famous for basically just one giant hit.",
    facts:["A \"one-hit wonder\" is a musician who has one super-famous song but never has another big hit.","a-ha's \"Take On Me\" has a famous music video that mixes real people with pencil-sketch cartoon drawings.","Some are impossible to sit still for — like \"Tainted Love,\" \"Come On Eileen,\" \"Mambo No. 5,\" and \"Macarena\" (which comes with its own dance).","The Baha Men's \"Who Let the Dogs Out?\" is a goofy favorite that kids almost always know."],
    listen:"Pick the catchiest one and see if you still remember it tomorrow — that's why they're famous!",
@@ -1377,7 +828,7 @@ const DAYS = [
    watch:yt("a-ha Take On Me official video"),
    watch2:{label:"▶️ Also: Los del Río \"Macarena\" (try the dance!)",url:yt("Macarena official dance version")}},
 
-  {era:"Bonus",cls:"ebonus",artist:"Princess & Disney Songs",genre:"Movie musical / soundtrack",
+  {id:"princess-and-disney-songs", era:"Bonus",cls:"ebonus",artist:"Princess & Disney Songs",genre:"Movie musical / soundtrack",
    intro:"A whole day of the big sing-along songs from animated movies — many written like Broadway showstoppers.",
    facts:["\"Let It Go\" from Frozen was so catchy it won an Academy Award and got sung by kids everywhere.","The songs for Moana and Encanto were written by Lin-Manuel Miranda, the same person who made the musical Hamilton.","Encanto's \"We Don't Talk About Bruno\" became the first Disney movie song ever to hit number one in America — and it was translated into 46 languages.","Brave is set in Scotland, and Tangled, Cinderella, and Snow White each turned classic fairy tales into musicals."],
    listen:"Notice how these songs tell the story — the character is usually singing about what they want.",
@@ -1385,46 +836,65 @@ const DAYS = [
    watch:yt("Encanto We Don't Talk About Bruno official clip"),
    watch2:{label:"▶️ Also: Moana \"How Far I'll Go\"",url:yt("Moana How Far I'll Go official")}},
 
-  {era:"Bonus",cls:"ebonus",artist:"Bobby McFerrin",genre:"Voice as instrument",
-   intro:"A singer who builds entire songs using only his voice and his body.",
-   facts:["His hit \"Don't Worry, Be Happy\" has NO instruments — every sound is him.","He thumps his own chest to make the drum beat.","He can sing two things at once and gets whole audiences singing with him."],
-   listen:"There's no band — see how many sounds come from just one person.",
-   wiki:"https://en.wikipedia.org/wiki/Bobby_McFerrin",
-   watch:yt("Bobby McFerrin Don't Worry Be Happy official")},
-
-  {era:"Bonus",cls:"ebonus",artist:"Yo-Yo Ma",genre:"Classical cello",
-   intro:"The world's most famous cello player.",
-   facts:["The cello is a big string instrument you play sitting down, hugged between your knees.","He played for the public at age 7 and has won many Grammys.","He has played everything from classical music to bluegrass to movie scores."],
-   listen:"The cello sounds deep and warm — close your eyes and just listen.",
-   wiki:"https://en.wikipedia.org/wiki/Yo-Yo_Ma",
-   watch:yt("Yo-Yo Ma NPR Tiny Desk cello")},
-
-  {era:"Bonus",cls:"ebonus",artist:"STOMP",genre:"Rhythm & percussion",
-   intro:"A performance group that makes music out of everyday objects.",
-   facts:["They make beats using brooms, trash can lids, and even kitchen sinks.","There are no words and no normal instruments — just rhythm.","It started as a street show and became a famous stage performance."],
-   listen:"Try tapping the beat along with them on your knees.",
-   wiki:"https://en.wikipedia.org/wiki/Stomp_(theatrical_show)",
-   watch:yt("STOMP performance brooms rhythm")},
-
-  {era:"Bonus",cls:"ebonus",artist:"\"Weird Al\" Yankovic",genre:"Comedy / parody",
-   intro:"The king of funny songs that make fun of famous hits.",
-   facts:["He takes hit songs and rewrites the words to be silly — like turning a love song into a song about food.","He plays the accordion.","He's been making people laugh with parody songs for over 40 years."],
-   listen:"See if you can guess the real song he's making fun of.",
-   wiki:"https://en.wikipedia.org/wiki/%22Weird_Al%22_Yankovic",
-   watch:yt("Weird Al Yankovic Eat It official")},
-
-  {era:"Bonus",cls:"ebonus",artist:"Lin-Manuel Miranda / Hamilton",genre:"Musical theater",
+  {id:"lin-manuel-miranda-hamilton", era:"Bonus",cls:"ebonus",artist:"Lin-Manuel Miranda / Hamilton",genre:"Musical theater",
    intro:"A songwriter who told the story of American history using rap and hip-hop.",
    facts:["He wrote the musical \"Hamilton,\" where the Founding Fathers rap.","It mixes hip-hop, R&B, and traditional show tunes.","He also wrote songs for Disney's \"Moana\" and \"Encanto.\""],
    listen:"Notice how the characters rap the story instead of just talking.",
    flag:"The full musical has some mature themes and language — the \"Moana\" and \"Encanto\" songs are the most kid-friendly entry point.",
    wiki:"https://en.wikipedia.org/wiki/Lin-Manuel_Miranda",
    watch:yt("Lin-Manuel Miranda Hamilton White House performance")},
+
+  {id:"weird-al-yankovic", era:"Bonus",cls:"ebonus",artist:"\"Weird Al\" Yankovic",genre:"Comedy / parody",
+   intro:"The king of funny songs that make fun of famous hits.",
+   facts:["He takes hit songs and rewrites the words to be silly — like turning a love song into a song about food.","He plays the accordion.","He's been making people laugh with parody songs for over 40 years."],
+   listen:"See if you can guess the real song he's making fun of.",
+   wiki:"https://en.wikipedia.org/wiki/%22Weird_Al%22_Yankovic",
+   watch:yt("Weird Al Yankovic Eat It official")},
+
+  {id:"bobby-mcferrin", era:"Bonus",cls:"ebonus",artist:"Bobby McFerrin",genre:"Voice as instrument",
+   intro:"A singer who builds entire songs using only his voice and his body.",
+   facts:["His hit \"Don't Worry, Be Happy\" has NO instruments — every sound is him.","He thumps his own chest to make the drum beat.","He can sing two things at once and gets whole audiences singing with him."],
+   listen:"There's no band — see how many sounds come from just one person.",
+   wiki:"https://en.wikipedia.org/wiki/Bobby_McFerrin",
+   watch:yt("Bobby McFerrin Don't Worry Be Happy official")},
+
+  {id:"stomp", era:"Bonus",cls:"ebonus",artist:"STOMP",genre:"Rhythm & percussion",
+   intro:"A performance group that makes music out of everyday objects.",
+   facts:["They make beats using brooms, trash can lids, and even kitchen sinks.","There are no words and no normal instruments — just rhythm.","It started as a street show and became a famous stage performance."],
+   listen:"Try tapping the beat along with them on your knees.",
+   wiki:"https://en.wikipedia.org/wiki/Stomp_(theatrical_show)",
+   watch:yt("STOMP performance brooms rhythm")},
+
+  {id:"yo-yo-ma", era:"Bonus",cls:"ebonus",artist:"Yo-Yo Ma",genre:"Classical cello",
+   intro:"The world's most famous cello player.",
+   facts:["The cello is a big string instrument you play sitting down, hugged between your knees.","He played for the public at age 7 and has won many Grammys.","He has played everything from classical music to bluegrass to movie scores."],
+   listen:"The cello sounds deep and warm — close your eyes and just listen.",
+   wiki:"https://en.wikipedia.org/wiki/Yo-Yo_Ma",
+   watch:yt("Yo-Yo Ma NPR Tiny Desk cello")},
+
 ];
+
+// ---- SANITY CHECK ----
+// Every day needs a unique id (it's the key for SPOTIFY links). If you copy a
+// day and forget to change its id, this warns you in the browser console (F12).
+(() => {
+  const seen = new Set(), dupes = new Set();
+  DAYS.forEach(d => {
+    if(!d.id){ console.warn("Day is missing an id:", d.artist); return; }
+    if(seen.has(d.id)){ dupes.add(d.id); } else { seen.add(d.id); }
+  });
+  if(dupes.size){ console.warn("Duplicate day id(s) — Spotify links may attach to the wrong day:", [...dupes]); }
+})();
 
 // ---- RENDER ----
 const grid = document.getElementById("grid");const erasBox = document.getElementById("eras");
 document.getElementById("dayCount").textContent = DAYS.length;
+
+// Map each id to its current day number, so prose can reference other days
+// with a {{n:some-id}} token that stays correct no matter how days are ordered.
+const dayNumberOf = {};
+DAYS.forEach((d,i)=>{ dayNumberOf[d.id] = i+1; });
+const resolveRefs = s => s.replace(/\{\{n:([a-z0-9-]+)\}\}/g, (_,id)=> dayNumberOf[id] ?? "?");
 
 DAYS.forEach((d,i)=>{
   const n = i+1;
@@ -1435,12 +905,16 @@ DAYS.forEach((d,i)=>{
 
   let body = `<div class="card-body">
       <div class="body-label">Fun facts</div>
-      <ul class="facts">${d.facts.map(f=>`<li>${f}</li>`).join("")}</ul>
-      <div class="listen"><b>Listen for:</b> ${d.listen}</div>`;
+      <ul class="facts">${d.facts.map(f=>`<li>${resolveRefs(f)}</li>`).join("")}</ul>
+      <div class="listen"><b>Listen for:</b> ${resolveRefs(d.listen)}</div>`;
   if(d.flag){ body += `<div class="flag"><b>⚑ Parent note:</b> ${d.flag}</div>`; }
   body += `<div class="watch-row"><a class="watch" href="${d.watch}" target="_blank" rel="noopener">▶️ Watch a clip</a>`;
   if(d.watch2){ body += `<a class="watch tiny" href="${d.watch2.url}" target="_blank" rel="noopener">${d.watch2.label}</a>`; }
-  if(SPOTIFY[n]){ body += `<a class="watch spotify" href="${SPOTIFY[n]}" target="_blank" rel="noopener">♫ Listen on Spotify</a>`; }
+  if(SPOTIFY[d.id]){
+    body += `<a class="watch spotify" href="${SPOTIFY[d.id]}" target="_blank" rel="noopener">♫ Listen on Spotify</a>`;
+  } else {
+    body += `<a class="watch spotify-find" href="${sp(d.artist)}" target="_blank" rel="noopener">♫ Find on Spotify</a>`;
+  }
   body += `</div>`;
   if(d.wiki){ body += `<a class="wiki-link" href="${d.wiki}" target="_blank" rel="noopener">📖 Learn more (Wikipedia)</a>`; }
   body += `</div>`;
@@ -1451,7 +925,7 @@ DAYS.forEach((d,i)=>{
       <span class="card-meta">
         <span class="era-tag">${d.era}</span>
         <p class="artist">${d.artist}${d.essential ? ' <span class="essential-badge" title="Music History Essential"></span>' : ''}</p>
-        <span class="genre">${d.genre} — ${d.intro}</span>
+        <span class="genre">${d.genre} — ${resolveRefs(d.intro)}</span>
       </span>
       <span class="chev">›</span>
     </button>${body}`;
@@ -1493,6 +967,8 @@ essToggle.onclick = ()=>{
 
 function toggleAll(open){
   document.querySelectorAll(".card").forEach(c=>c.classList.toggle("open", open));
+  document.getElementById("btnExpand").setAttribute("aria-pressed", open);
+  document.getElementById("btnCollapse").setAttribute("aria-pressed", !open);
 }
 </script>
 
