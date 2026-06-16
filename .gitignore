@@ -1,0 +1,10 @@
+# Claude Code local & preview files
+.claude/
+
+# macOS
+.DS_Store
+
+# Editor / OS junk
+*.swp
+*~
+Thumbs.db
