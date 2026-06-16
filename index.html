@@ -131,6 +131,11 @@
   }
   .chip[aria-pressed="true"]{background:var(--ink);color:#fff;border-color:var(--ink);}
 
+  /* COLLECTIONS (tag filter row) */
+  .collections{display:flex;gap:8px;justify-content:center;flex-wrap:wrap;align-items:center;margin:8px auto 4px;}
+  .collections-label{font-size:.78rem;font-weight:700;letter-spacing:.04em;text-transform:uppercase;color:var(--shade);}
+  .chip-collection[aria-pressed="true"]{background:var(--grass);color:#fff;border-color:var(--grass);}
+
   /* GRID */
   .grid{
     display:grid;gap:16px;margin-top:26px;
@@ -194,6 +199,7 @@
   .wiki-link:hover{border-bottom-color:var(--sky);}
   .essential-badge{color:var(--sun-deep);font-size:.9em;}
   .essential-badge::before{content:"★";}
+  .tag-badge{font-size:.82em;vertical-align:middle;margin-left:1px;cursor:default;}
   .ess-toggle{display:inline-flex;align-items:center;gap:8px;margin:22px auto 0;background:var(--card);border:2px solid var(--sun-deep);color:var(--sun-deep);font-weight:700;font-size:.9rem;padding:9px 16px;border-radius:999px;cursor:pointer;transition:all .12s ease;}
   .ess-toggle[aria-pressed="true"]{background:var(--sun-deep);color:#fff;}
   .ess-toggle:hover{filter:brightness(1.03);}
@@ -272,6 +278,7 @@
     </div>
 
     <div class="eras" id="eras"></div>
+    <div class="collections" id="collections"></div>
   </header>
 
   <div class="grid" id="grid"></div>
@@ -349,14 +356,14 @@ const SPOTIFY = {
 
 const DAYS = [
   // ===== 1950s =====
-  {id:"louis-armstrong", era:"1950s",cls:"e50",artist:"Louis Armstrong",genre:"Jazz trumpet",
+  {id:"louis-armstrong", tags:["calm"], era:"1950s",cls:"e50",artist:"Louis Armstrong",genre:"Jazz trumpet",
    intro:"A trumpet master with the most recognizable gravelly voice in jazz.",
    facts:["His nickname was \"Satchmo,\" short for \"Satchel Mouth.\"","He helped make the trumpet solo a star of jazz music.","His song \"What a Wonderful World\" is still played at weddings and movies today."],
    listen:"Notice how his singing voice sounds raspy, like a friendly growl.",
    wiki:"https://en.wikipedia.org/wiki/Louis_Armstrong",
    watch:yt("Louis Armstrong What a Wonderful World")},
 
-  {id:"ella-fitzgerald", era:"1950s",cls:"e50",artist:"Ella Fitzgerald",essential:true,genre:"Jazz vocals",
+  {id:"ella-fitzgerald", tags:["calm","voices","women"], era:"1950s",cls:"e50",artist:"Ella Fitzgerald",essential:true,genre:"Jazz vocals",
    intro:"\"The First Lady of Song\" and the queen of scat singing.",
    facts:["Scat singing is making up nonsense syllables like an instrument — \"shoo-bee-doo-bop\" — and Ella was the best ever.","She won 13 Grammy Awards.","She could copy the sound of a trumpet or sax with just her voice."],
    listen:"When she stops singing real words and just sings sounds — that's scat!",
@@ -393,7 +400,7 @@ const DAYS = [
    watch:yt("Elvis Presley Hound Dog"),
    watch2:{label:"▶️ Also: Elvis Presley \"Jailhouse Rock\"",url:yt("Elvis Presley Jailhouse Rock")}},
 
-  {id:"doo-wop-day", era:"1950s",cls:"e50",artist:"Doo-Wop Day",essential:true,genre:"Vocal harmony / doo-wop",
+  {id:"doo-wop-day", tags:["voices"], era:"1950s",cls:"e50",artist:"Doo-Wop Day",essential:true,genre:"Vocal harmony / doo-wop",
    intro:"The 1950s sound of groups singing close harmony together, often with no instruments at first — featuring the Platters, the Drifters, and Frankie Lymon and the Teenagers.",
    facts:["\"Doo-wop\" gets its name from the nonsense sounds the background singers made, like \"doo-wop\" and \"sh-boom.\"","Groups would practice singing on street corners and in stairwells because the echo made their harmonies sound great.","Frankie Lymon was only 13 when he sang lead on \"Why Do Fools Fall in Love\" — making them rock's first all-teenage group.","The Platters' \"The Great Pretender\" and The Drifters' songs turned this street-corner style into polished hits."],
    listen:"Listen for the background singers making sounds instead of words.",
@@ -403,7 +410,7 @@ const DAYS = [
 
 
   // ===== 1960s =====
-  {id:"motown-day", era:"1960s",cls:"e60",artist:"Motown Day",essential:true,genre:"Motown soul",
+  {id:"motown-day", tags:["dance"], era:"1960s",cls:"e60",artist:"Motown Day",essential:true,genre:"Motown soul",
    intro:"A whole day for Motown, the Detroit record label that made hit after hit after hit — featuring the Supremes, the Temptations, the Four Tops, Smokey Robinson, and Marvin Gaye.",
    facts:["Motown was started in Detroit, a city famous for building cars, and people called its smooth hit-making style \"the Motown sound.\"","The Temptations and the Four Tops did sharp, matching dance steps while they sang.","The Supremes, led by Diana Ross, were one of the most successful groups of the 1960s.","Smokey Robinson wrote hit songs for himself AND for many other Motown stars."],
    listen:"Watch the groups' synchronized dance moves — everyone steps together.",
@@ -411,7 +418,7 @@ const DAYS = [
    watch:yt("The Temptations My Girl live"),
    watch2:{label:"▶️ Also: The Supremes \"You Can't Hurry Love\"",url:yt("The Supremes You Can't Hurry Love")}},
 
-  {id:"the-beach-boys", era:"1960s",cls:"e60",artist:"The Beach Boys",genre:"Surf harmony pop",
+  {id:"the-beach-boys", tags:["voices"], era:"1960s",cls:"e60",artist:"The Beach Boys",genre:"Surf harmony pop",
    intro:"California's kings of sunshine, surfing, and stacked harmonies.",
    facts:["Most of the band members were actual brothers and cousins.","Only one of them really surfed — the rest just sang about it!","They layered many voices together to make those big, glowing harmonies."],
    listen:"Hear how many different voices are singing at the same time.",
@@ -425,7 +432,7 @@ const DAYS = [
    wiki:"https://en.wikipedia.org/wiki/Stevie_Wonder",
    watch:yt("Stevie Wonder Isn't She Lovely live")},
 
-  {id:"aretha-franklin", era:"1960s",cls:"e60",artist:"Aretha Franklin",essential:true,genre:"Soul / gospel",
+  {id:"aretha-franklin", tags:["women"], era:"1960s",cls:"e60",artist:"Aretha Franklin",essential:true,genre:"Soul / gospel",
    intro:"\"The Queen of Soul\" with one of the most powerful voices ever recorded.",
    facts:["Her most famous song spells out a word: R-E-S-P-E-C-T.","She learned to sing in her father's church.","She was the first woman inducted into the Rock and Roll Hall of Fame."],
    listen:"In \"Respect,\" sing along when she spells the word out loud.",
@@ -454,7 +461,7 @@ const DAYS = [
    wiki:"https://en.wikipedia.org/wiki/The_Rolling_Stones",
    watch:yt("Rolling Stones Satisfaction live")},
 
-  {id:"paul-simon", era:"1960s",cls:"e60",artist:"Paul Simon & Simon & Garfunkel",genre:"Folk rock / singer-songwriter",
+  {id:"paul-simon", tags:["calm"], era:"1960s",cls:"e60",artist:"Paul Simon & Simon & Garfunkel",genre:"Folk rock / singer-songwriter",
    intro:"A singer-songwriter who first found fame in the duo Simon & Garfunkel, then helped bring music from around the world to everyone's ears.",
    facts:["As one half of Simon & Garfunkel, he and Art Garfunkel sang gentle, harmony-filled songs like \"The Sound of Silence\" and \"Mrs. Robinson.\"","For his 1986 album \"Graceland,\" Paul Simon traveled to South Africa and made music with South African musicians, sharing their joyful rhythms with the whole world.","On \"Graceland,\" he sang with a South African group called Ladysmith Black Mambazo, who make beautiful music using only their voices — no instruments at all. The album won the Grammy for Album of the Year."],
    listen:"In \"The Sound of Silence,\" hear how the two voices weave together in close harmony.",
@@ -487,21 +494,21 @@ const DAYS = [
    wiki:"https://en.wikipedia.org/wiki/Pink_Floyd",
    watch:yt("Pink Floyd Time official")},
 
-  {id:"bob-marley", era:"1970s",cls:"e70",artist:"Bob Marley",genre:"Reggae",
+  {id:"bob-marley", tags:["calm"], era:"1970s",cls:"e70",artist:"Bob Marley",genre:"Reggae",
    intro:"Jamaica's reggae legend who spread messages of peace through music.",
    facts:["Reggae music has a relaxed, bouncy off-beat rhythm you can sway to.","His song \"Three Little Birds\" tells you \"don't worry about a thing.\"","He's the most famous musician ever to come from Jamaica."],
    listen:"Feel the off-beat \"chucka-chucka\" guitar that makes reggae bounce.",
    wiki:"https://en.wikipedia.org/wiki/Bob_Marley",
    watch:yt("Bob Marley Three Little Birds")},
 
-  {id:"earth-wind-and-fire", era:"1970s",cls:"e70",artist:"Earth, Wind & Fire",essential:true,genre:"Funk / soul",
+  {id:"earth-wind-and-fire", tags:["dance"], era:"1970s",cls:"e70",artist:"Earth, Wind & Fire",essential:true,genre:"Funk / soul",
    intro:"A huge, horn-powered funk band with sparkly costumes and big grooves.",
    facts:["Their song \"September\" asks \"do you remember\" the 21st night — a date fans celebrate every year.","They had a whole section of horn players blasting trumpets and trombones.","Their costumes were covered in glitter and bright colors."],
    listen:"Listen for the punchy horns answering the singers back and forth.",
    wiki:"https://en.wikipedia.org/wiki/Earth,_Wind_%26_Fire",
    watch:yt("Earth Wind Fire September official")},
 
-  {id:"dolly-parton", era:"1970s",cls:"e70",artist:"Dolly Parton",genre:"Country",
+  {id:"dolly-parton", tags:["women"], era:"1970s",cls:"e70",artist:"Dolly Parton",genre:"Country",
    intro:"A beloved country songwriter and storyteller with a giant heart.",
    facts:["She has written over 3,000 songs.","She runs a program that has mailed free books to millions of kids.","She wrote two hit songs — \"Jolene\" and \"I Will Always Love You\" — on the very same day."],
    listen:"Country songs tell a story — listen for what happens in it.",
@@ -531,7 +538,7 @@ const DAYS = [
    wiki:"https://en.wikipedia.org/wiki/Queen_(band)",
    watch:yt("Queen We Will Rock You official")},
 
-  {id:"abba", era:"1970s",cls:"e70",artist:"ABBA",genre:"Disco pop",
+  {id:"abba", tags:["dance"], era:"1970s",cls:"e70",artist:"ABBA",genre:"Disco pop",
    intro:"A super-catchy pop group from Sweden — two couples who sang together.",
    facts:["The name ABBA comes from the first letters of the four members' names.","They sang in English even though they're from Sweden.","Their songs became the musical and movie \"Mamma Mia!\""],
    listen:"Try to clap along with \"Dancing Queen\" — it's built for dancing.",
@@ -554,7 +561,7 @@ const DAYS = [
    watch:yt("Journey Don't Stop Believin official"),
    watch2:{label:"▶️ Also: Boston \"More Than a Feeling\"",url:yt("Boston More Than a Feeling official")}},
 
-  {id:"soft-rock-sunshine-pop", era:"1970s",cls:"e70",artist:"Soft Rock & Sunshine Pop",genre:"Soft rock / sunshine pop",
+  {id:"soft-rock-sunshine-pop", tags:["calm"], era:"1970s",cls:"e70",artist:"Soft Rock & Sunshine Pop",genre:"Soft rock / sunshine pop",
    intro:"Gentle, harmony-driven pop from the late 60s and 70s — lush vocal blends and mellow, sunny songs. Featuring The Carpenters, The Mamas & the Papas, Seals & Crofts, America, and Crosby, Stills, Nash & Young (CSNY).",
    facts:["The Mamas & the Papas' \"California Dreamin'\" stacks four voices into one warm, layered harmony.","The Carpenters were built around Karen Carpenter's rich, gentle voice — and she sang lead while playing the drums, which was rare back then.","America's \"A Horse with No Name\" is a mellow, easygoing song that sounds like a long drive through the desert.","Seals & Crofts' \"Summer Breeze\" is a soft, sunny tune that feels like a lazy warm afternoon.","Crosby, Stills, Nash & Young wove several voices together into intricate, interlocking harmony."],
    listen:"Listen for how many voices blend together — these groups stacked their harmonies in layers.",
@@ -562,7 +569,7 @@ const DAYS = [
    watch:yt("The Mamas and the Papas California Dreamin'"),
    watch2:{label:"▶️ Also: Carpenters \"Close to You\"",url:yt("Carpenters Close to You")}},
 
-  {id:"yacht-rock-day", era:"1970s",cls:"e70",artist:"Yacht Rock Day",genre:"Smooth summer grooves",
+  {id:"yacht-rock-day", tags:["calm"], era:"1970s",cls:"e70",artist:"Yacht Rock Day",genre:"Smooth summer grooves",
    intro:"Mellow, sunny \"yacht rock\" plus Carolina beach music made for swaying on a warm day — featuring Chairmen of the Board and Christopher Cross.",
    facts:["Chairmen of the Board's \"Carolina Girls\" is THE Carolina beach anthem — and it was written by a college student right in Raleigh, North Carolina.","\"Yacht rock\" is a nickname for super-smooth, breezy 1970s–80s songs that sound like a sunny day on a boat.","Carolina beach music has its own slow partner dance called \"the shag.\""],
    listen:"Pick the song that sounds the most like a lazy summer afternoon.",
@@ -597,7 +604,7 @@ const DAYS = [
    watch:yt("Bruce Springsteen Born in the USA"),
    watch2:{label:"▶️ Also: Bruce Springsteen \"Dancing in the Dark\"",url:yt("Bruce Springsteen Dancing in the Dark")}},
 
-  {id:"michael-jackson", era:"1980s",cls:"e80",artist:"Michael Jackson",essential:true,genre:"Pop / R&B",
+  {id:"michael-jackson", tags:["dance"], era:"1980s",cls:"e80",artist:"Michael Jackson",essential:true,genre:"Pop / R&B",
    intro:"\"The King of Pop\" — the biggest solo pop star of the 1980s.",
    facts:["His dance move the \"moonwalk\" makes it look like he's gliding backward.","His album \"Thriller\" is one of the best-selling albums of all time.","He started out as the kid singer of the Jackson 5 (Day {{n:the-jackson-5}}!)."],
    listen:"Watch his feet during the moonwalk — how does he do that?",
@@ -611,7 +618,7 @@ const DAYS = [
    wiki:"https://en.wikipedia.org/wiki/Prince_(musician)",
    watch:yt("Prince guitar solo While My Guitar Gently Weeps")},
 
-  {id:"tina-turner", era:"1980s",cls:"e80",artist:"Tina Turner",genre:"Rock / soul",
+  {id:"tina-turner", tags:["dance","women"], era:"1980s",cls:"e80",artist:"Tina Turner",genre:"Rock / soul",
    intro:"\"The Queen of Rock and Roll\" — pure energy on stage.",
    facts:["She was famous for dancing nonstop through entire concerts.","She became an even bigger solo star in her 40s — a huge comeback.","Her powerful, raspy voice is instantly recognizable."],
    listen:"Notice she's basically dancing the whole song without stopping.",
@@ -663,21 +670,21 @@ const DAYS = [
    watch:yt("Green Day Good Riddance Time of Your Life"),
    watch2:{label:"▶️ Also: Green Day \"American Idiot\"",url:yt("Green Day American Idiot")}},
 
-  {id:"mariah-carey", era:"1990s",cls:"e90",artist:"Mariah Carey",essential:true,genre:"Pop / R&B",
+  {id:"mariah-carey", tags:["women"], era:"1990s",cls:"e90",artist:"Mariah Carey",essential:true,genre:"Pop / R&B",
    intro:"A pop superstar famous for hitting impossibly high notes.",
    facts:["She can sing a super-high \"whistle note\" most singers can't reach.","She co-wrote most of her own hit songs.","Her holiday song \"All I Want for Christmas Is You\" comes back every single December."],
    listen:"Wait for the very, very high \"whistle\" note near the end.",
    wiki:"https://en.wikipedia.org/wiki/Mariah_Carey",
    watch:yt("Mariah Carey whistle notes live")},
 
-  {id:"selena", era:"1990s",cls:"e90",artist:"Selena",genre:"Tejano / Latin pop",
+  {id:"selena", tags:["women"], era:"1990s",cls:"e90",artist:"Selena",genre:"Tejano / Latin pop",
    intro:"\"The Queen of Tejano music\" and a beloved Mexican-American star.",
    facts:["She sang in Spanish and learned the words even before she spoke Spanish fluently.","She's called the Queen of Tejano, a lively Texas-Mexican style of music.","Her bright, danceable song \"Bidi Bidi Bom Bom\" is still a favorite."],
    listen:"The chorus is just fun sounds — \"bidi bidi bom bom\" — sing along!",
    wiki:"https://en.wikipedia.org/wiki/Selena",
    watch:yt("Selena Bidi Bidi Bom Bom official")},
 
-  {id:"90s-rnb-groups", era:"1990s",cls:"e90",artist:"90s R&B Groups",genre:"R&B / soul vocals",
+  {id:"90s-rnb-groups", tags:["voices"], era:"1990s",cls:"e90",artist:"90s R&B Groups",genre:"R&B / soul vocals",
    intro:"Smooth-singing groups that grew out of soul and R&B and ruled 90s radio with harmony — featuring Boyz II Men, TLC, En Vogue, and New Edition.",
    facts:["Boyz II Men were famous for blending four voices into one smooth sound.","TLC mixed singing and rapping and were one of the best-selling girl groups ever.","These groups often sang every note live in tight harmony, with no instruments needed — just voices.","Groups like En Vogue and New Edition helped carry the soul and R&B tradition into the 90s."],
    listen:"Count the voices — can you hear all the different parts singing together?",
@@ -702,7 +709,7 @@ const DAYS = [
 
 
   // ===== 2000s =====
-  {id:"pop-princesses", era:"2000s",cls:"e00",artist:"Pop Princesses",essential:true,genre:"Teen pop",
+  {id:"pop-princesses", tags:["women"], era:"2000s",cls:"e00",artist:"Pop Princesses",essential:true,genre:"Teen pop",
    intro:"The super catchy teen-pop stars who ruled the radio and TV around the year 2000 — featuring Britney Spears, Christina Aguilera, and more.",
    facts:["Britney Spears and Christina Aguilera both started out as kids on the same TV show — Disney's \"Mickey Mouse Club\" — alongside Justin Timberlake.","Britney's \"...Baby One More Time\" made her one of the biggest pop stars in the world almost overnight.","Christina Aguilera was famous for her huge, powerful voice and lots of fancy vocal runs.","Other big pop stars of this moment included Mandy Moore, Jessica Simpson, and Pink."],
    listen:"Listen to how many extra notes Christina adds — that's called a vocal \"run.\"",
@@ -711,7 +718,7 @@ const DAYS = [
    watch:yt("Britney Spears Baby One More Time official"),
    watch2:{label:"▶️ Also: Christina Aguilera \"Genie in a Bottle\"",url:yt("Christina Aguilera Genie in a Bottle official")}},
 
-  {id:"latin-music", era:"2000s",cls:"e00",artist:"Latin Music",genre:"Latin pop",
+  {id:"latin-music", tags:["dance"], era:"2000s",cls:"e00",artist:"Latin Music",genre:"Latin pop",
    intro:"A cross-era celebration of music from Latin America and the Spanish-speaking world that makes the whole world want to dance — featuring Gloria Estefan, Shakira, and Ricky Martin, plus the wider world of Latin pop and reggaeton.",
    facts:["Shakira is from Colombia and is famous all over the world for her amazing dancing.","Gloria Estefan and her band the Miami Sound Machine helped bring bright Latin rhythms onto pop radio.","Lots of these songs mix English and Spanish words together in the very same song.","The bouncy rhythms make it almost impossible to sit still — your feet just want to move!","Selena (Day {{n:selena}}) was another beloved Latin-music star you already met this summer!"],
    listen:"Get up and dance — see if you can move to the beat.",
@@ -719,7 +726,7 @@ const DAYS = [
    watch:yt("Shakira Waka Waka"),
    watch2:{label:"▶️ Also: Ricky Martin \"Livin' la Vida Loca\"",url:yt("Ricky Martin Livin la Vida Loca")}},
 
-  {id:"women-of-hip-hop-and-rnb", era:"2000s",cls:"e00",artist:"Women of Hip-Hop & R&B",essential:true,genre:"Hip-hop / R&B",
+  {id:"women-of-hip-hop-and-rnb", tags:["women"], era:"2000s",cls:"e00",artist:"Women of Hip-Hop & R&B",essential:true,genre:"Hip-hop / R&B",
    intro:"Trailblazing women — Missy Elliott, Eve, and more — who changed what hip-hop sounded and looked like.",
    facts:["Missy Elliott made wild, imaginative music videos unlike anything else on TV.","Eve was the first woman rapper to have an album debut at number one — a huge milestone.","Missy is also a producer, meaning she builds the beats and sounds, not just the words."],
    listen:"Notice the bouncy, creative beats — Missy loved unusual sounds.",
@@ -728,7 +735,7 @@ const DAYS = [
    watch:yt("Missy Elliott NPR Tiny Desk"),
    watch2:{label:"▶️ Also: Missy Elliott \"Work It\" (clean)",url:yt("Missy Elliott Work It clean version")}},
 
-  {id:"outkast", era:"2000s",cls:"e00",artist:"OutKast",genre:"Hip-hop",
+  {id:"outkast", tags:["dance"], era:"2000s",cls:"e00",artist:"OutKast",genre:"Hip-hop",
    intro:"A creative, genre-bending hip-hop duo from Atlanta.",
    facts:["Their song \"Hey Ya!\" tells you to shake it \"like a Polaroid picture.\"","They mixed rap with funk, rock, and soul in surprising ways.","They were known for bold, colorful style and big imagination."],
    listen:"Everyone shake your hands during \"shake it like a Polaroid picture!\"",
@@ -742,7 +749,7 @@ const DAYS = [
    wiki:"https://en.wikipedia.org/wiki/Alicia_Keys",
    watch:yt("Alicia Keys NPR Tiny Desk")},
 
-  {id:"beyonce", era:"2000s",cls:"e00",artist:"Beyoncé",essential:true,genre:"Pop / R&B",
+  {id:"beyonce", tags:["dance","women"], era:"2000s",cls:"e00",artist:"Beyoncé",essential:true,genre:"Pop / R&B",
    intro:"One of the biggest stars in the world — first as a kid in Destiny's Child, then solo.",
    facts:["She started in the girl group Destiny's Child before going solo.","She has won more Grammy Awards than any other artist in history.","She rehearses her shows for months to get every dance move exact."],
    listen:"Watch how every dancer moves at the exact same time as her.",
@@ -768,7 +775,7 @@ const DAYS = [
    watch:yt("Lady Gaga Shallow live"),
    watch2:{label:"▶️ Also: Lady Gaga \"Million Reasons\"",url:yt("Lady Gaga Million Reasons official")}},
 
-  {id:"taylor-swift", era:"2010s+",cls:"e10",artist:"Taylor Swift",essential:true,genre:"Pop / country-pop",
+  {id:"taylor-swift", tags:["women"], era:"2010s+",cls:"e10",artist:"Taylor Swift",essential:true,genre:"Pop / country-pop",
    intro:"One of the biggest stars of the 2010s, who started in country music and became a pop superstar.",
    facts:["She writes or co-writes all her own songs, often telling stories from her real life.","When a company bought the recordings of her early albums, she re-recorded them herself so she'd own her own music — fans call these the \"Taylor's Version\" albums.","Her Eras Tour became one of the biggest and highest-earning concert tours ever.","She started out as a teenager playing country music in Nashville before going full pop."],
    listen:"Listen for the storytelling — her songs usually tell a beginning, middle, and end.",
@@ -776,7 +783,7 @@ const DAYS = [
    watch:yt("Taylor Swift Shake It Off official"),
    watch2:{label:"▶️ Also: Taylor Swift \"ME!\"",url:yt("Taylor Swift ME official")}},
 
-  {id:"adele", era:"2010s+",cls:"e10",artist:"Adele",genre:"Pop / soul",
+  {id:"adele", tags:["calm","women"], era:"2010s+",cls:"e10",artist:"Adele",genre:"Pop / soul",
    intro:"A British singer with a huge, emotional voice, famous for powerful ballads.",
    facts:["She names her albums after how old she was when she made them — like \"19,\" \"21,\" \"25,\" and \"30.\"","Her song \"Hello\" was so popular its video got over a billion views.","She's won many Grammy Awards and an Oscar for a James Bond movie song, \"Skyfall.\"","She sings mostly without fancy effects — it's really just her big voice."],
    listen:"Close your eyes and notice how much feeling she puts into each note.",
@@ -784,14 +791,14 @@ const DAYS = [
    watch:yt("Adele Hello official"),
    watch2:{label:"▶️ Also: Adele NPR Tiny Desk",url:yt("Adele NPR Tiny Desk")}},
 
-  {id:"bruno-mars", era:"2010s+",cls:"e10",artist:"Bruno Mars",genre:"Pop / funk / soul",
+  {id:"bruno-mars", tags:["dance"], era:"2010s+",cls:"e10",artist:"Bruno Mars",genre:"Pop / funk / soul",
    intro:"A throwback showman who brings old-school funk and soul to today's pop.",
    facts:["As a little kid he performed as an Elvis impersonator.","He plays multiple instruments and sings, dances, and writes his songs.","\"Uptown Funk\" makes almost everybody want to dance."],
    listen:"Try not to dance during \"Uptown Funk\" — it's nearly impossible.",
    wiki:"https://en.wikipedia.org/wiki/Bruno_Mars",
    watch:yt("Mark Ronson Bruno Mars Uptown Funk official")},
 
-  {id:"pop-queens", era:"2010s+",cls:"e10",artist:"Pop Queens",genre:"Pop / dance-pop",
+  {id:"pop-queens", tags:["women"], era:"2010s+",cls:"e10",artist:"Pop Queens",genre:"Pop / dance-pop",
    intro:"The chart-topping women who defined 2010s radio — featuring Katy Perry, Ariana Grande, and Rihanna.",
    facts:["Katy Perry's \"Firework\" and \"Roar\" are big, confident sing-along anthems.","Ariana Grande is known for hitting very high notes, a bit like Mariah Carey (Day {{n:mariah-carey}}!), who inspired her.","Rihanna is from the Caribbean island of Barbados and became a global superstar — she's also a hugely successful businessperson.","All three are famous for enormous, colorful concerts and music videos."],
    listen:"Listen for how high Ariana can sing — she reaches notes most singers can't.",
@@ -817,7 +824,7 @@ const DAYS = [
    watch:yt("Lil Nas X Old Town Road official"),
    watch2:{label:"▶️ Also: Drake \"God's Plan\" (clean)",url:yt("Drake God's Plan clean version")}},
 
-  {id:"lizzo", era:"2010s+",cls:"e10",artist:"Lizzo",genre:"Pop / hip-hop",
+  {id:"lizzo", tags:["dance","women"], era:"2010s+",cls:"e10",artist:"Lizzo",genre:"Pop / hip-hop",
    intro:"A joyful pop star who is also a trained classical flute player.",
    facts:["She plays the flute — and sometimes plays it while dancing!","She studied classical flute seriously before becoming a pop star.","Her songs are all about confidence and feeling good about yourself."],
    listen:"Spot the moment she plays the flute mid-song.",
@@ -831,7 +838,7 @@ const DAYS = [
    wiki:"https://en.wikipedia.org/wiki/OK_Go",
    watch:yt("OK Go This Too Shall Pass Rube Goldberg official")},
 
-  {id:"pentatonix", era:"2010s+",cls:"e10",artist:"Pentatonix",genre:"A cappella",
+  {id:"pentatonix", tags:["voices"], era:"2010s+",cls:"e10",artist:"Pentatonix",genre:"A cappella",
    intro:"A group that makes a full band's worth of sound using only their voices.",
    facts:["They use zero instruments — every sound is a human voice.","One member is a \"beatboxer\" who makes drum sounds with his mouth.","They won a TV singing competition as a group."],
    listen:"There are no instruments — every single sound is somebody's mouth.",
@@ -878,7 +885,7 @@ const DAYS = [
    wiki:"https://en.wikipedia.org/wiki/%22Weird_Al%22_Yankovic",
    watch:yt("Weird Al Yankovic Eat It official")},
 
-  {id:"bobby-mcferrin", era:"Bonus",cls:"ebonus",artist:"Bobby McFerrin",genre:"Voice as instrument",
+  {id:"bobby-mcferrin", tags:["calm","voices"], era:"Bonus",cls:"ebonus",artist:"Bobby McFerrin",genre:"Voice as instrument",
    intro:"A singer who builds entire songs using only his voice and his body.",
    facts:["His hit \"Don't Worry, Be Happy\" has NO instruments — every sound is him.","He thumps his own chest to make the drum beat.","He can sing two things at once and gets whole audiences singing with him."],
    listen:"There's no band — see how many sounds come from just one person.",
@@ -892,7 +899,7 @@ const DAYS = [
    wiki:"https://en.wikipedia.org/wiki/Stomp_(theatrical_show)",
    watch:yt("STOMP performance brooms rhythm")},
 
-  {id:"yo-yo-ma", era:"Bonus",cls:"ebonus",artist:"Yo-Yo Ma",genre:"Classical cello",
+  {id:"yo-yo-ma", tags:["calm"], era:"Bonus",cls:"ebonus",artist:"Yo-Yo Ma",genre:"Classical cello",
    intro:"The world's most famous cello player.",
    facts:["The cello is a big string instrument you play sitting down, hugged between your knees.","He played for the public at age 7 and has won many Grammys.","He has played everything from classical music to bluegrass to movie scores."],
    listen:"The cello sounds deep and warm — close your eyes and just listen.",
@@ -923,12 +930,22 @@ const dayNumberOf = {};
 DAYS.forEach((d,i)=>{ dayNumberOf[d.id] = i+1; });
 const resolveRefs = s => s.replace(/\{\{n:([a-z0-9-]+)\}\}/g, (_,id)=> dayNumberOf[id] ?? "?");
 
+// ---- COLLECTIONS (cross-era tag groups; badge shown next to the artist name) ----
+const TAG_ORDER = ["calm","dance","voices","women"];
+const TAG_META = {
+  calm:   {emoji:"😌", label:"Calm & Cozy"},
+  dance:  {emoji:"💃", label:"Dance Party"},
+  voices: {emoji:"🎤", label:"Just Voices"},
+  women:  {emoji:"👑", label:"Women Who Ruled"},
+};
+
 DAYS.forEach((d,i)=>{
   const n = i+1;
   const card = document.createElement("div");
   card.className = "card " + d.cls;
   card.dataset.era = d.era;
   if(d.essential){ card.dataset.essential = "true"; }
+  card.dataset.tags = (d.tags || []).join(" ");
   card.dataset.search = [d.artist, d.era, d.genre, resolveRefs(d.intro), d.facts.map(resolveRefs).join(" "), resolveRefs(d.listen), d.flag || ""].join(" ").toLowerCase();
 
   let body = `<div class="card-body">
@@ -952,7 +969,7 @@ DAYS.forEach((d,i)=>{
       <span class="day-num">${n}</span>
       <span class="card-meta">
         <span class="era-tag">${d.era}</span>
-        <p class="artist">${d.artist}${d.essential ? ' <span class="essential-badge" title="Music History Essential"></span>' : ''}</p>
+        <p class="artist">${d.artist}${d.essential ? ' <span class="essential-badge" title="Music History Essential"></span>' : ''}${(d.tags || []).map(t=>` <span class="tag-badge" title="${TAG_META[t].label}">${TAG_META[t].emoji}</span>`).join("")}</p>
         <span class="genre">${d.genre} — ${resolveRefs(d.intro)}</span>
       </span>
       <span class="chev">›</span>
@@ -960,10 +977,11 @@ DAYS.forEach((d,i)=>{
   grid.appendChild(card);
 });
 
-// ---- FILTERS (era + essentials work together) ----
+// ---- FILTERS (era + essentials + collection + search all work together) ----
 let activeEra = "All";
 let essentialsOnly = false;
 let searchQuery = "";
+let activeTag = "";
 
 function applyFilters(){
   const q = searchQuery.trim().toLowerCase();
@@ -972,7 +990,8 @@ function applyFilters(){
     const eraOk = (activeEra==="All" || card.dataset.era===activeEra);
     const essOk = (!essentialsOnly || card.dataset.essential==="true");
     const searchOk = (!q || (card.dataset.search||"").includes(q));
-    const show = eraOk && essOk && searchOk;
+    const tagOk = (!activeTag || (card.dataset.tags||"").split(" ").includes(activeTag));
+    const show = eraOk && essOk && searchOk && tagOk;
     card.classList.toggle("hide", !show);
     if(show) visible++;
   });
@@ -985,12 +1004,33 @@ eras.forEach((e,idx)=>{
   const c = document.createElement("button");
   c.className="chip"; c.textContent=e; c.setAttribute("aria-pressed", idx===0);
   c.onclick=()=>{
-    document.querySelectorAll(".chip").forEach(x=>x.setAttribute("aria-pressed","false"));
+    erasBox.querySelectorAll(".chip").forEach(x=>x.setAttribute("aria-pressed","false"));
     c.setAttribute("aria-pressed","true");
     activeEra = e;
     applyFilters();
   };
   erasBox.appendChild(c);
+});
+
+// ---- COLLECTION CHIPS (😌 💃 🎤 👑 — filter by tag, composes with the others) ----
+const collectionsBox = document.getElementById("collections");
+const collLabel = document.createElement("span");
+collLabel.className = "collections-label";
+collLabel.textContent = "Collections:";
+collectionsBox.appendChild(collLabel);
+const collChips = [{tag:"", label:"All"}, ...TAG_ORDER.map(t=>({tag:t, label:TAG_META[t].emoji + " " + TAG_META[t].label}))];
+collChips.forEach((cc,idx)=>{
+  const b = document.createElement("button");
+  b.className = "chip chip-collection";
+  b.textContent = cc.label;
+  b.setAttribute("aria-pressed", idx===0);
+  b.onclick = ()=>{
+    collectionsBox.querySelectorAll(".chip").forEach(x=>x.setAttribute("aria-pressed","false"));
+    b.setAttribute("aria-pressed","true");
+    activeTag = cc.tag;
+    applyFilters();
+  };
+  collectionsBox.appendChild(b);
 });
 
 const essToggle = document.getElementById("essToggle");
