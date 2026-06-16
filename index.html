@@ -385,7 +385,7 @@ const DAYS = [
    wiki:"https://en.wikipedia.org/wiki/Chuck_Berry",
    watch:yt("Chuck Berry Johnny B Goode live")},
 
-  {id:"little-richard", era:"1950s",cls:"e50",artist:"Little Richard",essential:true,genre:"Piano rock & roll",
+  {id:"little-richard", tags:["piano"], era:"1950s",cls:"e50",artist:"Little Richard",essential:true,genre:"Piano rock & roll",
    intro:"A wild, joyful piano-pounder with sky-high energy.",
    facts:["He played piano standing up, sometimes with his foot on the keys.","His big yell \"A-wop-bop-a-loo-bop-a-lop-bam-boom!\" is one of the most famous noises in music.","He called himself \"the architect of rock and roll\" — and lots of people agree."],
    listen:"Count how many times he shouts \"woo!\"",
@@ -425,7 +425,7 @@ const DAYS = [
    wiki:"https://en.wikipedia.org/wiki/The_Beach_Boys",
    watch:yt("Beach Boys I Get Around")},
 
-  {id:"stevie-wonder", era:"1960s",cls:"e60",artist:"Stevie Wonder",essential:true,genre:"Motown soul",
+  {id:"stevie-wonder", tags:["piano"], era:"1960s",cls:"e60",artist:"Stevie Wonder",essential:true,genre:"Motown soul",
    intro:"A musical genius who was signed to Motown Records as a kid.",
    facts:["He has been blind since shortly after birth and plays piano, drums, and harmonica.","He had his first number-one song at just 13 years old.","He's won 25 Grammy Awards — one of the most in history."],
    listen:"Listen for the harmonica — that's Stevie playing it.",
@@ -515,7 +515,7 @@ const DAYS = [
    wiki:"https://en.wikipedia.org/wiki/Dolly_Parton",
    watch:yt("Dolly Parton Jolene live")},
 
-  {id:"billy-joel", era:"1970s",cls:"e70",artist:"Billy Joel",essential:true,genre:"Piano rock / singer-songwriter",
+  {id:"billy-joel", tags:["piano"], era:"1970s",cls:"e70",artist:"Billy Joel",essential:true,genre:"Piano rock / singer-songwriter",
    intro:"The \"Piano Man\" — a singer-songwriter who tells whole stories from behind his piano.",
    facts:["His nickname is the \"Piano Man,\" after his 1973 song where he plays both piano and harmonica.","Almost every line of his song \"We Didn't Start the Fire\" names a real historical event, listed in order from 1949 to 1989 — teachers have used it to help kids learn history.","He's one of the best-selling solo musicians in U.S. history, with tens of millions of albums sold."],
    listen:"In \"Piano Man,\" listen for the harmonica he plays between the verses.",
@@ -523,7 +523,7 @@ const DAYS = [
    watch:yt("Billy Joel Piano Man official"),
    watch2:{label:"▶️ Also: Billy Joel \"We Didn't Start the Fire\"",url:yt("Billy Joel We Didn't Start the Fire official")}},
 
-  {id:"elton-john", era:"1970s",cls:"e70",artist:"Elton John",essential:true,genre:"Piano pop / rock",
+  {id:"elton-john", tags:["piano"], era:"1970s",cls:"e70",artist:"Elton John",essential:true,genre:"Piano pop / rock",
    intro:"A piano superstar famous for turning every concert into a big, sparkly, colorful show.",
    facts:["He's famous for wild, colorful costumes and giant, fancy glasses in every shape you can imagine.","He often plays the piano standing up — kicking, jumping, and putting on a huge show.","He wrote the music for the songs in Disney's \"The Lion King,\" like \"Circle of Life\" and \"Can You Feel the Love Tonight.\"","For most of his other famous songs, his partner Bernie Taupin writes the words and Elton writes the music."],
    listen:"Look at his amazing sparkly glasses and costumes while he plays — he turns piano into a big show.",
@@ -742,7 +742,7 @@ const DAYS = [
    wiki:"https://en.wikipedia.org/wiki/OutKast",
    watch:yt("OutKast Hey Ya official")},
 
-  {id:"alicia-keys", era:"2000s",cls:"e00",artist:"Alicia Keys",genre:"R&B / soul / piano",
+  {id:"alicia-keys", tags:["piano"], era:"2000s",cls:"e00",artist:"Alicia Keys",genre:"R&B / soul / piano",
    intro:"A singer-songwriter who plays gorgeous piano while she sings.",
    facts:["She started playing classical piano when she was just 7 years old.","She writes her own songs at the piano.","Her song \"Empire State of Mind\" is a love letter to New York City."],
    listen:"It's all built on her piano — listen for it under her voice.",
@@ -767,7 +767,7 @@ const DAYS = [
    watch:yt("Paramore Still Into You official"),
    watch2:{label:"▶️ Also: Fall Out Boy \"Centuries\"",url:yt("Fall Out Boy Centuries official")}},
 
-  {id:"lady-gaga", era:"2010s+",cls:"e10",artist:"Lady Gaga",genre:"Pop / dance-pop",
+  {id:"lady-gaga", tags:["piano"], era:"2010s+",cls:"e10",artist:"Lady Gaga",genre:"Pop / dance-pop",
    intro:"A bold, theatrical pop star known for wild costumes and powerful singing.",
    facts:["She's famous for over-the-top outfits and dramatic, artistic music videos.","She's also a trained pianist and can sing big jazz and showtune numbers.","She won an Academy Award for the song \"Shallow\" from the movie A Star Is Born.","She made a whole album of old jazz songs with the legendary singer Tony Bennett."],
    listen:"Notice she's not just singing — the costumes and staging are part of the show.",
@@ -775,7 +775,7 @@ const DAYS = [
    watch:yt("Lady Gaga Shallow live"),
    watch2:{label:"▶️ Also: Lady Gaga \"Million Reasons\"",url:yt("Lady Gaga Million Reasons official")}},
 
-  {id:"taylor-swift", tags:["women"], era:"2010s+",cls:"e10",artist:"Taylor Swift",essential:true,genre:"Pop / country-pop",
+  {id:"taylor-swift", tags:["women","piano"], era:"2010s+",cls:"e10",artist:"Taylor Swift",essential:true,genre:"Pop / country-pop",
    intro:"One of the biggest stars of the 2010s, who started in country music and became a pop superstar.",
    facts:["She writes or co-writes all her own songs, often telling stories from her real life.","When a company bought the recordings of her early albums, she re-recorded them herself so she'd own her own music — fans call these the \"Taylor's Version\" albums.","Her Eras Tour became one of the biggest and highest-earning concert tours ever.","She started out as a teenager playing country music in Nashville before going full pop."],
    listen:"Listen for the storytelling — her songs usually tell a beginning, middle, and end.",
@@ -931,12 +931,13 @@ DAYS.forEach((d,i)=>{ dayNumberOf[d.id] = i+1; });
 const resolveRefs = s => s.replace(/\{\{n:([a-z0-9-]+)\}\}/g, (_,id)=> dayNumberOf[id] ?? "?");
 
 // ---- COLLECTIONS (cross-era tag groups; badge shown next to the artist name) ----
-const TAG_ORDER = ["calm","dance","voices","women"];
+const TAG_ORDER = ["calm","dance","voices","women","piano"];
 const TAG_META = {
   calm:   {emoji:"😌", label:"Calm & Cozy"},
   dance:  {emoji:"💃", label:"Dance Party"},
   voices: {emoji:"🎤", label:"Just Voices"},
   women:  {emoji:"👑", label:"Women Who Ruled"},
+  piano:  {emoji:"🎹", label:"Piano Powerhouses"},
 };
 
 DAYS.forEach((d,i)=>{
