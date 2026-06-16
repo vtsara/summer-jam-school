@@ -98,6 +98,20 @@
   .btn-sky{background:var(--sky);}
   .btn-ghost{background:transparent;color:var(--sun-deep);border:2px solid var(--sun-deep);}
   .btn:hover{filter:brightness(1.05);}
+  .btn-search{background:var(--grass);}
+  .search-wrap{display:inline-flex;align-items:center;}
+  .search-input{
+    width:0;min-width:0;opacity:0;padding:0;margin:0;
+    border:2px solid transparent;border-radius:999px;
+    font-family:inherit;font-size:.9rem;color:var(--ink);background:var(--card);outline:none;
+    transition:width .22s ease, opacity .18s ease, padding .22s ease, margin .22s ease;
+  }
+  .search-wrap.open .search-input{
+    width:210px;opacity:1;padding:9px 14px;margin-left:8px;border-color:var(--grass);
+  }
+  @media (max-width:480px){ .search-wrap.open .search-input{width:150px;} }
+  .no-results{display:none;text-align:center;color:var(--shade);font-size:1.05rem;margin:34px auto;}
+  .no-results.show{display:block;}
   /* Expand/Collapse act as a toggle pair: the active view state is filled,
      ringed, and checkmarked; the other sits quiet as an outline. Clear on
      mobile, where the two buttons may wrap onto separate rows. */
@@ -247,6 +261,10 @@
       <button class="btn btn-toggle" id="btnExpand" aria-pressed="false" onclick="toggleAll(true)">Expand all</button>
       <button class="btn btn-toggle" id="btnCollapse" aria-pressed="true" onclick="toggleAll(false)">Collapse all</button>
       <button class="btn btn-sky" onclick="window.print()">🖨 Print / Save PDF</button>
+      <span class="search-wrap" id="searchWrap">
+        <button class="btn btn-search" id="searchToggle" aria-label="Search days" aria-expanded="false">🔍</button>
+        <input type="search" id="searchInput" class="search-input" placeholder="Search acts, facts…" aria-label="Search days" autocomplete="off">
+      </span>
     </div>
 
     <div style="text-align:center;">
@@ -257,6 +275,7 @@
   </header>
 
   <div class="grid" id="grid"></div>
+  <p class="no-results" id="noResults">No days match your search — try a different word! 🔎</p>
 
   <footer>
     Built for backyard listening. Video links open YouTube searches or official channels so they stay working over time.<br>
@@ -496,6 +515,14 @@ const DAYS = [
    wiki:"https://en.wikipedia.org/wiki/Billy_Joel",
    watch:yt("Billy Joel Piano Man official"),
    watch2:{label:"▶️ Also: Billy Joel \"We Didn't Start the Fire\"",url:yt("Billy Joel We Didn't Start the Fire official")}},
+
+  {id:"elton-john", era:"1970s",cls:"e70",artist:"Elton John",genre:"Piano pop / rock",
+   intro:"A piano superstar famous for turning every concert into a big, sparkly, colorful show.",
+   facts:["He's famous for wild, colorful costumes and giant, fancy glasses in every shape you can imagine.","He often plays the piano standing up — kicking, jumping, and putting on a huge show.","He wrote the music for the songs in Disney's \"The Lion King,\" like \"Circle of Life\" and \"Can You Feel the Love Tonight.\"","For most of his other famous songs, his partner Bernie Taupin writes the words and Elton writes the music."],
+   listen:"Look at his amazing sparkly glasses and costumes while he plays — he turns piano into a big show.",
+   wiki:"https://en.wikipedia.org/wiki/Elton_John",
+   watch:yt("Elton John Crocodile Rock"),
+   watch2:{label:"▶️ Also: The Lion King \"Circle of Life\"",url:yt("Lion King Circle of Life Elton John")}},
 
   {id:"queen", era:"1970s",cls:"e70",artist:"Queen",genre:"Arena rock",
    intro:"A theatrical rock band led by the dazzling showman Freddie Mercury.",
@@ -902,6 +929,7 @@ DAYS.forEach((d,i)=>{
   card.className = "card " + d.cls;
   card.dataset.era = d.era;
   if(d.essential){ card.dataset.essential = "true"; }
+  card.dataset.search = [d.artist, d.era, d.genre, resolveRefs(d.intro), d.facts.map(resolveRefs).join(" "), resolveRefs(d.listen), d.flag || ""].join(" ").toLowerCase();
 
   let body = `<div class="card-body">
       <div class="body-label">Fun facts</div>
@@ -935,13 +963,21 @@ DAYS.forEach((d,i)=>{
 // ---- FILTERS (era + essentials work together) ----
 let activeEra = "All";
 let essentialsOnly = false;
+let searchQuery = "";
 
 function applyFilters(){
+  const q = searchQuery.trim().toLowerCase();
+  let visible = 0;
   document.querySelectorAll(".card").forEach(card=>{
     const eraOk = (activeEra==="All" || card.dataset.era===activeEra);
     const essOk = (!essentialsOnly || card.dataset.essential==="true");
-    card.classList.toggle("hide", !(eraOk && essOk));
+    const searchOk = (!q || (card.dataset.search||"").includes(q));
+    const show = eraOk && essOk && searchOk;
+    card.classList.toggle("hide", !show);
+    if(show) visible++;
   });
+  const nr = document.getElementById("noResults");
+  if(nr) nr.classList.toggle("show", visible===0);
 }
 
 const eras = ["All", ...Array.from(new Set(DAYS.map(d=>d.era)))];
@@ -964,6 +1000,24 @@ essToggle.onclick = ()=>{
   essToggle.textContent = essentialsOnly ? "★ Showing Music History Essentials — show all" : "★ Show only Music History Essentials";
   applyFilters();
 };
+
+// ---- LIVE SEARCH (expands from the 🔍 icon; filters as you type) ----
+const searchWrap = document.getElementById("searchWrap");
+const searchToggle = document.getElementById("searchToggle");
+const searchInput = document.getElementById("searchInput");
+searchToggle.onclick = ()=>{
+  const open = searchWrap.classList.toggle("open");
+  searchToggle.setAttribute("aria-expanded", open);
+  if(open){
+    searchInput.focus();
+  } else {
+    searchInput.value = "";
+    searchQuery = "";
+    applyFilters();
+  }
+};
+searchInput.addEventListener("input", ()=>{ searchQuery = searchInput.value; applyFilters(); });
+searchInput.addEventListener("keydown", e=>{ if(e.key === "Escape" && searchWrap.classList.contains("open")){ searchToggle.click(); } });
 
 function toggleAll(open){
   document.querySelectorAll(".card").forEach(c=>c.classList.toggle("open", open));
