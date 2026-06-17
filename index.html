@@ -7,14 +7,15 @@
 <style>
   :root{
     --ink:#241a16;
-    --paper:#fff7ea;
-    --sun:#ffb703;
-    --sun-deep:#fb8500;
-    --sky:#3a86ff;
-    --punch:#ef476f;
-    --grass:#06a77d;
+    --paper:#F2E8DB;        /* Cream */
+    --sun:#FFD10C;          /* Yellow — primary accent */
+    --sun-deep:#FF574B;     /* Cherry / coral-red — primary warm accent (text, borders, buttons) */
+    --sky:#1A5EDC;          /* Cobalt — headings accent, listen/wiki, 2000s badge */
+    --punch:#FF574B;        /* Cherry / coral-red — Watch buttons, flags */
+    --grass:#06a77d;        /* Green — search, collections, body labels */
+    --gold:#f5c518;         /* Gold — essential star */
     --shade:#7a6a5f;
-    --card:#fffdf7;
+    --card:#FCF7EF;         /* light warm card, sits above the cream page */
     --line:#e6d9c4;
   }
   *{box-sizing:border-box;}
@@ -22,8 +23,8 @@
   body{
     margin:0;
     background:
-      radial-gradient(circle at 12% -5%, rgba(255,183,3,.35), transparent 40%),
-      radial-gradient(circle at 92% 0%, rgba(58,134,255,.18), transparent 35%),
+      radial-gradient(circle at 12% -5%, rgba(255,209,12,.30), transparent 40%),
+      radial-gradient(circle at 92% 0%, rgba(26,94,220,.14), transparent 35%),
       var(--paper);
     color:var(--ink);
     font-family:"Helvetica Neue",Arial,sans-serif;
@@ -48,7 +49,7 @@
     margin:.18em 0 .12em;
     letter-spacing:-.02em;
     text-transform:uppercase;
-    background:linear-gradient(180deg,var(--sun-deep),var(--punch));
+    background:linear-gradient(180deg,#7B36FE,#1A5EDC);
     -webkit-background-clip:text;background-clip:text;color:transparent;
     text-shadow:0 1px 0 rgba(0,0,0,.04);
   }
@@ -95,7 +96,7 @@
   }
   .btn:active{transform:translateY(1px);}
   .btn-sun{background:var(--sun-deep);}
-  .btn-sky{background:var(--sky);}
+  .btn-sky{background:var(--sun);color:var(--ink);}
   .btn-ghost{background:transparent;color:var(--sun-deep);border:2px solid var(--sun-deep);}
   .btn:hover{filter:brightness(1.05);}
   .btn-search{background:var(--grass);}
@@ -118,7 +119,7 @@
   .btn-toggle{background:var(--card);color:var(--sun-deep);border:2px solid var(--sun-deep);}
   .btn-toggle[aria-pressed="true"]{
     background:var(--sun-deep);color:#fff;
-    box-shadow:0 0 0 3px rgba(251,133,0,.28);
+    box-shadow:0 0 0 3px rgba(255,87,75,.28);
   }
   .btn-toggle[aria-pressed="true"]::before{content:"✓ ";font-weight:800;}
 
@@ -176,12 +177,12 @@
   .facts{margin:0;padding-left:1.1em;}
   .facts li{margin:.35em 0;font-size:.93rem;}
   .listen{
-    background:rgba(58,134,255,.08);border-left:3px solid var(--sky);
+    background:rgba(26,94,220,.08);border-left:3px solid var(--sky);
     padding:8px 12px;border-radius:0 8px 8px 0;font-size:.9rem;margin-top:10px;
   }
   .listen b{color:var(--sky);}
   .flag{
-    background:rgba(239,71,111,.1);border-left:3px solid var(--punch);
+    background:rgba(255,87,75,.12);border-left:3px solid var(--punch);
     padding:8px 12px;border-radius:0 8px 8px 0;font-size:.86rem;margin-top:10px;color:#8a2540;
   }
   .flag b{color:var(--punch);}
@@ -195,26 +196,27 @@
   .watch.spotify{background:#1DB954;}
   .watch.spotify-find{background:#64748b;}
   .watch-row{display:flex;gap:8px;flex-wrap:wrap;}
-  .wiki-link{display:inline-block;margin-top:12px;font-size:.85rem;color:var(--sky);text-decoration:none;border-bottom:1px solid rgba(58,134,255,.35);padding-bottom:1px;}
+  .wiki-link{display:inline-block;margin-top:12px;font-size:.85rem;color:var(--sky);text-decoration:none;border-bottom:1px solid rgba(26,94,220,.35);padding-bottom:1px;}
   .wiki-link:hover{border-bottom-color:var(--sky);}
-  .essential-badge{color:var(--sun-deep);font-size:.9em;}
+  .essential-badge{color:var(--gold);font-size:.95em;text-shadow:0 0 1px rgba(140,90,0,.45);}
   .essential-badge::before{content:"★";}
   .tag-badge{font-size:.82em;vertical-align:middle;margin-left:1px;cursor:default;}
   .ess-toggle{display:inline-flex;align-items:center;gap:8px;margin:22px auto 0;background:var(--card);border:2px solid var(--sun-deep);color:var(--sun-deep);font-weight:700;font-size:.9rem;padding:9px 16px;border-radius:999px;cursor:pointer;transition:all .12s ease;}
   .ess-toggle[aria-pressed="true"]{background:var(--sun-deep);color:#fff;}
+  .ess-star{color:var(--gold);text-shadow:0 0 1px rgba(140,90,0,.45);}
   .ess-toggle:hover{filter:brightness(1.03);}
 
   footer{text-align:center;margin-top:50px;color:var(--shade);font-size:.85rem;}
 
   /* assignee accent rotation by era handled via inline class */
-  .e50 .day-num{background:#e8833a;} /* 50s — warm amber */
-  .e60 .day-num{background:#c1121f;} /* 60s — deep red */
-  .e70 .day-num{background:#e0a106;} /* 70s — gold */
-  .e80 .day-num{background:#118ab2;} /* 80s — teal */
-  .e90 .day-num{background:#7b2cbf;} /* 90s — purple */
-  .e00 .day-num{background:#2a9d8f;} /* 2000s — green-teal */
-  .e10 .day-num{background:#3a86ff;} /* 2010s+ — blue */
-  .ebonus .day-num{background:#e76f9e;} /* Bonus — pink */
+  .e50 .day-num{background:#FA935A;color:var(--ink);} /* 1950s — coral orange */
+  .e60 .day-num{background:#FF574B;} /* 1960s — cherry red */
+  .e70 .day-num{background:#FFD10C;color:var(--ink);} /* 1970s — yellow */
+  .e80 .day-num{background:#1E987D;} /* 1980s — teal */
+  .e90 .day-num{background:#7B36FE;} /* 1990s — purple */
+  .e00 .day-num{background:#1A5EDC;} /* 2000s — cobalt */
+  .e10 .day-num{background:#FB72CC;color:var(--ink);} /* 2010s+ — hot pink */
+  .ebonus .day-num{background:#A2E07D;color:var(--ink);} /* Bonus — lime */
 
   /* PRINT */
   @media print{
@@ -246,7 +248,7 @@
           <li>Read the act's name and the one-line intro.</li>
           <li>Share the 3 fun facts — the weird ones stick best.</li>
           <li>Give the kids the <b>Listen For</b> job, then watch the clip.</li>
-          <li>Watch for a <b style="color:#ef476f">⚑ Parent note</b> — pre-screen those before pressing play.</li>
+          <li>Watch for a <b style="color:#FF574B">⚑ Parent note</b> — pre-screen those before pressing play.</li>
         </ol>
       </div>
 
@@ -256,8 +258,8 @@
           <li><span class="sw sw-green"></span><span><b>♫ Listen on Spotify</b> (green) — a curated, kid-vetted playlist</span></li>
           <li><span class="sw sw-grey"></span><span><b>♫ Find on Spotify</b> (grey) — search and pick your own songs</span></li>
           <li><span class="ic">▶️</span><span><b>Watch a clip</b> — a short video to watch together</span></li>
-          <li><span class="ic" style="color:#ef476f">⚑</span><span><b>Parent note</b> — this day's music skews mature; preview first</span></li>
-          <li><span class="ic" style="color:#fb8500">★</span><span><b>Music-history essential</b> — if you only do a few, start here</span></li>
+          <li><span class="ic" style="color:#FF574B">⚑</span><span><b>Parent note</b> — this day's music skews mature; preview first</span></li>
+          <li><span class="ic" style="color:var(--gold);text-shadow:0 0 1px rgba(140,90,0,.45)">★</span><span><b>Music-history essential</b> — if you only do a few, start here</span></li>
         </ul>
         <div class="note">Either way, use your own judgment — preview anything before playing for little ones.</div>
       </div>
@@ -274,7 +276,7 @@
     </div>
 
     <div style="text-align:center;">
-      <button class="ess-toggle" id="essToggle" aria-pressed="false">★ Show only Music History Essentials</button>
+      <button class="ess-toggle" id="essToggle" aria-pressed="false"><span class="ess-star">★</span> Show only Music History Essentials</button>
     </div>
 
     <div class="eras" id="eras"></div>
@@ -933,7 +935,7 @@ const resolveRefs = s => s.replace(/\{\{n:([a-z0-9-]+)\}\}/g, (_,id)=> dayNumber
 // ---- COLLECTIONS (cross-era tag groups; badge shown next to the artist name) ----
 const TAG_ORDER = ["calm","dance","voices","women","piano"];
 const TAG_META = {
-  calm:   {emoji:"😌", label:"Calm & Cozy"},
+  calm:   {emoji:"🧘", label:"Calm & Cozy"},
   dance:  {emoji:"💃", label:"Dance Party"},
   voices: {emoji:"🎤", label:"Just Voices"},
   women:  {emoji:"👑", label:"Women Who Ruled"},
@@ -1038,7 +1040,7 @@ const essToggle = document.getElementById("essToggle");
 essToggle.onclick = ()=>{
   essentialsOnly = !essentialsOnly;
   essToggle.setAttribute("aria-pressed", essentialsOnly);
-  essToggle.textContent = essentialsOnly ? "★ Showing Music History Essentials — show all" : "★ Show only Music History Essentials";
+  essToggle.innerHTML = '<span class="ess-star">★</span> ' + (essentialsOnly ? "Showing Music History Essentials — show all" : "Show only Music History Essentials");
   applyFilters();
 };
 
