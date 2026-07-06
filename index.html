@@ -19,20 +19,20 @@
             /* Peach */
             --sun: #f1cc0b;
             /* Yellow — primary accent */
-            --sun-deep: #f27351;
+            --coral: #f27351;
             /* Coral-orange — primary warm accent (text, borders, buttons) */
             --turquoise: #1e917b;
             /* dark green turquoise of brand */
-            --sky: #1A5EDC;
+            --cobalt: #1A5EDC;
             /* Cobalt — headings accent, listen/wiki, 2000s badge */
             --purple: #7633f6;
             /* vivid purple from brand kid */
             --ltpink: #f0ccda;
-            --ltblue: #90d9e2;
+            --sky: #90d9e2;
             --bubblegum: #fa66c8;
             --punch: #f94e45;
             /* Cherry / coral-red — Watch buttons, flags */
-            --grass: #06a77d;
+            --lime: #9cda77;
             /* Green — search, collections, body labels */
             --gold: #f5c518;
             /* Gold — essential star */
@@ -43,10 +43,12 @@
 
             /* Logo lockup layout — shared by the sliding smiley and the (separate) lettermark
                so they line up at every viewport. TUNE ME to resize/reposition the lockup. */
-            --logo-size: clamp(54px, 7.5vw, 76px);
+            --logo-size-base: clamp(54px, 7.5vw, 76px);
+            --logo-size: var(--logo-size-base);
             --logo-top: clamp(10px, 1.6vw, 18px);
             --logo-left: clamp(16px, 3vw, 30px);
             --logo-gap: clamp(8px, 1.4vw, 16px);
+            --nav-height: clamp(52px, 7vw, 66px);
         }
 
         * {
@@ -82,8 +84,8 @@
             min-height: 100vh;
             min-height: 100svh;
             /* mobile-safe viewport height */
-            background-color: #9cda77;
-            /* brand green */
+            background-color: var(--lime);
+            /* brand lime — the hero backdrop */
             /* TODO: add headphones artwork (e.g. images/headphones.png) — sits on the green, left side */
             background-image: url("images/headphones.png");
             background-repeat: no-repeat;
@@ -97,6 +99,16 @@
             overflow: hidden;
         }
 
+        /* Load-in: hero starts on cobalt, then fades to the lime backdrop as the logo
+           turns green and slides aside (JS toggles these; default stays lime for no-JS). */
+        .landing.bg-cobalt {
+            background-color: var(--cobalt);
+        }
+
+        .landing.bg-fade {
+            transition: background-color 1s ease;
+        }
+
         /* ===== Logo: centred intro → sticky top-left lockup ===== */
         /* The sliding smiley. It scales up + centres for the intro, then slides left to dock. */
         .logo-dock {
@@ -108,8 +120,8 @@
             width: var(--logo-size);
             height: var(--logo-size);
             transform-origin: top left;
-            /* the slide + shrink from the centred intro back down to this docked spot */
-            transition: transform .85s cubic-bezier(.65, 0, .35, 1);
+            /* the slide from the intro, plus the shrink when the nav bar engages on scroll */
+            transition: transform .85s cubic-bezier(.65, 0, .35, 1), width .35s ease, height .35s ease;
             pointer-events: none;
             will-change: transform;
             /* ▼ TUNE ME: size of the centred intro. Landing shrinks it back to 1 (i.e. 50% when this is 2). */
@@ -132,6 +144,94 @@
             width: auto;
             z-index: 1000;
             pointer-events: none;
+            transition: height .35s ease, left .35s ease;
+        }
+
+        /* ===== Scroll nav bar: appears once we pass the hero; logo shrinks 50% into it ===== */
+        body.nav-active {
+            --logo-size: calc(var(--logo-size-base) * .5);   /* logo shrinks another 50% */
+        }
+
+        .site-nav {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: var(--nav-height);
+            z-index: 1000;                 /* logo dock (1001) still rides on top at the left */
+            display: flex;
+            align-items: center;
+            justify-content: flex-end;     /* decades + top button pushed right; logo floats over the left */
+            gap: clamp(6px, 1.2vw, 14px);
+            /* reserve room on the left for the shrunken logo lockup (approx; placeholder spacing) */
+            padding: 0 clamp(14px, 2.5vw, 26px) 0 clamp(150px, 24vw, 250px);
+            background: #fff;
+            box-shadow: 0 2px 14px rgba(0, 0, 0, .12);
+            opacity: 0;
+            transform: translateY(-100%);
+            pointer-events: none;
+            transition: opacity .3s ease, transform .38s cubic-bezier(.4, 0, .2, 1);
+        }
+
+        body.nav-active .site-nav {
+            opacity: 1;
+            transform: translateY(0);
+            pointer-events: auto;
+        }
+
+        .nav-decades {
+            display: flex;
+            align-items: center;
+            gap: clamp(4px, 1vw, 12px);
+            list-style: none;
+            margin: 0;
+            padding: 0;
+            flex-wrap: nowrap;
+            overflow: hidden;
+        }
+
+        .nav-decade {
+            font-family: "DM Sans", "Helvetica Neue", Arial, sans-serif;
+            font-weight: 700;
+            font-size: clamp(.72rem, 1.4vw, .92rem);
+            color: var(--ink);
+            background: none;
+            border: 0;
+            border-radius: 999px;
+            padding: 7px clamp(7px, 1vw, 12px);
+            cursor: pointer;
+            white-space: nowrap;
+            transition: background .12s ease, color .12s ease;
+        }
+
+        .nav-decade:hover {
+            background: var(--paper);
+        }
+
+        .nav-top {
+            flex: 0 0 auto;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            width: clamp(34px, 5vw, 40px);
+            height: clamp(34px, 5vw, 40px);
+            margin-left: clamp(4px, 1vw, 10px);
+            border: 0;
+            border-radius: 50%;
+            background: var(--cobalt);
+            color: #fff;
+            font-size: 1.1rem;
+            line-height: 1;
+            cursor: pointer;
+            transition: filter .15s ease, transform .12s ease;
+        }
+
+        .nav-top:hover {
+            filter: brightness(1.08);
+        }
+
+        .nav-top:active {
+            transform: translateY(1px);
         }
 
         /* ===== Logo load animation: play button -> smiley eye -> brand colour flip ===== */
@@ -288,7 +388,7 @@
             font-size: clamp(1rem, 1.6vw, 1.15rem);
             line-height: 1;
             text-decoration: none;
-            color: #9cda77;
+            color: var(--lime);
             background: #20361a;
             padding: 16px 30px;
             border-radius: 999px;
@@ -329,7 +429,7 @@
             font-size: .8rem;
             letter-spacing: .32em;
             text-transform: uppercase;
-            color: var(--sun-deep);
+            color: var(--coral);
             font-weight: 700;
         }
 
@@ -484,7 +584,7 @@
         }
 
         .btn-sun {
-            background: var(--sun-deep);
+            background: var(--coral);
         }
 
         .btn-sky {
@@ -494,8 +594,8 @@
 
         .btn-ghost {
             background: transparent;
-            color: var(--sun-deep);
-            border: 2px solid var(--sun-deep);
+            color: var(--coral);
+            border: 2px solid var(--coral);
         }
 
         .btn:hover {
@@ -503,7 +603,7 @@
         }
 
         .btn-search {
-            background: var(--grass);
+            background: var(--lime);
         }
 
         .search-wrap {
@@ -532,7 +632,7 @@
             opacity: 1;
             padding: 9px 14px;
             margin-left: 8px;
-            border-color: var(--grass);
+            border-color: var(--lime);
         }
 
         @media (max-width:480px) {
@@ -558,12 +658,12 @@
      mobile, where the two buttons may wrap onto separate rows. */
         .btn-toggle {
             background: var(--card);
-            color: var(--sun-deep);
-            border: 2px solid var(--sun-deep);
+            color: var(--coral);
+            border: 2px solid var(--coral);
         }
 
         .btn-toggle[aria-pressed="true"] {
-            background: var(--sun-deep);
+            background: var(--coral);
             color: #fff;
             box-shadow: 0 0 0 3px rgba(255, 87, 75, .28);
         }
@@ -619,9 +719,9 @@
         }
 
         .chip-collection[aria-pressed="true"] {
-            background: var(--grass);
+            background: var(--lime);
             color: #fff;
-            border-color: var(--grass);
+            border-color: var(--lime);
         }
 
         /* GRID */
@@ -676,7 +776,7 @@
             font-family: "Arial Black", sans-serif;
             font-size: 1.15rem;
             color: #fff;
-            background: var(--sky);
+            background: var(--cobalt);
         }
 
         .card-meta {
@@ -695,7 +795,7 @@
             font-size: .72rem;
             letter-spacing: .06em;
             text-transform: uppercase;
-            color: var(--sun-deep);
+            color: var(--coral);
             font-weight: 700;
             margin-top: 3px;
             display: block;
@@ -745,7 +845,7 @@
             font-size: .72rem;
             letter-spacing: .14em;
             text-transform: uppercase;
-            color: var(--grass);
+            color: var(--lime);
             font-weight: 700;
             margin: 10px 0 4px;
         }
@@ -762,7 +862,7 @@
 
         .listen {
             background: rgba(26, 94, 220, .08);
-            border-left: 3px solid var(--sky);
+            border-left: 3px solid var(--cobalt);
             padding: 8px 12px;
             border-radius: 0 8px 8px 0;
             font-size: .9rem;
@@ -770,7 +870,7 @@
         }
 
         .listen b {
-            color: var(--sky);
+            color: var(--cobalt);
         }
 
         .flag {
@@ -829,14 +929,14 @@
             display: inline-block;
             margin-top: 12px;
             font-size: .85rem;
-            color: var(--sky);
+            color: var(--cobalt);
             text-decoration: none;
             border-bottom: 1px solid rgba(26, 94, 220, .35);
             padding-bottom: 1px;
         }
 
         .wiki-link:hover {
-            border-bottom-color: var(--sky);
+            border-bottom-color: var(--cobalt);
         }
 
         .essential-badge {
@@ -862,8 +962,8 @@
             gap: 8px;
             margin: 22px auto 0;
             background: var(--card);
-            border: 2px solid var(--sun-deep);
-            color: var(--sun-deep);
+            border: 2px solid var(--coral);
+            color: var(--coral);
             font-weight: 700;
             font-size: .9rem;
             padding: 9px 16px;
@@ -873,7 +973,7 @@
         }
 
         .ess-toggle[aria-pressed="true"] {
-            background: var(--sun-deep);
+            background: var(--coral);
             color: #fff;
         }
 
@@ -896,7 +996,7 @@
         /* assignee accent rotation by era handled via inline class */
         /* 1950s — coral orange */
         .e50 .day-num {
-            background: var(--sun-deep);
+            background: var(--coral);
             color: var(--ink);
         }
 
@@ -928,7 +1028,7 @@
 
         /* 2000s — cobalt */
         .e00 .day-num {
-            background: var(--sky);
+            background: var(--cobalt);
         }
 
 
@@ -941,9 +1041,19 @@
 
         /* Bonus — lime */
         .ebonus .day-num {
-            background: var(--grass);
+            background: var(--lime);
             color: var(--ink);
         }
+
+        /* Active era filter chip AND active sticky-nav decade adopt that decade's colour */
+        .chip.e50[aria-pressed="true"],   .nav-decade.e50.is-active    { background: var(--coral);     color: var(--ink); border-color: var(--coral); }
+        .chip.e60[aria-pressed="true"],   .nav-decade.e60.is-active    { background: var(--punch);     color: #fff;       border-color: var(--punch); }
+        .chip.e70[aria-pressed="true"],   .nav-decade.e70.is-active    { background: var(--sun);       color: var(--ink); border-color: var(--sun); }
+        .chip.e80[aria-pressed="true"],   .nav-decade.e80.is-active    { background: var(--turquoise); color: #fff;       border-color: var(--turquoise); }
+        .chip.e90[aria-pressed="true"],   .nav-decade.e90.is-active    { background: var(--purple);    color: #fff;       border-color: var(--purple); }
+        .chip.e00[aria-pressed="true"],   .nav-decade.e00.is-active    { background: var(--cobalt);    color: #fff;       border-color: var(--cobalt); }
+        .chip.e10[aria-pressed="true"],   .nav-decade.e10.is-active    { background: var(--bubblegum); color: var(--ink); border-color: var(--bubblegum); }
+        .chip.ebonus[aria-pressed="true"] { background: var(--lime);   color: var(--ink); border-color: var(--lime); }
 
 
 
@@ -1081,12 +1191,27 @@
     <img class="logo-letters" id="logoLetters" src="images/logo/logo-letters-purple.svg" alt="Summer Jam School"
         width="322" height="85">
 
+    <!-- Sticky nav bar: slides in once we scroll past the hero. Decade items are placeholders. -->
+    <nav class="site-nav" id="siteNav" aria-label="Decades">
+        <ul class="nav-decades">
+            <li><button type="button" class="nav-decade e50" data-cls="e50">50s</button></li>
+            <li><button type="button" class="nav-decade e60" data-cls="e60">60s</button></li>
+            <li><button type="button" class="nav-decade e70" data-cls="e70">70s</button></li>
+            <li><button type="button" class="nav-decade e80" data-cls="e80">80s</button></li>
+            <li><button type="button" class="nav-decade e90" data-cls="e90">90s</button></li>
+            <li><button type="button" class="nav-decade e00" data-cls="e00">00s</button></li>
+            <li><button type="button" class="nav-decade e10" data-cls="e10">10s</button></li>
+        </ul>
+        <button type="button" class="nav-top" id="navTop" aria-label="Back to top">↑</button>
+    </nav>
+
     <section class="landing">
         <script>
             (function () {
                 var anim = document.getElementById('logoAnim');
                 var dockEl = document.getElementById('logoDock');
                 var letters = document.getElementById('logoLetters');
+                var landing = document.querySelector('.landing');
                 if (!anim || !dockEl) return;
 
                 // yellow → orange → red → pink → purple → cobalt → green (settles on brand green)
@@ -1159,20 +1284,26 @@
                 setColor(colors[0]);
                 document.body.classList.add('hero-hidden');   // hide hero copy until the logo docks
                 if (letters) letters.style.clipPath = 'inset(-20% 0 -20% 100%)';   // curtain closed
+                if (landing) landing.classList.add('bg-cobalt');   // hero starts on cobalt (no transition yet)
                 snapCentre();
                 var onResize = function () { if (!dockEl.classList.contains('docked')) snapCentre(); };
                 window.addEventListener('resize', onResize);
 
                 requestAnimationFrame(function () {
                     anim.classList.add('enter');                                    // 1) play icon fades in, centred
-                    setTimeout(function () { anim.classList.add('press'); }, 650);    // 2) single button press (down + back)
-                    setTimeout(function () {                                          // 3) release into the fly-out
+                    setTimeout(function () { anim.classList.add('press'); }, 650);    // 2) single button press (down + back), .34s → settles at 990
+                    setTimeout(function () {                                          // 3) press fully settled → slide to the eye from a clean rest (full smooth .72s)
                         anim.classList.remove('press');
                         anim.classList.add('travel');
-                    }, 910);
-                    setTimeout(function () { anim.classList.add('landed'); }, 1680);  // 4) hand off to the real eye
-                    var cycleStart = 1780;
+                    }, 990);
+                    setTimeout(function () { anim.classList.add('landed'); }, 1760);  // 4) hand off to the real eye
+                    var cycleStart = 1860;
                     setTimeout(function () { anim.classList.add('cycling'); flipColors(); }, cycleStart); // 4) crossfade colours → green
+                    // when the logo hits green, fade the hero backdrop cobalt → lime (runs through the slide)
+                    var greenAt = cycleStart + (colors.length - 1) * CROSSFADE;
+                    setTimeout(function () {
+                        if (landing) { landing.classList.add('bg-fade'); landing.classList.remove('bg-cobalt'); }
+                    }, greenAt);
                     var dockAt = cycleStart + colors.length * CROSSFADE + 450;        // 5) shrink 50% + slide left + reveal lettermark, then stay sticky
                     setTimeout(function () { dockNow(); window.removeEventListener('resize', onResize); }, dockAt);
                 });
@@ -1181,11 +1312,84 @@
         <div class="landing-content">
             <h1 class="landing-title">Raising music lovers</h1>
             <p class="landing-sub">60 Years of Music, One Day at a Time.</p>
-            <a class="landing-cta" href="#grid">Start exploring</a>
+            <a class="landing-cta" href="#explore">Start exploring</a>
         </div>
+        <script>
+            (function () {
+                function easeInOutCubic(t) { return t < .5 ? 4 * t * t * t : 1 - Math.pow(-2 * t + 2, 3) / 2; }
+                function reduced() { return window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches; }
+                function smoothScrollTo(endY, dur) {
+                    var startY = window.scrollY || window.pageYOffset;
+                    endY = Math.max(0, Math.round(endY));
+                    if (reduced()) { window.scrollTo(0, endY); return; }
+                    var dist = endY - startY, t0 = null;
+                    function step(ts) {
+                        if (t0 === null) t0 = ts;
+                        var p = Math.min(1, (ts - t0) / dur);
+                        window.scrollTo(0, startY + dist * easeInOutCubic(p));
+                        if (p < 1) requestAnimationFrame(step);
+                    }
+                    requestAnimationFrame(step);
+                }
+
+                var landing = document.querySelector('.landing');
+
+                // "Start exploring" → eased scroll to the very next container after the hero
+                var cta = document.querySelector('.landing-cta');
+                if (cta) cta.addEventListener('click', function (e) {
+                    var target = landing && landing.nextElementSibling;
+                    if (!target) return;                 // no target → let the href jump handle it
+                    e.preventDefault();
+                    smoothScrollTo(target.getBoundingClientRect().top + (window.scrollY || 0), 700);
+                });
+
+                // Back-to-top button in the nav bar (same eased scroll)
+                var navTop = document.getElementById('navTop');
+                if (navTop) navTop.addEventListener('click', function () { smoothScrollTo(0, 600); });
+
+                // Decade nav buttons: click → eased scroll to where that decade's cards begin
+                var siteNav = document.getElementById('siteNav');
+                var decadeBtns = Array.prototype.slice.call(document.querySelectorAll('.nav-decade'));
+                var DECADE_CLS = decadeBtns.map(function (b) { return b.dataset.cls; });   // chronological
+                function firstCardOfEra(cls) { return document.querySelector('.card.' + cls + ':not(.hide)'); }
+                decadeBtns.forEach(function (btn) {
+                    btn.addEventListener('click', function () {
+                        var card = firstCardOfEra(btn.dataset.cls);
+                        if (!card) return;
+                        var navH = siteNav ? siteNav.offsetHeight : 60;
+                        smoothScrollTo(card.getBoundingClientRect().top + (window.scrollY || 0) - navH - 12, 650);
+                    });
+                });
+                // Scroll-spy: colour the decade whose section we're currently in
+                function updateActiveDecade() {
+                    var navH = siteNav ? siteNav.offsetHeight : 60;
+                    var line = (window.scrollY || 0) + navH + 24;
+                    var active = null;
+                    DECADE_CLS.forEach(function (cls) {
+                        var card = firstCardOfEra(cls);
+                        if (card && card.getBoundingClientRect().top + (window.scrollY || 0) <= line) active = cls;
+                    });
+                    decadeBtns.forEach(function (b) { b.classList.toggle('is-active', b.dataset.cls === active); });
+                }
+
+                // Show the sticky nav bar + shrink the logo once we've scrolled past the hero
+                var ticking = false;
+                function onScrollFrame() {
+                    ticking = false;
+                    var trigger = (landing ? landing.offsetHeight : window.innerHeight) * 0.7;
+                    document.body.classList.toggle('nav-active', (window.scrollY || 0) > trigger);
+                    updateActiveDecade();
+                }
+                window.addEventListener('scroll', function () {
+                    if (!ticking) { ticking = true; requestAnimationFrame(onScrollFrame); }
+                }, { passive: true });
+                window.addEventListener('resize', onScrollFrame, { passive: true });
+                onScrollFrame();
+            })();
+        </script>
     </section>
 
-    <div class="wrap">
+    <div class="wrap" id="explore">
         <header>
             <span class="eyebrow">A Backyard Music Camp · <span id="dayCount">60</span> Days</span>
             <h1>Summer Jam<br>School</h1>
@@ -2161,9 +2365,11 @@
         }
 
         const eras = ["All", ...Array.from(new Set(DAYS.map(d => d.era)))];
+        const ERA_CLS = {}; DAYS.forEach(d => { ERA_CLS[d.era] = d.cls; });   // "1950s" → "e50"
         eras.forEach((e, idx) => {
             const c = document.createElement("button");
             c.className = "chip"; c.textContent = e; c.setAttribute("aria-pressed", idx === 0);
+            if (ERA_CLS[e]) c.classList.add(ERA_CLS[e]);   // era colour on the active chip
             c.onclick = () => {
                 erasBox.querySelectorAll(".chip").forEach(x => x.setAttribute("aria-pressed", "false"));
                 c.setAttribute("aria-pressed", "true");
