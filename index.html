@@ -1678,11 +1678,14 @@
 
                 var landing = document.querySelector('.landing');
 
-                // "Start exploring" → eased scroll to the very next container after the hero
+                // "Start exploring" → eased scroll to the section named in the button's href (#explore).
+                // Resolving by href (not nextElementSibling) keeps this working even when hidden/WIP
+                // sections (e.g. .about with display:none) sit between the hero and the content.
                 var cta = document.querySelector('.landing-cta');
                 if (cta) cta.addEventListener('click', function (e) {
-                    var target = landing && landing.nextElementSibling;
-                    if (!target) return;                 // no target → let the href jump handle it
+                    var href = cta.getAttribute('href') || '';
+                    var target = href.charAt(0) === '#' ? document.getElementById(href.slice(1)) : null;
+                    if (!target || !target.getClientRects().length) return;   // missing or not rendered → let the browser handle it
                     e.preventDefault();
                     smoothScrollTo(target.getBoundingClientRect().top + (window.scrollY || 0), 700);
                 });
