@@ -86,15 +86,16 @@
             /* mobile-safe viewport height */
             background-color: var(--lime);
             /* brand lime — the hero backdrop */
-            /* TODO: add headphones artwork (e.g. images/headphones.png) — sits on the green, left side */
+            /* Headphones artwork (transparent PNG) spans the full width; its bulk sits on the
+               right, cord trailing across to the left. Lime shows through the transparent areas. */
             background-image: url("images/headphones.png");
             background-repeat: no-repeat;
-            background-position: left center;
-            background-size: min(46%, 520px) auto;
+            background-position: center top;
+            background-size: contain;
             display: flex;
             align-items: center;
-            justify-content: flex-end;
-            /* push text block to the right */
+            justify-content: flex-start;
+            /* text block on the left, clear of the headphones bulk on the right */
             padding: clamp(24px, 6vw, 80px);
             overflow: hidden;
         }
@@ -142,14 +143,16 @@
             left: calc(var(--logo-left) + var(--logo-size) + var(--logo-gap));
             height: var(--logo-size);
             width: auto;
-            z-index: 1000;
+            z-index: 1001;
+            /* above the nav bar (1000) so the wordmark stays visible on scroll */
             pointer-events: none;
             transition: height .35s ease, left .35s ease;
         }
 
         /* ===== Scroll nav bar: appears once we pass the hero; logo shrinks 50% into it ===== */
         body.nav-active {
-            --logo-size: calc(var(--logo-size-base) * .5);   /* logo shrinks another 50% */
+            --logo-size: calc(var(--logo-size-base) * .5);
+            /* logo shrinks another 50% */
         }
 
         .site-nav {
@@ -158,10 +161,12 @@
             left: 0;
             right: 0;
             height: var(--nav-height);
-            z-index: 1000;                 /* logo dock (1001) still rides on top at the left */
+            z-index: 1000;
+            /* logo dock (1001) still rides on top at the left */
             display: flex;
             align-items: center;
-            justify-content: flex-end;     /* decades + top button pushed right; logo floats over the left */
+            justify-content: flex-end;
+            /* decades + top button pushed right; logo floats over the left */
             gap: clamp(6px, 1.2vw, 14px);
             /* reserve room on the left for the shrunken logo lockup (approx; placeholder spacing) */
             padding: 0 clamp(14px, 2.5vw, 26px) 0 clamp(150px, 24vw, 250px);
@@ -232,6 +237,231 @@
 
         .nav-top:active {
             transform: translateY(1px);
+        }
+
+        /* Round icon button (search on the bar) */
+        .nav-icon {
+            flex: 0 0 auto;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            width: clamp(34px, 5vw, 40px);
+            height: clamp(34px, 5vw, 40px);
+            border: 0;
+            border-radius: 50%;
+            background: none;
+            color: var(--ink);
+            cursor: pointer;
+            transition: background .14s ease;
+        }
+
+        .nav-icon:hover {
+            background: var(--paper);
+        }
+
+        .nav-icon svg {
+            width: 20px;
+            height: 20px;
+            display: block;
+        }
+
+        /* Creative "playlist" menu button — three brand-coloured bars that fold into an X */
+        .nav-menu-btn {
+            flex: 0 0 auto;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            width: clamp(38px, 5.4vw, 44px);
+            height: clamp(34px, 5vw, 40px);
+            border: 0;
+            border-radius: 12px;
+            background: none;
+            cursor: pointer;
+            transition: background .14s ease;
+            display: none;
+        }
+
+        .nav-menu-btn:hover {
+            background: var(--paper);
+        }
+
+        .nmi {
+            position: relative;
+            width: 22px;
+            height: 16px;
+        }
+
+        .nmi i {
+            position: absolute;
+            left: 0;
+            right: 0;
+            height: 3px;
+            border-radius: 2px;
+            transition: transform .3s cubic-bezier(.4, 0, .2, 1), opacity .2s ease;
+        }
+
+        .nmi i:nth-child(1) {
+            top: 0;
+            background: var(--coral);
+        }
+
+        .nmi i:nth-child(2) {
+            top: 6.5px;
+            background: var(--purple);
+        }
+
+        .nmi i:nth-child(3) {
+            top: 13px;
+            background: var(--cobalt);
+        }
+
+        .nav-menu-btn[aria-expanded="true"] .nmi i:nth-child(1) {
+            transform: translateY(6.5px) rotate(45deg);
+        }
+
+        .nav-menu-btn[aria-expanded="true"] .nmi i:nth-child(2) {
+            opacity: 0;
+            transform: scaleX(.2);
+        }
+
+        .nav-menu-btn[aria-expanded="true"] .nmi i:nth-child(3) {
+            transform: translateY(-6.5px) rotate(-45deg);
+        }
+
+        /* Dropdown menu panel */
+        .nav-panel {
+            position: absolute;
+            top: calc(100% + 8px);
+            right: clamp(14px, 2.5vw, 26px);
+            width: min(280px, 82vw);
+            background: #fff;
+            border-radius: 16px;
+            box-shadow: 0 14px 36px rgba(0, 0, 0, .20);
+            padding: 10px;
+            display: flex;
+            flex-direction: column;
+            opacity: 0;
+            transform: translateY(-8px) scale(.98);
+            transform-origin: top right;
+            pointer-events: none;
+            transition: opacity .2s ease, transform .2s ease;
+        }
+
+        .nav-panel.open {
+            opacity: 1;
+            transform: none;
+            pointer-events: auto;
+        }
+
+        .nav-panel-label {
+            font-size: .68rem;
+            text-transform: uppercase;
+            letter-spacing: .09em;
+            color: var(--shade);
+            font-weight: 700;
+            padding: 10px 12px 4px;
+        }
+
+        .nav-panel-decades {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .nav-panel .nav-decade,
+        .nav-panel-item {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            width: 100%;
+            text-align: left;
+            box-sizing: border-box;
+            padding: 10px 12px;
+            border-radius: 10px;
+            border: 0;
+            background: none;
+            font: 600 .95rem "DM Sans", "Helvetica Neue", Arial, sans-serif;
+            color: var(--ink);
+            cursor: pointer;
+            text-decoration: none;
+            white-space: nowrap;
+        }
+
+        .nav-panel .nav-decade:hover,
+        .nav-panel-item:hover {
+            background: var(--paper);
+        }
+
+        .nav-panel-item svg {
+            width: 18px;
+            height: 18px;
+            flex: 0 0 auto;
+        }
+
+        .nav-panel-divider {
+            height: 1px;
+            background: var(--line);
+            margin: 6px 6px;
+        }
+
+        /* colour swatch preceding each decade in the panel */
+        .nav-panel .nav-decade::before {
+            content: "";
+            width: 11px;
+            height: 11px;
+            border-radius: 3px;
+            flex: 0 0 auto;
+            background: var(--sw, var(--line));
+        }
+
+        .nav-panel .nav-decade.e50 {
+            --sw: var(--coral);
+        }
+
+        .nav-panel .nav-decade.e60 {
+            --sw: var(--punch);
+        }
+
+        .nav-panel .nav-decade.e70 {
+            --sw: var(--sun);
+        }
+
+        .nav-panel .nav-decade.e80 {
+            --sw: var(--turquoise);
+        }
+
+        .nav-panel .nav-decade.e90 {
+            --sw: var(--purple);
+        }
+
+        .nav-panel .nav-decade.e00 {
+            --sw: var(--cobalt);
+        }
+
+        .nav-panel .nav-decade.e10 {
+            --sw: var(--bubblegum);
+        }
+
+        .nav-panel .nav-decade.ebonus {
+            --sw: var(--lime);
+        }
+
+        /* search lives on the bar by default; it moves into the panel only when the bar is tight */
+        .nav-panel-search {
+            display: none;
+        }
+
+        @media (max-width: 820px) {
+            .site-nav>.nav-decades {
+                display: none;
+            }
+
+            .nav-search-bar {
+                display: none;
+            }
+
+            .nav-panel-search {
+                display: flex;
+            }
         }
 
         /* ===== Logo load animation: play button -> smiley eye -> brand colour flip ===== */
@@ -345,7 +575,6 @@
             max-width: 640px;
             text-align: left;
             color: var(--turquoise);
-            /* deep green ink on the green */
             transition: opacity .7s ease, transform .7s ease;
         }
 
@@ -406,10 +635,8 @@
 
         @media (max-width:760px) {
             .landing {
-                /* stack: headphones behind, text pinned to the lower-right */
+                /* stack: headphones top band (contain, from the base rule), text pinned to the lower-right */
                 align-items: flex-end;
-                background-position: left top;
-                background-size: auto min(42%, 300px);
                 padding-bottom: clamp(40px, 12vw, 80px);
             }
 
@@ -417,6 +644,40 @@
                 text-align: right;
                 max-width: 100%;
             }
+        }
+
+        /* ABOUT */
+        .about {
+            position: relative;
+            width: 100%;
+            min-height: 100vh;
+            min-height: 100svh;
+            /* mobile-safe viewport height */
+            background-color: var(--ltpink);
+            background-repeat: no-repeat;
+            background-position: center top;
+            background-size: contain;
+            display: flex;
+            align-items: center;
+            justify-content: flex-start;
+            padding: clamp(24px, 6vw, 80px);
+            overflow: hidden;
+            display: none;
+        }
+
+        .about-content {
+            max-width: 640px;
+            text-align: left;
+            color: var(--ink);
+        }
+
+        .about-title {
+            font-family: "Righteous", "Arial Black", Impact, sans-serif;
+            font-size: clamp(2.8rem, 9vw, 6rem);
+            line-height: .98;
+            margin: 0;
+            letter-spacing: -.01em;
+            color: var(--bubblegum);
         }
 
         /* HERO */
@@ -1046,14 +1307,60 @@
         }
 
         /* Active era filter chip AND active sticky-nav decade adopt that decade's colour */
-        .chip.e50[aria-pressed="true"],   .nav-decade.e50.is-active    { background: var(--coral);     color: var(--ink); border-color: var(--coral); }
-        .chip.e60[aria-pressed="true"],   .nav-decade.e60.is-active    { background: var(--punch);     color: #fff;       border-color: var(--punch); }
-        .chip.e70[aria-pressed="true"],   .nav-decade.e70.is-active    { background: var(--sun);       color: var(--ink); border-color: var(--sun); }
-        .chip.e80[aria-pressed="true"],   .nav-decade.e80.is-active    { background: var(--turquoise); color: #fff;       border-color: var(--turquoise); }
-        .chip.e90[aria-pressed="true"],   .nav-decade.e90.is-active    { background: var(--purple);    color: #fff;       border-color: var(--purple); }
-        .chip.e00[aria-pressed="true"],   .nav-decade.e00.is-active    { background: var(--cobalt);    color: #fff;       border-color: var(--cobalt); }
-        .chip.e10[aria-pressed="true"],   .nav-decade.e10.is-active    { background: var(--bubblegum); color: var(--ink); border-color: var(--bubblegum); }
-        .chip.ebonus[aria-pressed="true"] { background: var(--lime);   color: var(--ink); border-color: var(--lime); }
+        .chip.e50[aria-pressed="true"],
+        .nav-decade.e50.is-active {
+            background: var(--coral);
+            color: var(--ink);
+            border-color: var(--coral);
+        }
+
+        .chip.e60[aria-pressed="true"],
+        .nav-decade.e60.is-active {
+            background: var(--punch);
+            color: #fff;
+            border-color: var(--punch);
+        }
+
+        .chip.e70[aria-pressed="true"],
+        .nav-decade.e70.is-active {
+            background: var(--sun);
+            color: var(--ink);
+            border-color: var(--sun);
+        }
+
+        .chip.e80[aria-pressed="true"],
+        .nav-decade.e80.is-active {
+            background: var(--turquoise);
+            color: #fff;
+            border-color: var(--turquoise);
+        }
+
+        .chip.e90[aria-pressed="true"],
+        .nav-decade.e90.is-active {
+            background: var(--purple);
+            color: #fff;
+            border-color: var(--purple);
+        }
+
+        .chip.e00[aria-pressed="true"],
+        .nav-decade.e00.is-active {
+            background: var(--cobalt);
+            color: #fff;
+            border-color: var(--cobalt);
+        }
+
+        .chip.e10[aria-pressed="true"],
+        .nav-decade.e10.is-active {
+            background: var(--bubblegum);
+            color: var(--ink);
+            border-color: var(--bubblegum);
+        }
+
+        .chip.ebonus[aria-pressed="true"] {
+            background: var(--lime);
+            color: var(--ink);
+            border-color: var(--lime);
+        }
 
 
 
@@ -1192,7 +1499,7 @@
         width="322" height="85">
 
     <!-- Sticky nav bar: slides in once we scroll past the hero. Decade items are placeholders. -->
-    <nav class="site-nav" id="siteNav" aria-label="Decades">
+    <nav class="site-nav" id="siteNav" aria-label="Primary">
         <ul class="nav-decades">
             <li><button type="button" class="nav-decade e50" data-cls="e50">50s</button></li>
             <li><button type="button" class="nav-decade e60" data-cls="e60">60s</button></li>
@@ -1202,7 +1509,43 @@
             <li><button type="button" class="nav-decade e00" data-cls="e00">00s</button></li>
             <li><button type="button" class="nav-decade e10" data-cls="e10">10s</button></li>
         </ul>
+
+        <button type="button" class="nav-icon nav-search-bar" id="navSearch" aria-label="Search">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round">
+                <circle cx="11" cy="11" r="7"></circle>
+                <line x1="16.5" y1="16.5" x2="21" y2="21"></line>
+            </svg>
+        </button>
+
+        <button type="button" class="nav-menu-btn" id="navMenuBtn" aria-label="Menu" aria-expanded="false"
+            aria-controls="navPanel">
+            <span class="nmi"><i></i><i></i><i></i></span>
+        </button>
+
         <button type="button" class="nav-top" id="navTop" aria-label="Back to top">↑</button>
+
+        <div class="nav-panel" id="navPanel" role="menu" aria-label="Menu">
+            <button type="button" class="nav-panel-item nav-panel-search" id="navPanelSearch" role="menuitem">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round">
+                    <circle cx="11" cy="11" r="7"></circle>
+                    <line x1="16.5" y1="16.5" x2="21" y2="21"></line>
+                </svg> Search
+            </button>
+            <span class="nav-panel-label">Decades</span>
+            <div class="nav-panel-decades">
+                <button type="button" class="nav-decade e50" data-cls="e50" role="menuitem">1950s</button>
+                <button type="button" class="nav-decade e60" data-cls="e60" role="menuitem">1960s</button>
+                <button type="button" class="nav-decade e70" data-cls="e70" role="menuitem">1970s</button>
+                <button type="button" class="nav-decade e80" data-cls="e80" role="menuitem">1980s</button>
+                <button type="button" class="nav-decade e90" data-cls="e90" role="menuitem">1990s</button>
+                <button type="button" class="nav-decade e00" data-cls="e00" role="menuitem">2000s</button>
+                <button type="button" class="nav-decade e10" data-cls="e10" role="menuitem">2010s+</button>
+                <button type="button" class="nav-decade ebonus" data-cls="ebonus" role="menuitem">Bonus</button>
+            </div>
+            <div class="nav-panel-divider"></div>
+            <button type="button" class="nav-panel-item" role="menuitem">About</button>
+            <button type="button" class="nav-panel-item" role="menuitem">FAQ</button>
+        </div>
     </nav>
 
     <section class="landing">
@@ -1311,8 +1654,9 @@
         </script>
         <div class="landing-content">
             <h1 class="landing-title">Raising music lovers</h1>
-            <p class="landing-sub">60 Years of Music, One Day at a Time.</p>
-            <a class="landing-cta" href="#explore">Start exploring</a>
+            <p class="landing-sub">a tiny modern-music history adventure for the whole family, baby shark not included.
+            </p>
+            <a class="landing-cta" href="#explore">start exploring</a>
         </div>
         <script>
             (function () {
@@ -1349,17 +1693,63 @@
 
                 // Decade nav buttons: click → eased scroll to where that decade's cards begin
                 var siteNav = document.getElementById('siteNav');
-                var decadeBtns = Array.prototype.slice.call(document.querySelectorAll('.nav-decade'));
-                var DECADE_CLS = decadeBtns.map(function (b) { return b.dataset.cls; });   // chronological
+                var menuBtn = document.getElementById('navMenuBtn');
+                var panel = document.getElementById('navPanel');
+                var decadeBtns = Array.prototype.slice.call(document.querySelectorAll('.nav-decade'));   // inline + panel
+                var DECADE_CLS = decadeBtns.map(function (b) { return b.dataset.cls; })
+                    .filter(function (c, i, a) { return a.indexOf(c) === i; });   // unique, chronological
                 function firstCardOfEra(cls) { return document.querySelector('.card.' + cls + ':not(.hide)'); }
+
+                // Hamburger menu open/close
+                function closeMenu() {
+                    if (!panel) return;
+                    panel.classList.remove('open');
+                    if (menuBtn) menuBtn.setAttribute('aria-expanded', 'false');
+                }
+                if (menuBtn) menuBtn.addEventListener('click', function (e) {
+                    e.stopPropagation();
+                    var open = !panel.classList.contains('open');
+                    panel.classList.toggle('open', open);
+                    menuBtn.setAttribute('aria-expanded', open ? 'true' : 'false');
+                });
+                document.addEventListener('click', function (e) {
+                    if (panel && panel.classList.contains('open') && !panel.contains(e.target) &&
+                        menuBtn && !menuBtn.contains(e.target)) closeMenu();
+                });
+                document.addEventListener('keydown', function (e) { if (e.key === 'Escape') closeMenu(); });
+
                 decadeBtns.forEach(function (btn) {
                     btn.addEventListener('click', function () {
+                        closeMenu();
                         var card = firstCardOfEra(btn.dataset.cls);
                         if (!card) return;
                         var navH = siteNav ? siteNav.offsetHeight : 60;
                         smoothScrollTo(card.getBoundingClientRect().top + (window.scrollY || 0) - navH - 12, 650);
                     });
                 });
+
+                // Search (bar icon + panel item) → reveal & focus the toolbar search field
+                function openSearch() {
+                    closeMenu();
+                    var wrap = document.getElementById('searchWrap');
+                    var toggle = document.getElementById('searchToggle');
+                    var input = document.getElementById('searchInput');
+                    if (!wrap) return;
+                    if (!wrap.classList.contains('open')) {
+                        wrap.classList.add('open');
+                        if (toggle) toggle.setAttribute('aria-expanded', 'true');
+                    }
+                    var navH = siteNav ? siteNav.offsetHeight : 60;
+                    smoothScrollTo(wrap.getBoundingClientRect().top + (window.scrollY || 0) - navH - 24, 600);
+                    setTimeout(function () { if (input) input.focus({ preventScroll: true }); }, 640);
+                }
+                var navSearch = document.getElementById('navSearch');
+                var navPanelSearch = document.getElementById('navPanelSearch');
+                if (navSearch) navSearch.addEventListener('click', openSearch);
+                if (navPanelSearch) navPanelSearch.addEventListener('click', openSearch);
+                // About / FAQ placeholders (and any other plain panel item) just close the menu
+                Array.prototype.slice.call(panel ? panel.querySelectorAll('.nav-panel-item') : [])
+                    .forEach(function (it) { if (it !== navPanelSearch) it.addEventListener('click', closeMenu); });
                 // Scroll-spy: colour the decade whose section we're currently in
                 function updateActiveDecade() {
                     var navH = siteNav ? siteNav.offsetHeight : 60;
@@ -1388,22 +1778,34 @@
             })();
         </script>
     </section>
-
+    <section class="about">
+        <div class="about-content">
+            <h2 class="about-title">not sure yet</h2>
+            <p class="about-sub">This started as a simple way to make sure my kids know who Elton John and Stevie Wonder
+                are. Eventually the list of
+                artists was so long that I needed a way to organize it. And now here we are with an entire
+                app-website-thing, complete with playlists and trivia and extra categories and a fun color scheme.
+            </p>
+            <a class="about-cta" href="#">listen</a>
+        </div>
+    </section>
     <div class="wrap" id="explore">
         <header>
-            <span class="eyebrow">A Backyard Music Camp · <span id="dayCount">60</span> Days</span>
+            <span class="eyebrow">RAISING MUSIC LOVERS: one day at a time · <span id="dayCount">60</span> Days</span>
             <h1>Summer Jam<br>School</h1>
-            <p class="sub">One act a day, a few fun facts, and one short clip to watch together — a tour through music
-                history from the 1950s to now. Each day can link to a Spotify playlist, so you can listen along while
-                you learn.</p>
+            <p class="sub">Tap any card to see the details of that day. Tap a decade to speed through time. ★ marks the
+                big moments in music
+                history, or choose a collection to narrow the focus. Each day can link to a Spotify playlist, so you can
+                listen along while
+                you learn. Press play, sing along, have fun!</p>
 
             <div class="howto-row">
                 <div class="howto">
-                    <b>How to run a day (about 5 minutes):</b>
+                    <b>For littles, how to share the music:</b>
                     <ol>
-                        <li>Read the act's name and the one-line intro.</li>
-                        <li>Share the 3 fun facts — the weird ones stick best.</li>
-                        <li>Give the kids the <b>Listen For</b> job, then watch the clip.</li>
+                        <li>Tell them the act's name and the one-line intro.</li>
+                        <li>Share the fun facts — the weird ones stick best.</li>
+                        <li>Give the kids the <b>Listen For</b> job, then watch the clip or listen to the playlist.</li>
                         <li>Watch for a <b style="color:#FF574B">⚑ Parent note</b> — pre-screen those before pressing
                             play.</li>
                     </ol>
@@ -1416,7 +1818,8 @@
                                 kid-vetted playlist</span></li>
                         <li><span class="sw sw-grey"></span><span><b>♫ Find on Spotify</b> (grey) — search and pick your
                                 own songs</span></li>
-                        <li><span class="ic">▶️</span><span><b>Watch a clip</b> — a short video to watch together</span>
+                        <li><span class="ic">▶️</span><span><b>Watch a clip</b> — a video suggestion to watch
+                                together</span>
                         </li>
                         <li><span class="ic" style="color:#FF574B">⚑</span><span><b>Parent note</b> — this day's music
                                 skews mature; preview first</span></li>
@@ -1425,7 +1828,7 @@
                                     essential</b> — if you only do a few, start here</span></li>
                     </ul>
                     <div class="note">Either way, use your own judgment — preview anything before playing for little
-                        ones.</div>
+                        ears.</div>
                 </div>
             </div>
 
@@ -1456,7 +1859,8 @@
         <p class="no-results" id="noResults">No days match your search — try a different word! 🔎</p>
 
         <footer>
-            Built for backyard listening. Video links open YouTube searches or official channels so they stay working
+            Built for kids, fun for families, perfect for tired parents. Video links open YouTube searches or official
+            channels so they stay working
             over time.<br>
             Always glance at a clip yourself first — recommendations and related videos change.
         </footer>
@@ -1535,6 +1939,7 @@
             "bobby-mcferrin": "https://open.spotify.com/playlist/37i9dQZF1DZ06evO1wZCuz",  // Bobby McFerrin
             "stomp": "https://open.spotify.com/playlist/37i9dQZF1E4vv3SNe8RRbP",  // STOMP
             "yo-yo-ma": "https://open.spotify.com/playlist/37i9dQZF1DZ06evO3jIPfy",  // Yo-Yo Ma
+            "emo-and-punk": "https://open.spotify.com/playlist/7ExcBV3brOwJj0loW6tumH?si=efbb314e885749f7", // emo + punk rock
         };
 
 
@@ -2085,8 +2490,8 @@
 
             // ===== 2010s+ =====
             {
-                id: "emo-and-anthems", era: "2010s+", cls: "e10", artist: "Emo & Anthems", genre: "Emo / pop-punk / alt-rock",
-                intro: "The big, emotional rock of the 2000s and 2010s — dramatic, catchy, and made for shouting along. Featuring Fall Out Boy, Panic! at the Disco, Paramore, and Linkin Park.",
+                id: "emo-and-punk", era: "2000s", cls: "e00", artist: "Emo & Punk", genre: "Emo / pop-punk / alt-rock",
+                intro: "The big, emotional rock of the late 90s and 2000s — dramatic, catchy, and made for shouting along. Featuring Fall Out Boy, Panic! at the Disco, Paramore, and Linkin Park.",
                 facts: ["These bands often have long, funny, dramatic song titles — Fall Out Boy and Panic! at the Disco are famous for it.", "Paramore is led by Hayley Williams, one of the most popular women fronting a rock band in this era.", "Linkin Park mixed rock guitars with rapping and electronic sounds — a blend lots of bands copied.", "The style is full of loud-then-soft-then-loud moments that make the songs feel dramatic."],
                 listen: "Listen for the loud-then-soft-then-loud pattern that makes these songs feel dramatic.",
                 flag: "Some of these songs touch on grown-up emotions. Paramore's \"Still Into You\" and Fall Out Boy's \"Centuries\" are upbeat, kid-friendly entry points — pre-screen first.",
