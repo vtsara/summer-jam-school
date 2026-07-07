@@ -996,6 +996,266 @@
             grid-template-columns: repeat(auto-fill, minmax(min(100%, 260px), 1fr));
         }
 
+        /* ===== View toggle (Timeline / Grid) ===== */
+        .view-toggle {
+            display: flex;
+            gap: 4px;
+            width: fit-content;
+            margin: 26px auto 0;
+            padding: 4px;
+            background: var(--card);
+            border: 1.5px solid var(--line);
+            border-radius: 999px;
+        }
+
+        .view-btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 7px;
+            padding: 8px 16px;
+            border: 0;
+            border-radius: 999px;
+            background: none;
+            font: 700 .85rem "DM Sans", "Helvetica Neue", Arial, sans-serif;
+            color: var(--shade);
+            cursor: pointer;
+            transition: background .15s ease, color .15s ease;
+        }
+
+        .view-btn svg {
+            width: 16px;
+            height: 16px;
+        }
+
+        .view-btn[aria-pressed="true"] {
+            background: var(--ink);
+            color: #fff;
+        }
+
+        /* ===== Days layout — shared by both views ===== */
+        .days-layout {
+            position: relative;
+        }
+
+        /* per-decade colour token, inherited by the section's header, marker + card accent */
+        .decade.e50 {
+            --sw: var(--coral);
+        }
+
+        .decade.e60 {
+            --sw: var(--punch);
+        }
+
+        .decade.e70 {
+            --sw: var(--sun);
+        }
+
+        .decade.e80 {
+            --sw: var(--turquoise);
+        }
+
+        .decade.e90 {
+            --sw: var(--purple);
+        }
+
+        .decade.e00 {
+            --sw: var(--cobalt);
+        }
+
+        .decade.e10 {
+            --sw: var(--bubblegum);
+        }
+
+        .decade.ebonus {
+            --sw: var(--lime);
+        }
+
+        /* ---- GRID VIEW: flat multi-column, no rail, no decade headers (as before) ---- */
+        .days-layout[data-view="grid"] .decade-rail {
+            display: none;
+        }
+
+        .days-layout[data-view="grid"] .decade {
+            display: contents;
+        }
+
+        .days-layout[data-view="grid"] .decade-head {
+            display: none;
+        }
+
+        /* ---- TIMELINE VIEW: sticky decade rail + single-column spine ---- */
+        .days-layout[data-view="timeline"] {
+            display: grid;
+            grid-template-columns: auto minmax(0, 1fr);
+            gap: clamp(10px, 3vw, 36px);
+            align-items: start;
+            max-width: 1000px;
+            margin-inline: auto;
+        }
+
+        .days-layout[data-view="timeline"] .grid {
+            display: block;
+            grid-template-columns: none;
+            position: relative;
+            padding-left: 28px;
+            margin-top: 8px;
+        }
+
+        .days-layout[data-view="timeline"] .grid::before {
+            content: "";
+            position: absolute;
+            left: 6px;
+            top: 6px;
+            bottom: 6px;
+            width: 2px;
+            background: repeating-linear-gradient(to bottom, var(--line) 0 6px, transparent 6px 12px);
+        }
+
+        .days-layout[data-view="timeline"] .decade {
+            display: block;
+        }
+
+        .days-layout[data-view="timeline"] .decade.decade-empty {
+            display: none;
+        }
+
+        .days-layout[data-view="timeline"] .decade-head {
+            display: block;
+            font-family: "Righteous", "Arial Black", Impact, sans-serif;
+            font-size: clamp(1.5rem, 4vw, 2.2rem);
+            color: var(--sw);
+            margin: 44px 0 16px;
+            position: relative;
+        }
+
+        .days-layout[data-view="timeline"] .decade:first-child .decade-head {
+            margin-top: 8px;
+        }
+
+        .days-layout[data-view="timeline"] .decade-head::before {
+            content: "";
+            position: absolute;
+            left: -28px;
+            top: 50%;
+            transform: translateY(-50%);
+            width: 14px;
+            height: 14px;
+            border-radius: 50%;
+            background: var(--sw);
+            box-shadow: 0 0 0 4px var(--paper);
+        }
+
+        .days-layout[data-view="timeline"] .card {
+            max-width: none;
+            margin: 0 0 12px;
+            border-left: 4px solid var(--sw);
+        }
+
+        /* ---- Decade rail (sticky left nav for the timeline) ---- */
+        .decade-rail {
+            position: sticky;
+            top: calc(var(--nav-height, 60px) + 14px);
+            align-self: start;
+            display: flex;
+            flex-direction: column;
+            gap: 2px;
+            margin-top: 52px;
+        }
+
+        .rail-dot {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            padding: 6px 10px 6px 3px;
+            border: 0;
+            background: none;
+            border-radius: 999px;
+            font: 700 .8rem "DM Sans", "Helvetica Neue", Arial, sans-serif;
+            color: var(--shade);
+            white-space: nowrap;
+            cursor: pointer;
+            transition: color .15s ease;
+        }
+
+        .rail-dot::before {
+            content: "";
+            width: 12px;
+            height: 12px;
+            flex: 0 0 auto;
+            border-radius: 50%;
+            background: var(--line);
+            transition: transform .2s ease, background .2s ease, box-shadow .2s ease;
+        }
+
+        .rail-dot:hover {
+            color: var(--ink);
+        }
+
+        .rail-dot:hover::before {
+            background: var(--sw);
+        }
+
+        .rail-dot.active {
+            color: var(--sw);
+        }
+
+        .rail-dot.active::before {
+            background: var(--sw);
+            transform: scale(1.45);
+            box-shadow: 0 0 0 4px var(--paper);
+        }
+
+        .rail-dot.hide {
+            display: none;
+        }
+
+        .rail-dot.e50 {
+            --sw: var(--coral);
+        }
+
+        .rail-dot.e60 {
+            --sw: var(--punch);
+        }
+
+        .rail-dot.e70 {
+            --sw: var(--sun);
+        }
+
+        .rail-dot.e80 {
+            --sw: var(--turquoise);
+        }
+
+        .rail-dot.e90 {
+            --sw: var(--purple);
+        }
+
+        .rail-dot.e00 {
+            --sw: var(--cobalt);
+        }
+
+        .rail-dot.e10 {
+            --sw: var(--bubblegum);
+        }
+
+        .rail-dot.ebonus {
+            --sw: var(--lime);
+        }
+
+        @media (max-width: 620px) {
+            .days-layout[data-view="timeline"] {
+                gap: 8px;
+            }
+
+            .rail-label {
+                display: none;
+            }
+
+            .decade-rail {
+                gap: 10px;
+                margin-top: 44px;
+            }
+        }
+
         .card {
             background: var(--card);
             border: 1px solid var(--line);
@@ -1858,7 +2118,30 @@
             <div class="collections" id="collections"></div>
         </header>
 
-        <div class="grid" id="grid"></div>
+        <div class="view-toggle" role="group" aria-label="Choose day view">
+            <button type="button" class="view-btn" data-setview="timeline" aria-pressed="true">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round">
+                    <circle cx="4" cy="6" r="1.6" fill="currentColor" stroke="none" />
+                    <circle cx="4" cy="12" r="1.6" fill="currentColor" stroke="none" />
+                    <circle cx="4" cy="18" r="1.6" fill="currentColor" stroke="none" />
+                    <line x1="9" y1="6" x2="20" y2="6" />
+                    <line x1="9" y1="12" x2="20" y2="12" />
+                    <line x1="9" y1="18" x2="20" y2="18" />
+                </svg> Timeline
+            </button>
+            <button type="button" class="view-btn" data-setview="grid" aria-pressed="false">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <rect x="4" y="4" width="7" height="7" rx="1.5" />
+                    <rect x="13" y="4" width="7" height="7" rx="1.5" />
+                    <rect x="4" y="13" width="7" height="7" rx="1.5" />
+                    <rect x="13" y="13" width="7" height="7" rx="1.5" />
+                </svg> Grid
+            </button>
+        </div>
+        <div class="days-layout" id="daysLayout" data-view="timeline">
+            <nav class="decade-rail" id="decadeRail" aria-label="Jump to decade"></nav>
+            <div class="grid" id="grid"></div>
+        </div>
         <p class="no-results" id="noResults">No days match your search — try a different word! 🔎</p>
 
         <footer>
@@ -2094,7 +2377,7 @@
             {
                 id: "rock-titans", era: "1960s", cls: "e60", artist: "Rock Titans", essential: true, genre: "Psychedelic & hard rock",
                 intro: "The bold, electric rock giants who pushed the late-60s to new places — featuring Jimi Hendrix, The Who, and The Doors.",
-                facts: ["Jimi Hendrix was left-handed and flipped a regular guitar upside down — and famously played it with his teeth and behind his back as showmanship.", "The Who were so wild on stage that they'd sometimes smash a guitar at the very end of a show!", "The Doors were named after a line in a book, and their singer Jim Morrison was famous for his deep, dramatic voice."],
+                facts: ["Jimi Hendrix was left-handed and flipped a regular guitar upside down — and famously played it with his teeth and behind his back.", "The Who were so wild on stage that they'd sometimes smash a guitar at the very end of a show!", "The Doors were named after a line in a book, and their singer Jim Morrison was famous for his deep, dramatic voice."],
                 listen: "In Hendrix's solos, hear how he bends the notes so the guitar almost \"talks.\"",
                 flag: "Some songs from these bands are long or have grown-up themes. Hendrix's \"Star-Spangled Banner\" and The Who's \"Baba O'Riley\" are good kid-friendly entry points — pre-screen first.",
                 wiki: "https://en.wikipedia.org/wiki/Jimi_Hendrix",
@@ -2105,7 +2388,7 @@
             {
                 id: "the-jackson-5", era: "1960s", cls: "e60", artist: "The Jackson 5", genre: "Motown pop-soul",
                 intro: "Five brothers led by a very young Michael Jackson.",
-                facts: ["Michael was only about 11 when the band became famous.", "All five members were brothers from Gary, Indiana.", "Their bouncy hit \"ABC\" turns the alphabet into a love song."],
+                facts: ["Michael was only 11 when the band became famous.", "All five members were brothers from Gary, Indiana. Over the years, some left for solo careers, reuniting for special concerts.", "Their bouncy hit \"ABC\" turns the alphabet into a love song."],
                 listen: "That's little Michael singing lead — try to spot his voice.",
                 wiki: "https://en.wikipedia.org/wiki/The_Jackson_5",
                 watch: yt("Jackson 5 ABC official")
@@ -2125,7 +2408,7 @@
             {
                 id: "bob-marley", tags: ["calm"], era: "1970s", cls: "e70", artist: "Bob Marley", genre: "Reggae",
                 intro: "Jamaica's reggae legend who spread messages of peace through music.",
-                facts: ["Reggae music has a relaxed, bouncy off-beat rhythm you can sway to.", "His song \"Three Little Birds\" tells you \"don't worry about a thing.\"", "He's the most famous musician ever to come from Jamaica."],
+                facts: ["Reggae music has a relaxed, bouncy off-beat rhythm you can sway to.", "As a child, Bob would read palms of friends and neighbors and accurately predict their future!", "He had a very large family - 11 children! Over half of them have gone on to be musicians and popular performers just like their dad."],
                 listen: "Feel the off-beat \"chucka-chucka\" guitar that makes reggae bounce.",
                 wiki: "https://en.wikipedia.org/wiki/Bob_Marley",
                 watch: yt("Bob Marley Three Little Birds")
@@ -2220,7 +2503,7 @@
             {
                 id: "soft-rock-sunshine-pop", tags: ["calm"], era: "1970s", cls: "e70", artist: "Soft Rock & Sunshine Pop", genre: "Soft rock / sunshine pop",
                 intro: "Gentle, harmony-driven pop from the late 60s and 70s — lush vocal blends and mellow, sunny songs. Featuring The Carpenters, The Mamas & the Papas, Seals & Crofts, America, and Crosby, Stills, Nash & Young (CSNY).",
-                facts: ["The Mamas & the Papas' \"California Dreamin'\" stacks four voices into one warm, layered harmony.", "The Carpenters were built around Karen Carpenter's rich, gentle voice — and she sang lead while playing the drums, which was rare back then.", "America's \"A Horse with No Name\" is a mellow, easygoing song that sounds like a long drive through the desert.", "Seals & Crofts' \"Summer Breeze\" is a soft, sunny tune that feels like a lazy warm afternoon.", "Crosby, Stills, Nash & Young wove several voices together into intricate, interlocking harmony."],
+                facts: ["The Mamas & the Papas got their start as background singers.", "The Carpenters were built around Karen Carpenter's rich, gentle voice — and she sang lead while playing the drums, which was rare back then.", "America's \"A Horse with No Name\" is a mellow, easygoing song that sounds like a long drive through the desert.", "The fun intro of \"Summer Breeze\" was actually played on a toy piano that happened to be in the studio - and in tune!", "Crosby, Stills, Nash & Young were all famous from being in other bands before joining together."],
                 listen: "Listen for how many voices blend together — these groups stacked their harmonies in layers.",
                 wiki: "https://en.wikipedia.org/wiki/Soft_rock",
                 watch: yt("The Mamas and the Papas California Dreamin'"),
@@ -2443,7 +2726,7 @@
             },
 
             {
-                id: "latin-music", tags: ["dance"], era: "2000s", cls: "e00", artist: "Latin Music", genre: "Latin pop",
+                id: "latin-explosion", tags: ["dance"], era: "2000s", cls: "e00", artist: "Latin Explosion", genre: "Latin pop",
                 intro: "A cross-era celebration of music from Latin America and the Spanish-speaking world that makes the whole world want to dance — featuring Gloria Estefan, Shakira, and Ricky Martin, plus the wider world of Latin pop and reggaeton.",
                 facts: ["Shakira is from Colombia and is famous all over the world for her amazing dancing.", "Gloria Estefan and her band the Miami Sound Machine helped bring bright Latin rhythms onto pop radio.", "Lots of these songs mix English and Spanish words together in the very same song.", "The bouncy rhythms make it almost impossible to sit still — your feet just want to move!", "Selena (Day {{n:selena}}) was another beloved Latin-music star you already met this summer!"],
                 listen: "Get up and dance — see if you can move to the beat.",
@@ -2526,7 +2809,7 @@
             {
                 id: "adele", tags: ["calm", "women"], era: "2010s+", cls: "e10", artist: "Adele", genre: "Pop / soul",
                 intro: "A British singer with a huge, emotional voice, famous for powerful ballads.",
-                facts: ["She names her albums after how old she was when she made them — like \"19,\" \"21,\" \"25,\" and \"30.\"", "Her song \"Hello\" was so popular its video got over a billion views.", "She's won many Grammy Awards and an Oscar for a James Bond movie song, \"Skyfall.\"", "She sings mostly without fancy effects — it's really just her big voice."],
+                facts: ["She names her albums after how old she was when she made them — \"19,\" \"21,\" \"25,\" and \"30.\"", "Her song \"Hello\" was so popular its video got over a billion views.", "It's rumored that she only took 10 minutes to record the James Bond theme song, \"Skyfall.\"", "She is the only artist to win the Grammy Awards for Album of the Year, Record of the Year, and Song of the Year twice."],
                 listen: "Close your eyes and notice how much feeling she puts into each note.",
                 wiki: "https://en.wikipedia.org/wiki/Adele",
                 watch: yt("Adele Hello official"),
@@ -2536,7 +2819,7 @@
             {
                 id: "bruno-mars", tags: ["dance"], era: "2010s+", cls: "e10", artist: "Bruno Mars", genre: "Pop / funk / soul",
                 intro: "A throwback showman who brings old-school funk and soul to today's pop.",
-                facts: ["As a little kid he performed as an Elvis impersonator.", "He plays multiple instruments and sings, dances, and writes his songs.", "\"Uptown Funk\" makes almost everybody want to dance."],
+                facts: ["As a little kid he performed as an Elvis impersonator.", "He plays multiple instruments and sings, dances, and writes his songs.", "In 2011, he was named one of the top 100 most influential people of all time because his music was just that popular!"],
                 listen: "Try not to dance during \"Uptown Funk\" — it's nearly impossible.",
                 wiki: "https://en.wikipedia.org/wiki/Bruno_Mars",
                 watch: yt("Mark Ronson Bruno Mars Uptown Funk official")
@@ -2577,7 +2860,7 @@
             {
                 id: "lizzo", tags: ["dance", "women"], era: "2010s+", cls: "e10", artist: "Lizzo", genre: "Pop / hip-hop",
                 intro: "A joyful pop star who is also a trained classical flute player.",
-                facts: ["She plays the flute — and sometimes plays it while dancing!", "She studied classical flute seriously before becoming a pop star.", "Her songs are all about confidence and feeling good about yourself."],
+                facts: ["Lizzo taught herself how to play the flute and read music, before she was classically trained in the proper technique.", "She was born Melissa Jefferson, then went by Lissa for a brief period before officially going by Lizzo.", "Her songs are all about confidence and feeling good about yourself."],
                 listen: "Spot the moment she plays the flute mid-song.",
                 wiki: "https://en.wikipedia.org/wiki/Lizzo",
                 watch: yt("Lizzo NPR Tiny Desk flute")
@@ -2595,7 +2878,7 @@
             {
                 id: "pentatonix", tags: ["voices"], era: "2010s+", cls: "e10", artist: "Pentatonix", genre: "A cappella",
                 intro: "A group that makes a full band's worth of sound using only their voices.",
-                facts: ["They use zero instruments — every sound is a human voice.", "One member is a \"beatboxer\" who makes drum sounds with his mouth.", "They won a TV singing competition as a group."],
+                facts: ["They use zero instruments — every sound is a human voice.", "One member is a \"beatboxer\" who makes drum sounds with his mouth.", "In 2011, they became famous after winning TV singing competition \"The Sing-Off.\""],
                 listen: "There are no instruments — every single sound is somebody's mouth.",
                 wiki: "https://en.wikipedia.org/wiki/Pentatonix",
                 watch: yt("Pentatonix official a cappella performance")
@@ -2615,7 +2898,7 @@
             {
                 id: "one-hit-wonders", era: "Bonus", cls: "ebonus", artist: "One-Hit Wonders", genre: "Songs everyone knows, by bands you might not",
                 intro: "A whole day of catchy songs where the band became famous for basically just one giant hit.",
-                facts: ["A \"one-hit wonder\" is a musician who has one super-famous song but never has another big hit.", "a-ha's \"Take On Me\" has a famous music video that mixes real people with pencil-sketch cartoon drawings.", "Some are impossible to sit still for — like \"Tainted Love,\" \"Come On Eileen,\" \"Mambo No. 5,\" and \"Macarena\" (which comes with its own dance).", "The Baha Men's \"Who Let the Dogs Out?\" is a goofy favorite that kids almost always know."],
+                facts: ["A \"one-hit wonder\" is a musician who has one super-famous song but never has another big hit.", "a-ha's \"Take On Me\" has a famous music video that mixes real people with pencil-sketch cartoon drawings.", "Some are impossible to sit still for — like \"Tainted Love,\" \"Come On Eileen,\" \"Mambo No. 5,\" and \"Macarena\" (which comes with its own dance).", "9 different people claim to have written The Baha Men's \"Who Let the Dogs Out?\", and there's an entire documentary exploring it's real origins."],
                 listen: "Pick the catchiest one and see if you still remember it tomorrow — that's why they're famous!",
                 wiki: "https://en.wikipedia.org/wiki/One-hit_wonder",
                 watch: yt("a-ha Take On Me official video"),
@@ -2625,7 +2908,7 @@
             {
                 id: "princess-and-disney-songs", era: "Bonus", cls: "ebonus", artist: "Princess & Disney Songs", genre: "Movie musical / soundtrack",
                 intro: "A whole day of the big sing-along songs from animated movies — many written like Broadway showstoppers.",
-                facts: ["\"Let It Go\" from Frozen was so catchy it won an Academy Award and got sung by kids everywhere.", "The songs for Moana and Encanto were written by Lin-Manuel Miranda, the same person who made the musical Hamilton.", "Encanto's \"We Don't Talk About Bruno\" became the first Disney movie song ever to hit number one in America — and it was translated into 46 languages.", "Brave is set in Scotland, and Tangled, Cinderella, and Snow White each turned classic fairy tales into musicals."],
+                facts: ["\"Let It Go\" from Frozen was so catchy it won an Academy Award.", "The songs for Moana and Encanto were written by Lin-Manuel Miranda, the same person who made the musical Hamilton.", "Encanto's \"We Don't Talk About Bruno\" became the first Disney movie song ever to hit number one in America — and it was translated into 46 languages.", "Composer Alan Menken influenced an entire generation of princesses, winning 8 academy awards for his work on The Little Mermaid, Beauty and the Beast, Aladdin, Pocahontas, and Tangled."],
                 listen: "Notice how these songs tell the story — the character is usually singing about what they want.",
                 wiki: "https://en.wikipedia.org/wiki/Walt_Disney_Animation_Studios",
                 watch: yt("Encanto We Don't Talk About Bruno official clip"),
@@ -2672,7 +2955,7 @@
             {
                 id: "yo-yo-ma", tags: ["calm"], era: "Bonus", cls: "ebonus", artist: "Yo-Yo Ma", genre: "Classical cello",
                 intro: "The world's most famous cello player.",
-                facts: ["The cello is a big string instrument you play sitting down, hugged between your knees.", "He played for the public at age 7 and has won many Grammys.", "He has played everything from classical music to bluegrass to movie scores."],
+                facts: ["Yo-Yo Ma plays a 300-year-old Italian cello which he calls \"Petunia\".", "He played for two US Presidents when he was only 7-years-old, and since then has played for 7 more.", "He has won 20 Grammys over his 40+ year career."],
                 listen: "The cello sounds deep and warm — close your eyes and just listen.",
                 wiki: "https://en.wikipedia.org/wiki/Yo-Yo_Ma",
                 watch: yt("Yo-Yo Ma NPR Tiny Desk cello")
@@ -2712,8 +2995,20 @@
             piano: { emoji: "🎹", label: "Piano Powerhouses" },
         };
 
+        let curEra = null, decadeSection = null;
         DAYS.forEach((d, i) => {
             const n = i + 1;
+            // start a new decade section whenever the era changes (DAYS is in chronological order)
+            if (d.era !== curEra) {
+                curEra = d.era;
+                decadeSection = document.createElement("section");
+                decadeSection.className = "decade " + d.cls;
+                decadeSection.id = "decade-" + d.cls;
+                decadeSection.dataset.cls = d.cls;
+                decadeSection.dataset.era = d.era;
+                decadeSection.innerHTML = `<h2 class="decade-head">${d.era}</h2>`;
+                grid.appendChild(decadeSection);
+            }
             const card = document.createElement("div");
             card.className = "card " + d.cls;
             card.dataset.era = d.era;
@@ -2747,7 +3042,7 @@
       </span>
       <span class="chev">›</span>
     </button>${body}`;
-            grid.appendChild(card);
+            decadeSection.appendChild(card);
         });
 
         // ---- FILTERS (era + essentials + collection + search all work together) ----
@@ -2767,6 +3062,13 @@
                 const show = eraOk && essOk && searchOk && tagOk;
                 card.classList.toggle("hide", !show);
                 if (show) visible++;
+            });
+            // collapse decade sections (and their rail dots) that have no visible cards
+            document.querySelectorAll(".decade").forEach(sec => {
+                const empty = !sec.querySelector(".card:not(.hide)");
+                sec.classList.toggle("decade-empty", empty);
+                const dot = document.querySelector('.rail-dot[data-cls="' + sec.dataset.cls + '"]');
+                if (dot) dot.classList.toggle("hide", empty);
             });
             const nr = document.getElementById("noResults");
             if (nr) nr.classList.toggle("show", visible === 0);
@@ -2833,6 +3135,45 @@
         };
         searchInput.addEventListener("input", () => { searchQuery = searchInput.value; applyFilters(); });
         searchInput.addEventListener("keydown", e => { if (e.key === "Escape" && searchWrap.classList.contains("open")) { searchToggle.click(); } });
+
+        // ---- VIEW TOGGLE (timeline / grid), remembered across visits ----
+        const daysLayout = document.getElementById("daysLayout");
+        function setView(v) {
+            if (v !== "grid") v = "timeline";
+            daysLayout.dataset.view = v;
+            document.querySelectorAll(".view-btn").forEach(b => b.setAttribute("aria-pressed", String(b.dataset.setview === v)));
+            try { localStorage.setItem("sjs-view", v); } catch (e) { }
+        }
+        document.querySelectorAll(".view-btn").forEach(b => b.addEventListener("click", () => setView(b.dataset.setview)));
+        setView((function () { try { return localStorage.getItem("sjs-view"); } catch (e) { return null; } })() || "timeline");
+
+        // ---- DECADE RAIL (timeline left nav) — one dot per decade, jump + scroll-spy ----
+        const decadeRail = document.getElementById("decadeRail");
+        Array.from(new Set(DAYS.map(d => d.era))).forEach(era => {
+            const cls = ERA_CLS[era];
+            const dot = document.createElement("button");
+            dot.type = "button";
+            dot.className = "rail-dot " + cls;
+            dot.dataset.cls = cls;
+            dot.setAttribute("aria-label", "Jump to " + era);
+            dot.innerHTML = `<span class="rail-label">${era}</span>`;
+            dot.addEventListener("click", () => {
+                const sec = document.getElementById("decade-" + cls);
+                if (!sec) return;
+                const navH = (document.getElementById("siteNav") || {}).offsetHeight || 60;
+                window.scrollTo({ top: sec.getBoundingClientRect().top + window.scrollY - navH - 16, behavior: "smooth" });
+            });
+            decadeRail.appendChild(dot);
+        });
+        const railSpy = new IntersectionObserver(entries => {
+            entries.forEach(e => {
+                if (e.isIntersecting) {
+                    const cls = e.target.dataset.cls;
+                    decadeRail.querySelectorAll(".rail-dot").forEach(d => d.classList.toggle("active", d.dataset.cls === cls));
+                }
+            });
+        }, { rootMargin: "-45% 0px -50% 0px", threshold: 0 });
+        document.querySelectorAll(".decade").forEach(sec => railSpy.observe(sec));
 
         function toggleAll(open) {
             document.querySelectorAll(".card").forEach(c => c.classList.toggle("open", open));
