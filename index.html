@@ -658,26 +658,51 @@
             background-position: center top;
             background-size: contain;
             display: flex;
-            align-items: center;
-            justify-content: flex-start;
+            flex-wrap: wrap;
             padding: clamp(24px, 6vw, 80px);
+            padding: 0;
             overflow: hidden;
-            display: none;
         }
 
         .about-content {
             max-width: 640px;
             text-align: left;
             color: var(--ink);
+            padding: 40px;
+        }
+
+        .about-content.\31 st {
+            max-width: 550px;
+        }
+
+        .about-content.\32 nd {
+            background-color: var(--bubblegum);
+            color: var(--card);
+            max-width: 470px;
+            position: absolute;
+            top: 0;
+            right: 0;
+        }
+
+        .about-content.\33 rd {
+            background-color: var(--cobalt);
+            color: var(--card);
+            max-width: 670px;
+
+        }
+
+        .about-content.\34 th {
+            background-color: var(--gold);
+            max-width: 400px;
         }
 
         .about-title {
             font-family: "Righteous", "Arial Black", Impact, sans-serif;
-            font-size: clamp(2.8rem, 9vw, 6rem);
+            font-size: clamp(2.8rem, 9vw, 4rem);
             line-height: .98;
             margin: 0;
             letter-spacing: -.01em;
-            color: var(--bubblegum);
+            color: var(--purple);
         }
 
         /* HERO */
@@ -690,7 +715,7 @@
             font-size: .8rem;
             letter-spacing: .32em;
             text-transform: uppercase;
-            color: var(--coral);
+            color: var(--turquoise);
             font-weight: 700;
         }
 
@@ -704,14 +729,14 @@
             /* background: linear-gradient(180deg, #7B36FE, #1A5EDC); */
             -webkit-background-clip: text;
             background-clip: text;
-            color: var(--purple);
-            text-shadow: 0 1px 0 rgba(0, 0, 0, .04);
+            color: var(--coral);
+            text-shadow: 2px 1px 1px rgba(0, 0, 0, .21);
         }
 
         .sub {
-            max-width: 640px;
+            max-width: 615px;
             margin: .4em auto 0;
-            color: var(--shade);
+            color: var(--cobalt);
             font-size: 1.05rem;
         }
 
@@ -2042,14 +2067,46 @@
         </script>
     </section>
     <section class="about">
-        <div class="about-content">
-            <h2 class="about-title">not sure yet</h2>
-            <p class="about-sub">This started as a simple way to make sure my kids know who Elton John and Stevie Wonder
-                are. Eventually the list of
-                artists was so long that I needed a way to organize it. And now here we are with an entire
-                app-website-thing, complete with playlists and trivia and extra categories and a fun color scheme.
-            </p>
-            <a class="about-cta" href="#">listen</a>
+        <div class="about-content 1st">
+            <h2 class="about-title">what's summer jam school?</h2>
+            <div class="about-sub">
+                <p>This started as a simple way to make sure my kids know who Elton John and Stevie
+                    Wonder are, and maybe not complain every time I put on “grown-up music.” Eventually, my list of
+                    artists was so long that I needed a way to
+                    organize it.
+                </p>
+                <p>…And now, here we are with this entire app-website-thing, complete with playlists and trivia and
+                    extra categories and different views and a fun color scheme. <em>Some medical professionals call
+                        this hyper-fixation, but
+                        no one asked them.</em>
+                </p>
+            </div>
+        </div>
+        <div class="about-content 2nd">
+            <div class="about-sub">
+                <p>Now, put your hands together for Summer Jam School: 60 ish years of music, one day at a time. A fun
+                    post-pool-play-pout escape hatch, or a midwinter blues boost, or simply when you want to show
+                    <em>kids these days</em> what REAL MUSIC sounds like. Kinda like our parents did to us, yes? Ah, the
+                    circle of life.
+                </p>
+            </div>
+        </div>
+        <div class="about-content 3rd">
+            <div class="about-sub">
+                <p>Each day gives you one artist (or a theme), a few fun facts, and a video to watch together. Go in
+                    order or wander freely. Each day takes five ish minutes, and has a playlist or recommendation for
+                    when you're having
+                    an afternoon slump dance party or avoiding another day of “wait, that animal was definitely not on a
+                    farm.”</p>
+            </div>
+        </div>
+
+        <div class="about-content 4th">
+            <div class="about-sub">
+                <p>I am adding more themes, artists, collections, and ways to explore the music weekly as they come to
+                    me - via dreams or visitor submissions. Get in touch if you have ideas or edit suggestions!</p>
+                <a class="about-cta" href="#explore">press play, okay?</a>
+            </div>
         </div>
     </section>
     <div class="wrap" id="explore">
