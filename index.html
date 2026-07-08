@@ -1417,7 +1417,9 @@
             font-family: "Righteous", "Arial Black", Impact, sans-serif;
             font-size: clamp(1.5rem, 4vw, 2.2rem);
             color: var(--sw);
-            text-shadow: 2px 1px 1px rgba(0, 0, 0, .21);
+            -webkit-text-stroke: 0.6px rgba(36, 26, 22, .55);
+            paint-order: stroke fill;
+            text-shadow: 0 2px 4px rgba(0, 0, 0, .28);
             margin: 44px 0 16px;
             position: relative;
         }
@@ -2171,12 +2173,24 @@
                     setTimeout(function () { dockEl.style.willChange = 'auto'; }, 900);
                 }
 
-                if (window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+                // Play the full intro only on a fresh visit. A refresh or return within this window
+                // (or reduced-motion) jumps straight to the docked logo, so it never re-animates in a
+                // random scroll position while someone is browsing the days.
+                var INTRO_TTL = 6 * 60 * 60 * 1000;   // ▼ TUNE ME: replay the intro only after this long (6h)
+                var introSeen = false;
+                try {
+                    var seenAt = parseInt(localStorage.getItem('sjs-intro-seen'), 10);
+                    introSeen = seenAt && (Date.now() - seenAt) < INTRO_TTL;
+                } catch (e) { }
+                var reducedMotion = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+                if (introSeen || reducedMotion) {
                     setColor(colors[colors.length - 1]);
                     anim.classList.add('enter', 'travel', 'landed');
                     dockEl.classList.add('docked');
                     return;
                 }
+                try { localStorage.setItem('sjs-intro-seen', String(Date.now())); } catch (e) { }
 
                 setColor(colors[0]);
                 document.body.classList.add('hero-hidden');   // hide hero copy until the logo docks
@@ -2616,7 +2630,7 @@
             "dolly-parton": "https://open.spotify.com/playlist/37i9dQZF1DZ06evO1KXgbK",  // Dolly Parton
             "queen": "https://open.spotify.com/playlist/37i9dQZF1DZ06evO0ENBD2",  // Queen
             "abba": "https://open.spotify.com/playlist/37i9dQZF1DX3D78h6FPBPC",  // ABBA
-            "heartland-and-southern-rock": "https://open.spotify.com/playlist/2y6fPUrdaYSP8h5yvOEHLX",  // American Roots Rock
+            "heartland-and-southern-rock": "https://open.spotify.com/playlist/4x4LzBCnPGwLs30NOV9V3z?si=8a38185d022340bd",  // American Roots Rock
             "yacht-rock-day": "https://open.spotify.com/playlist/31iFJoD3y50KWmtQjHscGt",  // Yacht Rock Day
             "big-hair-bigger-guitars": "https://open.spotify.com/playlist/75HA9jopOwQ1AWJBwCPjbF",  // Big Hair, Bigger Guitars
             "bruce-springsteen": "https://open.spotify.com/playlist/37i9dQZF1DZ06evO1S7maQ",  // Bruce Springsteen
@@ -2650,6 +2664,13 @@
             "stomp": "https://open.spotify.com/playlist/37i9dQZF1E4vv3SNe8RRbP",  // STOMP
             "yo-yo-ma": "https://open.spotify.com/playlist/37i9dQZF1DZ06evO3jIPfy",  // Yo-Yo Ma
             "emo-and-punk": "https://open.spotify.com/playlist/7ExcBV3brOwJj0loW6tumH?si=efbb314e885749f7", // emo + punk rock
+            "soft-rock-sunshine-pop": "https://open.spotify.com/playlist/6J3xTMxi5Ieymtjy3vF63b?si=945492e9e1aa4210", // soft rock + sunshine pop 
+            "ray-charles": "https://open.spotify.com/album/7gvxyetkX6vkoMyDkDM6ls?si=1Yuru5caTkmf5sBCi3SLFg", // Ray Charles
+            "women-of-hip-hop-and-rnb": "https://open.spotify.com/playlist/2wo7OAmbux1CkoOwS1qZA1?si=e900328438fb46e2", // women of hip-hop
+            "boy-band-boom": "https://open.spotify.com/playlist/1TLH6EIc8SFdX4ESBdrPxq?si=32a44675bd6540e2", // 90s boy bands
+            "90s-rnb-groups": "https://open.spotify.com/playlist/5Jg9d5tmvaTNStDI0q9WVC?si=7560c43c3dec411c", // 90s r+b groups
+
+
         };
 
 
@@ -2671,6 +2692,15 @@
                 listen: "When she stops singing real words and just sings sounds — that's scat!",
                 wiki: "https://en.wikipedia.org/wiki/Ella_Fitzgerald",
                 watch: yt("Ella Fitzgerald scat singing live")
+            },
+
+            {
+                id: "ray-charles", tags: ["piano"], era: "1950s", cls: "e50", artist: "Ray Charles", essential: true, genre: "Soul / R&B piano",
+                intro: "The pioneer of soul music, blending blues, gospel, R&B, and jazz — known as \"the Genius.\"",
+                facts: ["He blended the sounds of traditional gospel music with R&B, basically inventing the genre of soul.", "He lost his eyesight at age 7, learned to play piano by ear, and read music in Braille.", "He won 18 Grammy Awards in a career that spanned more than 50 years."],
+                listen: "Listen for the gospel feeling in his voice and the bluesy roll of his piano.",
+                wiki: "https://en.wikipedia.org/wiki/Ray_Charles",
+                watch: yt("Ray Charles Hit the Road Jack official")
             },
 
             {
@@ -2841,7 +2871,7 @@
             {
                 id: "earth-wind-and-fire", tags: ["dance"], era: "1970s", cls: "e70", artist: "Earth, Wind & Fire", essential: true, genre: "Funk / soul",
                 intro: "A huge, horn-powered funk band with sparkly costumes and big grooves.",
-                facts: ["Their song \"September\" asks \"do you remember\" the 21st night — a date fans celebrate every year.", "They had a whole section of horn players blasting trumpets and trombones.", "Their costumes were covered in glitter and bright colors."],
+                facts: ["They were famous for their unique blend of soul, funk, jazz, and disco music. Most songs featured an entire horn section playing trumpets and trombones.", "Their performance costumes were very elaborate — sequins, sparkles, and rainbow colors. In later years, they even had magic shows as part of their concerts.", "It's said that their famous song \"September\" was inspired by the impending birth of bandleader Maurice White's firstborn child, who was expected to arrive on the 21st of September."],
                 listen: "Listen for the punchy horns answering the singers back and forth.",
                 wiki: "https://en.wikipedia.org/wiki/Earth,_Wind_%26_Fire",
                 watch: yt("Earth Wind Fire September official")
@@ -3119,8 +3149,8 @@
 
             {
                 id: "boy-band-boom", era: "1990s", cls: "e90", artist: "Boy Band Boom", genre: "Teen pop",
-                intro: "The late-90s pop boy bands — groups put together by producers, with matching outfits and synchronized dancing — featuring NSYNC, Backstreet Boys, and 98 Degrees (plus O-Town, LFO, and Westlife).",
-                facts: ["Many of these groups were put together by music producers, rather than friends who started a band on their own.", "They were famous for matching outfits and synchronized dance moves — everybody hitting the exact same step at the same time.", "So many fans loved them that people called the craze \"boy band fever.\""],
+                intro: "The late-90s pop boy bands — groups put together by producers, with matching outfits and synchronized dancing,  — featuring NSYNC, Backstreet Boys, and 98 Degrees (plus O-Town, LFO, and Westlife).",
+                facts: ["Most of these groups were put together by music producers, rather than friends who started a band on their own.", "They were famous for matching outfits and synchronized dance moves — everybody hitting the exact same step at the same time.", "So many fans loved them that people called the craze \"boy band fever.\""],
                 listen: "Watch how all the members dance the exact same moves at the same time.",
                 wiki: "https://en.wikipedia.org/wiki/Boy_band",
                 watch: yt("NSYNC Bye Bye Bye official"),
@@ -3410,18 +3440,30 @@
         const resolveRefs = s => s.replace(/\{\{n:([a-z0-9-]+)\}\}/g, (_, id) => dayNumberOf[id] ?? "?");
 
         // ---- COLLECTIONS (cross-era tag groups; badge shown next to the artist name) ----
-        const TAG_ORDER = ["calm", "dance", "voices", "women", "piano"];
+        const TAG_ORDER = ["calm", "dance", "voices", "women", "piano", "blackicons"];
         const TAG_META = {
             calm: { emoji: "🧘", label: "Calm & Cozy" },
             dance: { emoji: "💃", label: "Dance Party" },
             voices: { emoji: "🎤", label: "Just Voices" },
             women: { emoji: "👑", label: "Women Who Ruled" },
             piano: { emoji: "🎹", label: "Piano Powerhouses" },
+            blackicons: { emoji: "✊🏾", label: "Black Icons" },
         };
+
+        // Days in the Black Icons collection (the "blackicons" tag is applied to these at render time)
+        const BLACK_ICONS = new Set([
+            "louis-armstrong", "ella-fitzgerald", "ray-charles", "chuck-berry", "little-richard", "doo-wop-day",
+            "motown-day", "stevie-wonder", "aretha-franklin", "sounds-of-summer-soul", "the-jackson-5",
+            "bob-marley", "earth-wind-and-fire", "yacht-rock-day", "michael-jackson", "janet-jackson",
+            "prince", "tina-turner", "run-dmc", "whitney-houston", "90s-rnb-groups",
+            "women-of-hip-hop-and-rnb", "outkast", "alicia-keys", "beyonce",
+            "hip-hop-storytellers", "lizzo"
+        ]);
 
         let curEra = null, decadeSection = null;
         DAYS.forEach((d, i) => {
             const n = i + 1;
+            if (BLACK_ICONS.has(d.id)) { d.tags = (d.tags || []).concat("blackicons"); }
             // start a new decade section whenever the era changes (DAYS is in chronological order)
             if (d.era !== curEra) {
                 curEra = d.era;
