@@ -62,9 +62,7 @@
         body {
             margin: 0;
             background:
-                radial-gradient(circle at 12% -5%, rgba(255, 209, 12, .30), transparent 40%),
-                radial-gradient(circle at 92% 0%, rgba(26, 94, 220, .14), transparent 35%),
-                var(--paper);
+                rgba(26, 94, 220, .14);
             color: var(--ink);
             font-family: "Helvetica Neue", Arial, sans-serif;
             line-height: 1.5;
@@ -598,7 +596,7 @@
             background-clip: border-box;
             color: var(--turquoise);
             -webkit-text-fill-color: var(--turquoise);
-            text-shadow: none;
+            text-shadow: 2px 1px 1px rgba(0, 0, 0, .21);
         }
 
         .landing-sub {
@@ -750,13 +748,36 @@
         }
 
         /* ▼ TUNE ME: row heights + column splits = the asymmetric quad from the mockup */
-        .about-row-1 { height: 56vh; height: 56svh; }
-        .about-row-2 { height: 44vh; height: 44svh; }
-        .about-cell { overflow: hidden; position: relative; }
-        .cell-b1 { flex: 0 0 54%; }
-        .cell-b2 { flex: 0 0 46%; }
-        .cell-b3 { flex: 0 0 60%; }
-        .cell-b4 { flex: 0 0 40%; }
+        .about-row-1 {
+            height: 56vh;
+            height: 56svh;
+        }
+
+        .about-row-2 {
+            height: 44vh;
+            height: 44svh;
+        }
+
+        .about-cell {
+            overflow: hidden;
+            position: relative;
+        }
+
+        .cell-b1 {
+            flex: 0 0 54%;
+        }
+
+        .cell-b2 {
+            flex: 0 0 46%;
+        }
+
+        .cell-b3 {
+            flex: 0 0 60%;
+        }
+
+        .cell-b4 {
+            flex: 0 0 40%;
+        }
 
         .about-content {
             height: 100%;
@@ -769,10 +790,23 @@
             justify-content: center;
         }
 
-        .about-content.b1 { background-color: var(--ltpink); }
-        .about-content.b2 { background-color: var(--bubblegum); color: var(--card); }
-        .about-content.b3 { background-color: var(--cobalt); color: var(--card); }
-        .about-content.b4 { background-color: var(--gold); }
+        .about-content.b1 {
+            background-color: var(--ltpink);
+        }
+
+        .about-content.b2 {
+            background-color: var(--bubblegum);
+            color: var(--card);
+        }
+
+        .about-content.b3 {
+            background-color: var(--cobalt);
+            color: var(--card);
+        }
+
+        .about-content.b4 {
+            background-color: var(--gold);
+        }
 
         /* b2–b4 start hidden below their cell; JS slides them up as you scroll */
         .cell-b2 .about-content,
@@ -797,7 +831,9 @@
             line-height: 1.5;
         }
 
-        .about-sub p { margin: 0 0 .8em; }
+        .about-sub p {
+            margin: 0 0 .8em;
+        }
 
         .about-cta {
             align-self: flex-start;
@@ -830,7 +866,9 @@
             transition: opacity .15s ease;
         }
 
-        .about-skip-float:hover { opacity: 1; }
+        .about-skip-float:hover {
+            opacity: 1;
+        }
 
         /* once gold is in place, "press play" covers this — fade it out */
         .about-skip-float.faded {
@@ -848,7 +886,9 @@
             transition: transform .45s cubic-bezier(.34, 1.7, .55, 1);
         }
 
-        .about-content.pop-in .pop-emoji { transform: scale(1); }
+        .about-content.pop-in .pop-emoji {
+            transform: scale(1);
+        }
 
         /* clap + kapow: centered above their text */
         .clap,
@@ -866,8 +906,13 @@
             margin-bottom: .5em;
         }
 
-        .about-content.pop-in .emoji-row .pop-emoji:nth-child(2) { transition-delay: .12s; }
-        .about-content.pop-in .emoji-row .pop-emoji:nth-child(3) { transition-delay: .24s; }
+        .about-content.pop-in .emoji-row .pop-emoji:nth-child(2) {
+            transition-delay: .12s;
+        }
+
+        .about-content.pop-in .emoji-row .pop-emoji:nth-child(3) {
+            transition-delay: .24s;
+        }
 
         /* raise the bubblegum clap + text a touch higher in the box */
         .about-content.b2 .about-inner {
@@ -882,7 +927,10 @@
 
         /* b2 rises from the very bottom of the viewport, so let it out of its cell + over the lower row */
         @media (min-width: 901px) {
-            .cell-b2 { overflow: visible; z-index: 4; }
+            .cell-b2 {
+                overflow: visible;
+                z-index: 4;
+            }
         }
 
         /* hide the site nav while the about stage is pinned (immersive full-screen sequence) */
@@ -894,13 +942,35 @@
 
         /* ---- Narrow screens: keep the pin, but each block is full-screen and covers the last ---- */
         @media (max-width: 900px) {
-            .about-stage { display: block; }
-            .about-row { display: block; height: auto; }
-            .about-cell { position: absolute; inset: 0; }
-            .cell-b1 { z-index: 1; }
-            .cell-b2 { z-index: 2; }
-            .cell-b3 { z-index: 3; }
-            .cell-b4 { z-index: 4; }
+            .about-stage {
+                display: block;
+            }
+
+            .about-row {
+                display: block;
+                height: auto;
+            }
+
+            .about-cell {
+                position: absolute;
+                inset: 0;
+            }
+
+            .cell-b1 {
+                z-index: 1;
+            }
+
+            .cell-b2 {
+                z-index: 2;
+            }
+
+            .cell-b3 {
+                z-index: 3;
+            }
+
+            .cell-b4 {
+                z-index: 4;
+            }
         }
 
         /* HERO */
@@ -1347,6 +1417,7 @@
             font-family: "Righteous", "Arial Black", Impact, sans-serif;
             font-size: clamp(1.5rem, 4vw, 2.2rem);
             color: var(--sw);
+            text-shadow: 2px 1px 1px rgba(0, 0, 0, .21);
             margin: 44px 0 16px;
             position: relative;
         }
@@ -2268,7 +2339,8 @@
         <div class="about-bar">
             <p class="about-bar-hook"><strong>New here?</strong> The quick story behind Summer Jam School.</p>
             <div class="about-actions">
-                <button type="button" class="about-expand" id="aboutRead">Read the story <span class="chev">↓</span></button>
+                <button type="button" class="about-expand" id="aboutRead">Read the story <span
+                        class="chev">↓</span></button>
                 <a class="about-skip" href="#explore">Skip to the days →</a>
             </div>
         </div>
@@ -2293,9 +2365,12 @@
                             <div class="about-inner">
                                 <span class="clap pop-emoji" aria-hidden="true">👏</span>
                                 <div class="about-sub">
-                                    <p>Now, put your hands together for Summer Jam School: 60 ish years of music, one day
-                                        at a time. A fun post-pool-play-pout escape hatch, or a midwinter blues boost, or
-                                        simply when you want to show <em>kids these days</em> what REAL MUSIC sounds like.
+                                    <p>Now, put your hands together for Summer Jam School: 60 ish years of music, one
+                                        day
+                                        at a time. A fun post-pool-play-pout escape hatch, or a midwinter blues boost,
+                                        or
+                                        simply when you want to show <em>kids these days</em> what REAL MUSIC sounds
+                                        like.
                                         Kinda like our parents did to us, yes? Ah, the circle of life.</p>
                                 </div>
                             </div>
@@ -2322,7 +2397,8 @@
                         <div class="about-content b4">
                             <span class="kapow pop-emoji" aria-hidden="true">💥</span>
                             <div class="about-sub">
-                                <p>I am adding more themes, artists, collections, and ways to explore the music weekly as
+                                <p>I am adding more themes, artists, collections, and ways to explore the music weekly
+                                    as
                                     they come to me - via dreams or visitor submissions. Get in touch if you have ideas
                                     or edit suggestions!</p>
                                 <a class="about-cta" href="#explore">press play, okay?</a>
