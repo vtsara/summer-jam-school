@@ -81,9 +81,9 @@
         .landing {
             position: relative;
             width: 100%;
-            min-height: 100vh;
-            min-height: 100svh;
-            /* mobile-safe viewport height */
+            min-height: 80vh;
+            min-height: 80svh;
+            /* leaves ~20svh below the fold for the about/faq bar */
             background-color: var(--lime);
             /* brand lime — the hero backdrop */
             /* Headphones artwork (transparent PNG) spans the full width; its bulk sits on the
@@ -650,59 +650,257 @@
         .about {
             position: relative;
             width: 100%;
-            min-height: 100vh;
-            min-height: 100svh;
-            /* mobile-safe viewport height */
             background-color: var(--ltpink);
-            background-repeat: no-repeat;
-            background-position: center top;
-            background-size: contain;
-            display: flex;
-            flex-wrap: wrap;
-            padding: clamp(24px, 6vw, 80px);
-            padding: 0;
-            overflow: hidden;
         }
+
+        /* Collapsed teaser bar — sits below the hero, above the fold */
+        .about-bar {
+            min-height: clamp(96px, 20svh, 220px);
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            flex-wrap: wrap;
+            gap: 14px 28px;
+            padding: clamp(18px, 4vw, 40px) clamp(20px, 6vw, 80px);
+        }
+
+        .about-bar-hook {
+            margin: 0;
+            max-width: 30ch;
+            font-size: clamp(1rem, 2vw, 1.25rem);
+            line-height: 1.3;
+            color: var(--ink);
+        }
+
+        .about-bar-hook strong {
+            color: var(--purple);
+        }
+
+        .about-actions {
+            display: flex;
+            gap: 10px;
+            flex-wrap: wrap;
+        }
+
+        .about-expand,
+        .about-skip {
+            display: inline-flex;
+            align-items: center;
+            gap: 7px;
+            font: 700 .95rem "DM Sans", "Helvetica Neue", Arial, sans-serif;
+            padding: 11px 20px;
+            border-radius: 999px;
+            cursor: pointer;
+            text-decoration: none;
+            transition: filter .15s ease, background .15s ease, transform .08s ease;
+        }
+
+        .about-expand {
+            border: 0;
+            background: var(--purple);
+            color: var(--card);
+        }
+
+        .about-skip {
+            border: 2px solid var(--ink);
+            background: transparent;
+            color: var(--ink);
+        }
+
+        .about-expand:hover,
+        .about-skip:hover {
+            filter: brightness(1.06);
+        }
+
+        .about-expand:active,
+        .about-skip:active {
+            transform: translateY(1px);
+        }
+
+        .about-expand .chev {
+            transition: transform .3s ease;
+        }
+
+        .about.open .about-expand .chev {
+            transform: rotate(180deg);
+        }
+
+        /* ---- Scroll track + pinned stage ---- */
+        .about-track {
+            /* ▼ TUNE ME: total scroll length of the pinned sequence. Longer = slower reveals.
+               Reveals finish at ~80% (see revealEnd in the script), leaving a ~1s settled beat before unpin. */
+            height: 500vh;
+            position: relative;
+        }
+
+        .about-stage {
+            position: sticky;
+            top: 0;
+            height: 100vh;
+            height: 100svh;
+            overflow: hidden;
+            background: var(--ltpink);
+            display: flex;
+            flex-direction: column;
+        }
+
+        .about-row {
+            display: flex;
+            width: 100%;
+        }
+
+        /* ▼ TUNE ME: row heights + column splits = the asymmetric quad from the mockup */
+        .about-row-1 { height: 56vh; height: 56svh; }
+        .about-row-2 { height: 44vh; height: 44svh; }
+        .about-cell { overflow: hidden; position: relative; }
+        .cell-b1 { flex: 0 0 54%; }
+        .cell-b2 { flex: 0 0 46%; }
+        .cell-b3 { flex: 0 0 60%; }
+        .cell-b4 { flex: 0 0 40%; }
 
         .about-content {
-            max-width: 640px;
+            height: 100%;
+            box-sizing: border-box;
             text-align: left;
             color: var(--ink);
-            padding: 40px;
+            padding: clamp(22px, 4vw, 52px);
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
         }
 
-        .about-content.\31 st {
-            max-width: 550px;
-        }
+        .about-content.b1 { background-color: var(--ltpink); }
+        .about-content.b2 { background-color: var(--bubblegum); color: var(--card); }
+        .about-content.b3 { background-color: var(--cobalt); color: var(--card); }
+        .about-content.b4 { background-color: var(--gold); }
 
-        .about-content.\32 nd {
-            background-color: var(--bubblegum);
-            color: var(--card);
-            max-width: 470px;
-            position: absolute;
-            top: 0;
-            right: 0;
-        }
-
-        .about-content.\33 rd {
-            background-color: var(--cobalt);
-            color: var(--card);
-            max-width: 670px;
-
-        }
-
-        .about-content.\34 th {
-            background-color: var(--gold);
-            max-width: 400px;
+        /* b2–b4 start hidden below their cell; JS slides them up as you scroll */
+        .cell-b2 .about-content,
+        .cell-b3 .about-content,
+        .cell-b4 .about-content {
+            transform: translateY(100%);
+            opacity: 0;
+            will-change: transform, opacity;
         }
 
         .about-title {
             font-family: "Righteous", "Arial Black", Impact, sans-serif;
-            font-size: clamp(2.8rem, 9vw, 4rem);
+            font-size: clamp(2rem, 4.5vw, 3.4rem);
             line-height: .98;
-            margin: 0;
+            margin: 0 0 .45em;
             letter-spacing: -.01em;
             color: var(--purple);
+        }
+
+        .about-sub {
+            font-size: clamp(.95rem, 1.5vw, 1.15rem);
+            line-height: 1.5;
+        }
+
+        .about-sub p { margin: 0 0 .8em; }
+
+        .about-cta {
+            align-self: flex-start;
+            margin-top: 12px;
+            display: inline-block;
+            padding: 11px 22px;
+            border-radius: 999px;
+            background: var(--ink);
+            color: var(--card);
+            font-weight: 700;
+            text-decoration: none;
+        }
+
+        /* persistent skip button during the pinned sequence */
+        .about-skip-float {
+            position: absolute;
+            bottom: clamp(14px, 3vh, 28px);
+            right: clamp(14px, 3vw, 28px);
+            z-index: 10;
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            padding: 9px 16px;
+            border-radius: 999px;
+            background: var(--ink);
+            color: var(--card);
+            font: 700 .82rem "DM Sans", "Helvetica Neue", Arial, sans-serif;
+            text-decoration: none;
+            opacity: .85;
+            transition: opacity .15s ease;
+        }
+
+        .about-skip-float:hover { opacity: 1; }
+
+        /* once gold is in place, "press play" covers this — fade it out */
+        .about-skip-float.faded {
+            opacity: 0;
+            pointer-events: none;
+        }
+
+        /* Pop emojis (clap / cobalt trio / gold kapow) — scale in with a bouncy overshoot */
+        .pop-emoji {
+            display: inline-block;
+            font-size: clamp(2.2rem, 5vw, 3.2rem);
+            line-height: 1;
+            transform: scale(0);
+            transform-origin: center;
+            transition: transform .45s cubic-bezier(.34, 1.7, .55, 1);
+        }
+
+        .about-content.pop-in .pop-emoji { transform: scale(1); }
+
+        /* clap + kapow: centered above their text */
+        .clap,
+        .kapow {
+            display: block;
+            text-align: center;
+            margin-bottom: .35em;
+        }
+
+        /* cobalt trio: centered row that pops 1-2-3 */
+        .emoji-row {
+            display: flex;
+            justify-content: center;
+            gap: clamp(12px, 3vw, 30px);
+            margin-bottom: .5em;
+        }
+
+        .about-content.pop-in .emoji-row .pop-emoji:nth-child(2) { transition-delay: .12s; }
+        .about-content.pop-in .emoji-row .pop-emoji:nth-child(3) { transition-delay: .24s; }
+
+        /* raise the bubblegum clap + text a touch higher in the box */
+        .about-content.b2 .about-inner {
+            transform: translateY(-40px);
+        }
+
+        /* more breathing room above the "what's summer jam school?" heading */
+        .about-content.b1 {
+            justify-content: flex-start;
+            padding-top: clamp(64px, 14vh, 150px);
+        }
+
+        /* b2 rises from the very bottom of the viewport, so let it out of its cell + over the lower row */
+        @media (min-width: 901px) {
+            .cell-b2 { overflow: visible; z-index: 4; }
+        }
+
+        /* hide the site nav while the about stage is pinned (immersive full-screen sequence) */
+        body.about-pinned .site-nav {
+            transform: translateY(-110%);
+            opacity: 0;
+            pointer-events: none;
+        }
+
+        /* ---- Narrow screens: keep the pin, but each block is full-screen and covers the last ---- */
+        @media (max-width: 900px) {
+            .about-stage { display: block; }
+            .about-row { display: block; height: auto; }
+            .about-cell { position: absolute; inset: 0; }
+            .cell-b1 { z-index: 1; }
+            .cell-b2 { z-index: 2; }
+            .cell-b3 { z-index: 3; }
+            .cell-b4 { z-index: 4; }
         }
 
         /* HERO */
@@ -2066,49 +2264,142 @@
             })();
         </script>
     </section>
-    <section class="about">
-        <div class="about-content 1st">
-            <h2 class="about-title">what's summer jam school?</h2>
-            <div class="about-sub">
-                <p>This started as a simple way to make sure my kids know who Elton John and Stevie
-                    Wonder are, and maybe not complain every time I put on “grown-up music.” Eventually, my list of
-                    artists was so long that I needed a way to
-                    organize it.
-                </p>
-                <p>…And now, here we are with this entire app-website-thing, complete with playlists and trivia and
-                    extra categories and different views and a fun color scheme. <em>Some medical professionals call
-                        this hyper-fixation, but
-                        no one asked them.</em>
-                </p>
+    <section class="about" id="about">
+        <div class="about-bar">
+            <p class="about-bar-hook"><strong>New here?</strong> The quick story behind Summer Jam School.</p>
+            <div class="about-actions">
+                <button type="button" class="about-expand" id="aboutRead">Read the story <span class="chev">↓</span></button>
+                <a class="about-skip" href="#explore">Skip to the days →</a>
             </div>
         </div>
-        <div class="about-content 2nd">
-            <div class="about-sub">
-                <p>Now, put your hands together for Summer Jam School: 60 ish years of music, one day at a time. A fun
-                    post-pool-play-pout escape hatch, or a midwinter blues boost, or simply when you want to show
-                    <em>kids these days</em> what REAL MUSIC sounds like. Kinda like our parents did to us, yes? Ah, the
-                    circle of life.
-                </p>
-            </div>
-        </div>
-        <div class="about-content 3rd">
-            <div class="about-sub">
-                <p>Each day gives you one artist (or a theme), a few fun facts, and a video to watch together. Go in
-                    order or wander freely. Each day takes five ish minutes, and has a playlist or recommendation for
-                    when you're having
-                    an afternoon slump dance party or avoiding another day of “wait, that animal was definitely not on a
-                    farm.”</p>
-            </div>
-        </div>
-
-        <div class="about-content 4th">
-            <div class="about-sub">
-                <p>I am adding more themes, artists, collections, and ways to explore the music weekly as they come to
-                    me - via dreams or visitor submissions. Get in touch if you have ideas or edit suggestions!</p>
-                <a class="about-cta" href="#explore">press play, okay?</a>
+        <div class="about-track" id="aboutTrack">
+            <div class="about-stage" id="aboutStage">
+                <div class="about-row about-row-1">
+                    <div class="about-cell cell-b1">
+                        <div class="about-content b1">
+                            <h2 class="about-title">what's summer jam school?</h2>
+                            <div class="about-sub">
+                                <p>This started as a simple way to make sure my kids know who Elton John and Stevie
+                                    Wonder are, and maybe not complain every time I put on “grown-up music.” Eventually,
+                                    my list of artists was so long that I needed a way to organize it.</p>
+                                <p>…And now, here we are with this entire app-website-thing, complete with playlists and
+                                    trivia and extra categories and different views and a fun color scheme. <em>Some
+                                        medical professionals call this hyper-fixation, but no one asked them.</em></p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="about-cell cell-b2">
+                        <div class="about-content b2">
+                            <div class="about-inner">
+                                <span class="clap pop-emoji" aria-hidden="true">👏</span>
+                                <div class="about-sub">
+                                    <p>Now, put your hands together for Summer Jam School: 60 ish years of music, one day
+                                        at a time. A fun post-pool-play-pout escape hatch, or a midwinter blues boost, or
+                                        simply when you want to show <em>kids these days</em> what REAL MUSIC sounds like.
+                                        Kinda like our parents did to us, yes? Ah, the circle of life.</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="about-row about-row-2">
+                    <div class="about-cell cell-b3">
+                        <div class="about-content b3">
+                            <div class="emoji-row" aria-hidden="true">
+                                <span class="pop-emoji">📅</span>
+                                <span class="pop-emoji">🎬</span>
+                                <span class="pop-emoji">🕺</span>
+                            </div>
+                            <div class="about-sub">
+                                <p>Each day gives you one artist (or a theme), a few fun facts, and a video to watch
+                                    together. Go in order or wander freely. Each day takes five ish minutes, and has a
+                                    playlist or recommendation for when you're having an afternoon slump dance party or
+                                    avoiding another day of “wait, that animal was definitely not on a farm.”</p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="about-cell cell-b4">
+                        <div class="about-content b4">
+                            <span class="kapow pop-emoji" aria-hidden="true">💥</span>
+                            <div class="about-sub">
+                                <p>I am adding more themes, artists, collections, and ways to explore the music weekly as
+                                    they come to me - via dreams or visitor submissions. Get in touch if you have ideas
+                                    or edit suggestions!</p>
+                                <a class="about-cta" href="#explore">press play, okay?</a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <a class="about-skip-float" href="#explore">Skip to the days →</a>
             </div>
         </div>
     </section>
+    <script>
+        (function () {
+            var about = document.getElementById('about');
+            var track = document.getElementById('aboutTrack');
+            var stage = document.getElementById('aboutStage');
+            if (!about || !track || !stage) return;
+
+            function clamp01(x) { return x < 0 ? 0 : x > 1 ? 1 : x; }
+            var b2 = about.querySelector('.cell-b2 .about-content');
+            var b3 = about.querySelector('.cell-b3 .about-content');
+            var b4 = about.querySelector('.cell-b4 .about-content');
+            var skipFloat = about.querySelector('.about-skip-float');
+            var revealEnd = 0.8;   // reveals finish at 80% of the pinned scroll; the last ~20% is a settled beat
+
+            var ticking = false;
+            function update() {
+                ticking = false;
+                var pinDist = track.offsetHeight - stage.offsetHeight;   // scroll distance while pinned
+                if (pinDist <= 0) return;
+                var r = track.getBoundingClientRect();
+                var p = clamp01(-r.top / pinDist);   // 0 at pin start → 1 at end
+                document.body.classList.toggle('about-pinned', r.top <= 0 && r.bottom > stage.offsetHeight);
+                var rp = clamp01(p / revealEnd);     // reveal progress 0→1 over the first 80%
+                var third = 1 / 3;
+                var bp2 = clamp01(rp / third);              // b2 reveal
+                var bp3 = clamp01((rp - third) / third);    // b3 reveal
+                var bp4 = clamp01((rp - 2 * third) / third);// b4 reveal
+
+                // bubblegum rises up from the very bottom of the viewport
+                b2.style.transform = 'translateY(' + ((1 - bp2) * stage.offsetHeight) + 'px)';
+                b2.style.opacity = bp2;
+                b2.classList.toggle('pop-in', bp2 > 0.85);   // clap pops once it lands
+
+                // cobalt + gold slide up from their cells; emojis pop as they arrive
+                b3.style.transform = 'translateY(' + (100 - bp3 * 100) + '%)';
+                b3.style.opacity = bp3;
+                b3.classList.toggle('pop-in', bp3 > 0.55);   // 📅 🎬 🕺 pop 1-2-3 (staggered in CSS)
+                b4.style.transform = 'translateY(' + (100 - bp4 * 100) + '%)';
+                b4.style.opacity = bp4;
+                b4.classList.toggle('pop-in', bp4 > 0.55);   // 💥 pops
+
+                // once gold is basically in place, "press play, okay?" does the same job → fade skip
+                if (skipFloat) skipFloat.classList.toggle('faded', bp4 > 0.85);
+            }
+            window.addEventListener('scroll', function () {
+                if (!ticking) { ticking = true; requestAnimationFrame(update); }
+            }, { passive: true });
+            window.addEventListener('resize', update, { passive: true });
+            update();
+
+            // "Read the story" → scroll to the track top, which starts the pinned sequence
+            var read = document.getElementById('aboutRead');
+            if (read) read.addEventListener('click', function () {
+                window.scrollTo({ top: track.getBoundingClientRect().top + window.scrollY, behavior: 'smooth' });
+            });
+            // Skip (bar + floating) + "press play" → eased jump to the days
+            about.querySelectorAll('.about-skip, .about-skip-float, .about-cta').forEach(function (a) {
+                a.addEventListener('click', function (e) {
+                    var target = document.getElementById('explore');
+                    if (!target) return;
+                    e.preventDefault();
+                    window.scrollTo({ top: target.getBoundingClientRect().top + window.scrollY, behavior: 'smooth' });
+                });
+            });
+        })();
+    </script>
     <div class="wrap" id="explore">
         <header>
             <span class="eyebrow">RAISING MUSIC LOVERS: one day at a time · <span id="dayCount">60</span> Days</span>
