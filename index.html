@@ -61,8 +61,7 @@
 
         body {
             margin: 0;
-            background:
-                rgba(26, 94, 220, .14);
+            background: #DFE8FA;
             color: var(--ink);
             font-family: "Helvetica Neue", Arial, sans-serif;
             line-height: 1.5;
@@ -971,6 +970,17 @@
             .cell-b4 {
                 z-index: 4;
             }
+
+            /* bigger, roomier paragraphs so they fill the panel instead of squishing mid-screen */
+            .about-sub {
+                font-size: 1.15rem;
+                line-height: 1.62;
+            }
+
+            /* trim the large top pad on b1 so the taller text still clears one phone screen */
+            .about-content.b1 {
+                padding-top: clamp(32px, 9vh, 96px);
+            }
         }
 
         /* HERO */
@@ -1276,6 +1286,95 @@
             background: var(--lime);
             color: #fff;
             border-color: var(--lime);
+        }
+
+        /* MOBILE FILTER DROPDOWNS (replace the chip rows on phones) */
+        .filter-selects {
+            display: flex;
+            /* always visible: the collection dropdown lives here on every screen */
+            gap: 12px;
+            justify-content: center;
+            flex-wrap: wrap;
+            margin: 24px auto 4px;
+            padding: 0 16px;
+        }
+
+        /* Collection is a dropdown on all screens — retire its chip row everywhere */
+        .collections {
+            display: none;
+        }
+
+        /* Decade dropdown is mobile-only; on desktop the decade chips stay.
+           Compound selector so it beats the plain .fsel { display:flex } below. */
+        .filter-selects .fsel-era {
+            display: none;
+        }
+
+        .fsel {
+            display: flex;
+            flex-direction: column;
+            gap: 5px;
+            flex: 1 1 100%;
+            min-width: 0;
+            max-width: 420px;
+        }
+
+        .fsel-cap {
+            font-size: .68rem;
+            font-weight: 700;
+            letter-spacing: .08em;
+            text-transform: uppercase;
+            color: var(--shade);
+            padding-left: 14px;
+        }
+
+        .fsel-field {
+            position: relative;
+            display: block;
+        }
+
+        .fsel-field::after {
+            content: "";
+            position: absolute;
+            right: 17px;
+            top: 50%;
+            width: 8px;
+            height: 8px;
+            border-right: 2px solid var(--shade);
+            border-bottom: 2px solid var(--shade);
+            transform: translateY(-70%) rotate(45deg);
+            pointer-events: none;
+        }
+
+        .fsel select {
+            -webkit-appearance: none;
+            appearance: none;
+            width: 100%;
+            box-sizing: border-box;
+            border: 1.5px solid var(--line);
+            background: var(--card);
+            border-radius: 999px;
+            padding: 12px 36px 12px 16px;
+            font: 600 .95rem "DM Sans", "Helvetica Neue", Arial, sans-serif;
+            color: var(--ink);
+            cursor: pointer;
+        }
+
+        .fsel select:focus-visible {
+            outline: 2px solid var(--cobalt);
+            outline-offset: 1px;
+        }
+
+        @media (max-width: 640px) {
+
+            /* swap decade chips → dropdown on phones */
+            .eras {
+                display: none;
+            }
+
+            .filter-selects .fsel-era {
+                display: flex;
+            }
         }
 
         /* GRID */
@@ -2554,6 +2653,16 @@
 
             <div class="eras" id="eras"></div>
             <div class="collections" id="collections"></div>
+            <div class="filter-selects" id="filterSelects">
+                <label class="fsel fsel-era">
+                    <span class="fsel-cap">Decade</span>
+                    <span class="fsel-field"><select id="eraSelect" aria-label="Filter by decade"></select></span>
+                </label>
+                <label class="fsel fsel-coll">
+                    <span class="fsel-cap">Collection</span>
+                    <span class="fsel-field"><select id="collSelect" aria-label="Filter by collection"></select></span>
+                </label>
+            </div>
         </header>
 
         <div class="view-toggle" role="group" aria-label="Choose day view">
@@ -3542,18 +3651,25 @@
 
         const eras = ["All", ...Array.from(new Set(DAYS.map(d => d.era)))];
         const ERA_CLS = {}; DAYS.forEach(d => { ERA_CLS[d.era] = d.cls; });   // "1950s" → "e50"
+        const eraSelect = document.getElementById("eraSelect");
+        // one setter drives both the chips (desktop) and the dropdown (mobile) so they stay in sync
+        function setEra(e) {
+            activeEra = e;
+            erasBox.querySelectorAll(".chip").forEach(x => x.setAttribute("aria-pressed", String(x.dataset.era === e)));
+            if (eraSelect.value !== e) eraSelect.value = e;
+            applyFilters();
+        }
         eras.forEach((e, idx) => {
             const c = document.createElement("button");
-            c.className = "chip"; c.textContent = e; c.setAttribute("aria-pressed", idx === 0);
+            c.className = "chip"; c.textContent = e; c.dataset.era = e; c.setAttribute("aria-pressed", idx === 0);
             if (ERA_CLS[e]) c.classList.add(ERA_CLS[e]);   // era colour on the active chip
-            c.onclick = () => {
-                erasBox.querySelectorAll(".chip").forEach(x => x.setAttribute("aria-pressed", "false"));
-                c.setAttribute("aria-pressed", "true");
-                activeEra = e;
-                applyFilters();
-            };
+            c.onclick = () => setEra(e);
             erasBox.appendChild(c);
+            const o = document.createElement("option");
+            o.value = e; o.textContent = (e === "All" ? "All decades" : e);
+            eraSelect.appendChild(o);
         });
+        eraSelect.addEventListener("change", () => setEra(eraSelect.value));
 
         // ---- COLLECTION CHIPS (😌 💃 🎤 👑 — filter by tag, composes with the others) ----
         const collectionsBox = document.getElementById("collections");
@@ -3561,20 +3677,27 @@
         collLabel.className = "collections-label";
         collLabel.textContent = "Collections:";
         collectionsBox.appendChild(collLabel);
+        const collSelect = document.getElementById("collSelect");
+        function setTag(t) {
+            activeTag = t;
+            collectionsBox.querySelectorAll(".chip").forEach(x => x.setAttribute("aria-pressed", String((x.dataset.tag || "") === t)));
+            if (collSelect.value !== t) collSelect.value = t;
+            applyFilters();
+        }
         const collChips = [{ tag: "", label: "All" }, ...TAG_ORDER.map(t => ({ tag: t, label: TAG_META[t].emoji + " " + TAG_META[t].label }))];
         collChips.forEach((cc, idx) => {
             const b = document.createElement("button");
             b.className = "chip chip-collection";
             b.textContent = cc.label;
+            b.dataset.tag = cc.tag;
             b.setAttribute("aria-pressed", idx === 0);
-            b.onclick = () => {
-                collectionsBox.querySelectorAll(".chip").forEach(x => x.setAttribute("aria-pressed", "false"));
-                b.setAttribute("aria-pressed", "true");
-                activeTag = cc.tag;
-                applyFilters();
-            };
+            b.onclick = () => setTag(cc.tag);
             collectionsBox.appendChild(b);
+            const o = document.createElement("option");
+            o.value = cc.tag; o.textContent = (cc.tag === "" ? "All collections" : cc.label);
+            collSelect.appendChild(o);
         });
+        collSelect.addEventListener("change", () => setTag(collSelect.value));
 
         const essToggle = document.getElementById("essToggle");
         essToggle.onclick = () => {
