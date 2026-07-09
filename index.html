@@ -741,8 +741,8 @@
 
         .about-expand {
             border: 0;
-            background: var(--purple);
-            color: var(--card);
+            background: var(--bubblegum);
+            color: #fff;
         }
 
         .about-skip {
@@ -762,6 +762,8 @@
         }
 
         .about-expand .chev {
+            color: inherit;
+            /* follow the button's white, not the muted --shade from the base .chev rule */
             transition: transform .3s ease;
         }
 
@@ -1801,7 +1803,7 @@
             align-self: center;
         }
 
-        .card[open] .chev {
+        .card.open .chev {
             transform: rotate(90deg);
         }
 
