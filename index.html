@@ -83,12 +83,15 @@
             /* leaves ~20svh below the fold for the about/faq bar */
             background-color: var(--lime);
             /* brand lime — the hero backdrop */
-            /* Headphones artwork (transparent PNG) spans the full width; its bulk sits on the
-               right, cord trailing across to the left. Lime shows through the transparent areas. */
+            /* Headphones artwork (transparent PNG) spans the full width edge-to-edge; its bulk
+               sits on the right, the cord trails off the left edge. Lime shows through the
+               transparent areas. background-origin: border-box lets it ignore the padding below
+               (otherwise the padding would inset the art and the cord would end mid-screen). */
             background-image: url("images/headphones.png");
             background-repeat: no-repeat;
             background-position: center top;
-            background-size: contain;
+            background-size: 100% auto;
+            background-origin: border-box;
             display: flex;
             align-items: center;
             justify-content: flex-start;
@@ -105,6 +108,15 @@
 
         .landing.bg-fade {
             transition: background-color 1s ease;
+        }
+
+        /* On wide screens the full-width art is taller than the 80vh hero, so a top anchor would
+           crop the cord's lower-left exit and leave it dangling. Shift down so the cord runs off
+           the left edge. Narrow/tall screens (where the whole image fits) keep the top band. */
+        @media (min-aspect-ratio: 6/5) {
+            .landing {
+                background-position: center 40%;
+            }
         }
 
         /* ===== Logo: centred intro → sticky top-left lockup ===== */
@@ -260,6 +272,37 @@
             width: 20px;
             height: 20px;
             display: block;
+        }
+
+        /* Inline expandable search living in the sticky nav — same filter, no scroll */
+        .nav-search {
+            display: inline-flex;
+            align-items: center;
+            flex: 0 0 auto;
+        }
+
+        .nav-search-input {
+            width: 0;
+            min-width: 0;
+            opacity: 0;
+            padding: 0;
+            margin: 0;
+            border: 2px solid transparent;
+            border-radius: 999px;
+            font-family: inherit;
+            font-size: .9rem;
+            color: var(--ink);
+            background: var(--card);
+            outline: none;
+            transition: width .22s ease, opacity .18s ease, padding .22s ease, margin .22s ease;
+        }
+
+        .nav-search.open .nav-search-input {
+            width: clamp(140px, 22vw, 230px);
+            opacity: 1;
+            padding: 8px 14px;
+            margin-right: 6px;
+            border-color: var(--lime);
         }
 
         /* Creative "playlist" menu button — three brand-coloured bars that fold into an X */
@@ -453,6 +496,10 @@
             }
 
             .nav-search-bar {
+                display: none;
+            }
+
+            .nav-random-bar {
                 display: none;
             }
 
@@ -1168,6 +1215,29 @@
 
         .btn-search {
             background: var(--lime);
+        }
+
+        .btn-random {
+            background: var(--purple);
+        }
+
+        /* brief ring pulse on the card the random picker lands on */
+        @keyframes cardFlash {
+            0% {
+                box-shadow: 0 0 0 0 rgba(118, 51, 246, 0);
+            }
+
+            18% {
+                box-shadow: 0 0 0 5px rgba(118, 51, 246, .55);
+            }
+
+            100% {
+                box-shadow: 0 0 0 0 rgba(118, 51, 246, 0);
+            }
+        }
+
+        .card.flash {
+            animation: cardFlash 1.15s ease-out;
         }
 
         .search-wrap {
@@ -2165,10 +2235,26 @@
             <li><button type="button" class="nav-decade e10" data-cls="e10">10s</button></li>
         </ul>
 
-        <button type="button" class="nav-icon nav-search-bar" id="navSearch" aria-label="Search">
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round">
-                <circle cx="11" cy="11" r="7"></circle>
-                <line x1="16.5" y1="16.5" x2="21" y2="21"></line>
+        <div class="nav-search nav-search-bar" id="navSearchBox">
+            <input type="search" id="navSearchInput" class="nav-search-input" placeholder="Search acts, facts…"
+                aria-label="Search days" autocomplete="off">
+            <button type="button" class="nav-icon" id="navSearch" aria-label="Search" aria-expanded="false">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round">
+                    <circle cx="11" cy="11" r="7"></circle>
+                    <line x1="16.5" y1="16.5" x2="21" y2="21"></line>
+                </svg>
+            </button>
+        </div>
+
+        <button type="button" class="nav-icon nav-random-bar" id="navRandom"
+            aria-label="Surprise me — jump to a random day">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round">
+                <rect x="3.5" y="3.5" width="17" height="17" rx="4.5"></rect>
+                <circle cx="8.5" cy="8.5" r="1.35" fill="currentColor" stroke="none"></circle>
+                <circle cx="15.5" cy="8.5" r="1.35" fill="currentColor" stroke="none"></circle>
+                <circle cx="12" cy="12" r="1.35" fill="currentColor" stroke="none"></circle>
+                <circle cx="8.5" cy="15.5" r="1.35" fill="currentColor" stroke="none"></circle>
+                <circle cx="15.5" cy="15.5" r="1.35" fill="currentColor" stroke="none"></circle>
             </svg>
         </button>
 
@@ -2398,7 +2484,7 @@
                     });
                 });
 
-                // Search (bar icon + panel item) → reveal & focus the toolbar search field
+                // Search (mobile panel item) → reveal & focus the toolbar search field (legacy fallback)
                 function openSearch() {
                     closeMenu();
                     var wrap = document.getElementById('searchWrap');
@@ -2413,9 +2499,59 @@
                     smoothScrollTo(wrap.getBoundingClientRect().top + (window.scrollY || 0) - navH - 24, 600);
                     setTimeout(function () { if (input) input.focus({ preventScroll: true }); }, 640);
                 }
+
+                // Inline sticky-nav search: expands in place and drives the SAME filter as the toolbar
+                // field, by mirroring its value + firing its input event. No page scroll.
+                var navSearchBox = document.getElementById('navSearchBox');
                 var navSearch = document.getElementById('navSearch');
+                var navSearchInput = document.getElementById('navSearchInput');
+                function fireFilter(val) {
+                    var input = document.getElementById('searchInput');   // resolved lazily (parsed later in the doc)
+                    if (!input) return;
+                    input.value = val;
+                    input.dispatchEvent(new Event('input', { bubbles: true }));
+                }
+                function openNavSearch() {
+                    closeMenu();
+                    if (!navSearchBox) return;
+                    var toolbar = document.getElementById('searchInput');
+                    if (toolbar && navSearchInput) navSearchInput.value = toolbar.value;   // keep the two in sync
+                    navSearchBox.classList.add('open');
+                    if (navSearch) navSearch.setAttribute('aria-expanded', 'true');
+                    if (navSearchInput) navSearchInput.focus({ preventScroll: true });
+                }
+                function closeNavSearch() {
+                    if (!navSearchBox) return;
+                    navSearchBox.classList.remove('open');
+                    if (navSearch) navSearch.setAttribute('aria-expanded', 'false');
+                }
+                if (navSearch) navSearch.addEventListener('click', function (e) {
+                    e.stopPropagation();
+                    if (navSearchBox.classList.contains('open')) {
+                        if (navSearchInput && navSearchInput.value) { navSearchInput.value = ''; fireFilter(''); }
+                        closeNavSearch();
+                    } else openNavSearch();
+                });
+                if (navSearchInput) {
+                    navSearchInput.addEventListener('input', function () { fireFilter(navSearchInput.value); });
+                    navSearchInput.addEventListener('keydown', function (e) {
+                        if (e.key === 'Escape') { navSearchInput.value = ''; fireFilter(''); closeNavSearch(); }
+                    });
+                }
+                // click outside the nav search collapses it — but only when empty, so an active query stays put
+                document.addEventListener('click', function (e) {
+                    if (navSearchBox && navSearchBox.classList.contains('open') &&
+                        !navSearchBox.contains(e.target) && (!navSearchInput || !navSearchInput.value)) closeNavSearch();
+                });
+
+                // Sticky-nav "surprise me" icon → same random-day jump as the toolbar button
+                var navRandom = document.getElementById('navRandom');
+                if (navRandom) navRandom.addEventListener('click', function (e) {
+                    e.stopPropagation();
+                    if (window.goToRandomDay) window.goToRandomDay();
+                });
+
                 var navPanelSearch = document.getElementById('navPanelSearch');
-                if (navSearch) navSearch.addEventListener('click', openSearch);
                 if (navPanelSearch) navPanelSearch.addEventListener('click', openSearch);
                 // About / FAQ placeholders (and any other plain panel item) just close the menu
                 Array.prototype.slice.call(panel ? panel.querySelectorAll('.nav-panel-item') : [])
@@ -2638,6 +2774,7 @@
                 <button class="btn btn-toggle" id="btnCollapse" aria-pressed="true" onclick="toggleAll(false)">Collapse
                     all</button>
                 <button class="btn btn-sky" onclick="window.print()">🖨 Print / Save PDF</button>
+                <button class="btn btn-random" id="btnRandom" onclick="goToRandomDay()">🎲 Surprise me</button>
                 <span class="search-wrap" id="searchWrap">
                     <button class="btn btn-search" id="searchToggle" aria-label="Search days"
                         aria-expanded="false">🔍</button>
@@ -3648,6 +3785,27 @@
             const nr = document.getElementById("noResults");
             if (nr) nr.classList.toggle("show", visible === 0);
         }
+
+        // ---- RANDOM DAY ("Surprise me") — jump to a random visible day, a different one each click ----
+        let lastRandomCard = null;
+        function goToRandomDay() {
+            const cards = Array.from(document.querySelectorAll(".card:not(.hide)"));
+            if (!cards.length) return;
+            // avoid immediately repeating the previous pick (when there's more than one to choose from)
+            let pool = (cards.length > 1 && lastRandomCard) ? cards.filter(c => c !== lastRandomCard) : cards;
+            if (!pool.length) pool = cards;
+            const card = pool[Math.floor(Math.random() * pool.length)];
+            lastRandomCard = card;
+            card.classList.add("open");   // reveal the pick
+            const nav = document.getElementById("siteNav");
+            const navH = (nav && document.body.classList.contains("nav-active")) ? nav.offsetHeight : 0;
+            const reduce = window.matchMedia && window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+            const y = Math.max(0, card.getBoundingClientRect().top + (window.scrollY || 0) - navH - 16);
+            window.scrollTo({ top: y, behavior: reduce ? "instant" : "smooth" });
+            document.querySelectorAll(".card.flash").forEach(c => c.classList.remove("flash"));
+            void card.offsetWidth; card.classList.add("flash");   // re-trigger the pulse each pick
+        }
+        window.goToRandomDay = goToRandomDay;
 
         const eras = ["All", ...Array.from(new Set(DAYS.map(d => d.era)))];
         const ERA_CLS = {}; DAYS.forEach(d => { ERA_CLS[d.era] = d.cls; });   // "1950s" → "e50"
